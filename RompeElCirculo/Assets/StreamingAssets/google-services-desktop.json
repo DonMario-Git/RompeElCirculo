@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "660805764246",
+    "firebase_url": "https://lonida-database-default-rtdb.firebaseio.com",
+    "project_id": "lonida-database",
+    "storage_bucket": "lonida-database.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:660805764246:android:ed353d1fcb2d5a834aeeb7",
+        "android_client_info": {
+          "package_name": "com.LonidaApp.com"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbnzBWLjMR3dYnp4gUiGsM8qJyKlKGTfo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

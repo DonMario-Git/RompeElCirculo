@@ -1,0 +1,427 @@
+fileFormatVersion: 2
+guid: 2b092ac8e35b50c44a2b7ea658df5689
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -3455640529421165181
+    second: Vectores infantiles lonida_0
+  - first:
+      213: 5666396164048477692
+    second: Vectores infantiles lonida_1
+  - first:
+      213: 466490591486539292
+    second: Vectores infantiles lonida_2
+  - first:
+      213: -8324571718258012706
+    second: Vectores infantiles lonida_3
+  - first:
+      213: 6787212139560019013
+    second: Vectores infantiles lonida_4
+  - first:
+      213: -229503233198110811
+    second: Vectores infantiles lonida_5
+  - first:
+      213: -1215843435513254999
+    second: Vectores infantiles lonida_6
+  - first:
+      213: 6105283608235277589
+    second: Vectores infantiles lonida_7
+  - first:
+      213: 6245775787016136614
+    second: Vectores infantiles lonida_8
+  - first:
+      213: 5941887780688653154
+    second: Vectores infantiles lonida_9
+  - first:
+      213: 494250081928834304
+    second: Vectores infantiles lonida_10
+  - first:
+      213: 8058810218425292388
+    second: Vectores infantiles lonida_11
+  - first:
+      213: 3439133102208763134
+    second: Vectores infantiles lonida_12
+  - first:
+      213: 7443285155613411869
+    second: Vectores infantiles lonida_13
+  - first:
+      213: -7275222199359293642
+    second: Vectores infantiles lonida_14
+  - first:
+      213: 3918872145795724779
+    second: Vectores infantiles lonida_15
+  - first:
+      213: -328364680777144227
+    second: Vectores infantiles lonida_16
+  - first:
+      213: 1164216066524244064
+    second: Vectores infantiles lonida_17
+  - first:
+      213: -2560124313223308859
+    second: Vectores infantiles lonida_18
+  - first:
+      213: -1172202190425940540
+    second: Vectores infantiles lonida_19
+  - first:
+      213: -1912293967342042456
+    second: Vectores infantiles lonida_20
+  - first:
+      213: 5640327566742400598
+    second: Vectores infantiles lonida_21
+  - first:
+      213: -2634947433620437007
+    second: Vectores infantiles lonida_22
+  - first:
+      213: -7795032246583941051
+    second: Vectores infantiles lonida_23
+  - first:
+      213: -3670066788133286753
+    second: Vectores infantiles lonida_24
+  - first:
+      213: -6551045329892244935
+    second: Vectores infantiles lonida_25
+  - first:
+      213: -2275841157793866302
+    second: Vectores infantiles lonida_26
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 3
+    compressionQuality: 0
+    crunchedCompression: 1
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Vectores infantiles lonida_0
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 1276
+        width: 800
+        height: 800
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38d986c4f391b00d0800000000000000
+      internalID: -3455640529421165181
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vectores infantiles lonida_1
+      rect:
+        serializedVersion: 2
+        x: 986
+        y: 1136
+        width: 1000
+        height: 1000
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cfddeb21a4513ae40800000000000000
+      internalID: 5666396164048477692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vectores infantiles lonida_7
+      rect:
+        serializedVersion: 2
+        x: 3029
+        y: 1258
+        width: 800
+        height: 800
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51df0e138135ab450800000000000000
+      internalID: 6105283608235277589
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vectores infantiles lonida_9
+      rect:
+        serializedVersion: 2
+        x: 2063
+        y: 1185
+        width: 900
+        height: 900
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26b6e2f7473d57250800000000000000
+      internalID: 5941887780688653154
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vectores infantiles lonida_19
+      rect:
+        serializedVersion: 2
+        x: 1108
+        y: 347
+        width: 796
+        height: 796
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4cd1ab281508bbfe0800000000000000
+      internalID: -1172202190425940540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vectores infantiles lonida_21
+      rect:
+        serializedVersion: 2
+        x: 118
+        y: 288
+        width: 941
+        height: 941
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65e2688c908764e40800000000000000
+      internalID: 5640327566742400598
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vectores infantiles lonida_23
+      rect:
+        serializedVersion: 2
+        x: 1984
+        y: 310
+        width: 867
+        height: 867
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54826a9b87b72d390800000000000000
+      internalID: -7795032246583941051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vectores infantiles lonida_24
+      rect:
+        serializedVersion: 2
+        x: 3034
+        y: 347
+        width: 757
+        height: 757
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9c4b5773bd411dc0800000000000000
+      internalID: -3670066788133286753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 8c88a92e4bc959449b420dd2fd5c710b
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Vectores infantiles lonida_0: -3455640529421165181
+      Vectores infantiles lonida_1: 5666396164048477692
+      Vectores infantiles lonida_10: 494250081928834304
+      Vectores infantiles lonida_11: 8058810218425292388
+      Vectores infantiles lonida_12: 3439133102208763134
+      Vectores infantiles lonida_13: 7443285155613411869
+      Vectores infantiles lonida_14: -7275222199359293642
+      Vectores infantiles lonida_15: 3918872145795724779
+      Vectores infantiles lonida_16: -328364680777144227
+      Vectores infantiles lonida_17: 1164216066524244064
+      Vectores infantiles lonida_18: -2560124313223308859
+      Vectores infantiles lonida_19: -1172202190425940540
+      Vectores infantiles lonida_2: 466490591486539292
+      Vectores infantiles lonida_20: -1912293967342042456
+      Vectores infantiles lonida_21: 5640327566742400598
+      Vectores infantiles lonida_22: -2634947433620437007
+      Vectores infantiles lonida_23: -7795032246583941051
+      Vectores infantiles lonida_24: -3670066788133286753
+      Vectores infantiles lonida_25: -6551045329892244935
+      Vectores infantiles lonida_26: -2275841157793866302
+      Vectores infantiles lonida_3: -8324571718258012706
+      Vectores infantiles lonida_4: 6787212139560019013
+      Vectores infantiles lonida_5: -229503233198110811
+      Vectores infantiles lonida_6: -1215843435513254999
+      Vectores infantiles lonida_7: 6105283608235277589
+      Vectores infantiles lonida_8: 6245775787016136614
+      Vectores infantiles lonida_9: 5941887780688653154
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

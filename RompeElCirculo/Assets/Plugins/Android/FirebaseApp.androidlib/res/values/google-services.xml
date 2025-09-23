@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/firebase_database_url,@string/gcm_defaultSenderId,@string/google_storage_bucket,@string/project_id,@string/google_api_key,@string/google_crash_reporting_api_key,@string/google_app_id">
+  <string name="firebase_database_url" translatable="false">https://lonida-database-default-rtdb.firebaseio.com</string>
+  <string name="gcm_defaultSenderId" translatable="false">660805764246</string>
+  <string name="google_storage_bucket" translatable="false">lonida-database.firebasestorage.app</string>
+  <string name="project_id" translatable="false">lonida-database</string>
+  <string name="google_api_key" translatable="false">AIzaSyCbnzBWLjMR3dYnp4gUiGsM8qJyKlKGTfo</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCbnzBWLjMR3dYnp4gUiGsM8qJyKlKGTfo</string>
+  <string name="google_app_id" translatable="false">1:660805764246:android:ed353d1fcb2d5a834aeeb7</string>
+</resources>

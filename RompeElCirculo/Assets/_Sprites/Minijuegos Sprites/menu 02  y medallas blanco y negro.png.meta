@@ -1,0 +1,429 @@
+fileFormatVersion: 2
+guid: c81fef83dbc8ef74e84b71f9300eaee0
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 100
+    crunchedCompression: 1
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: menu 02  y medallas blanco y negro_6
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 3423
+        width: 613
+        height: 634
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1dabb9da4b21c174fa335060903118a4
+      internalID: 272164475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: menu 02  y medallas blanco y negro_7
+      rect:
+        serializedVersion: 2
+        x: 741
+        y: 3460
+        width: 571
+        height: 556
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41eab618129e1f945b6be3dd8af9b7a6
+      internalID: -369418132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: menu 02  y medallas blanco y negro_8
+      rect:
+        serializedVersion: 2
+        x: 1633
+        y: 3464
+        width: 572
+        height: 552
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15c551fb3ec5f5e4a99d3d3a1b363f5e
+      internalID: 122711165
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: menu 02  y medallas blanco y negro_9
+      rect:
+        serializedVersion: 2
+        x: 2436
+        y: 3486
+        width: 523
+        height: 530
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 09a43b1ee281a9244a0992d36c0d6191
+      internalID: -1510943716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: menu 02  y medallas blanco y negro_10
+      rect:
+        serializedVersion: 2
+        x: 3284
+        y: 3438
+        width: 608
+        height: 556
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f2b6c0302e28c94bad3f237da4c66ff
+      internalID: 1495437434
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: menu 02  y medallas blanco y negro_11
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 2743
+        width: 332
+        height: 511
+      alignment: 9
+      pivot: {x: 0.49265686, y: 0.99618024}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 347782ab9e9e5bb4c9f6d9d71e5178cc
+      internalID: 1280095683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: menu 02  y medallas blanco y negro_12
+      rect:
+        serializedVersion: 2
+        x: 861
+        y: 2881
+        width: 332
+        height: 366
+      alignment: 9
+      pivot: {x: 0.5, y: 0.9826006}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e8447a1f412e41c42b767c0a00a5d342
+      internalID: 1091914600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: menu 02  y medallas blanco y negro_13
+      rect:
+        serializedVersion: 2
+        x: 1753
+        y: 2946
+        width: 332
+        height: 327
+      alignment: 9
+      pivot: {x: 0.5, y: 0.9606732}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 83308f93246a287418ed06ab9d21b444
+      internalID: -1470061202
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: menu 02  y medallas blanco y negro_14
+      rect:
+        serializedVersion: 2
+        x: 2556
+        y: 2754
+        width: 283
+        height: 519
+      alignment: 9
+      pivot: {x: 0.51214147, y: 0.9832921}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95378f40695504c469bc0a9c9272833e
+      internalID: -1005136572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: menu 02  y medallas blanco y negro_15
+      rect:
+        serializedVersion: 2
+        x: 3377
+        y: 2769
+        width: 422
+        height: 504
+      alignment: 9
+      pivot: {x: 0.49999943, y: 0.968627}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6cb5c3ce464cca246bcdba586af9e542
+      internalID: 1976357218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: menu 02  y medallas blanco y negro_19
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 1443
+        width: 567
+        height: 560
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d071c423f34ad734897bc5e2767e0b49
+      internalID: 1063512745
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: menu 02  y medallas blanco y negro_20
+      rect:
+        serializedVersion: 2
+        x: 116
+        y: 846
+        width: 393
+        height: 452
+      alignment: 9
+      pivot: {x: 0.4999999, y: 1.00324}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c4f845e6f1f0273448ff7d2ab559531e
+      internalID: 779860828
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      menu 02  y medallas blanco y negro_0: -1548412822
+      menu 02  y medallas blanco y negro_1: 1219153428
+      menu 02  y medallas blanco y negro_10: 1495437434
+      menu 02  y medallas blanco y negro_11: 1280095683
+      menu 02  y medallas blanco y negro_12: 1091914600
+      menu 02  y medallas blanco y negro_13: -1470061202
+      menu 02  y medallas blanco y negro_14: -1005136572
+      menu 02  y medallas blanco y negro_15: 1976357218
+      menu 02  y medallas blanco y negro_16: -107406048
+      menu 02  y medallas blanco y negro_17: -1321513240
+      menu 02  y medallas blanco y negro_18: 75168597
+      menu 02  y medallas blanco y negro_19: 1063512745
+      menu 02  y medallas blanco y negro_2: -1397615798
+      menu 02  y medallas blanco y negro_20: 779860828
+      menu 02  y medallas blanco y negro_21: 59173272
+      menu 02  y medallas blanco y negro_3: -295365699
+      menu 02  y medallas blanco y negro_4: 1001687011
+      menu 02  y medallas blanco y negro_5: 325354411
+      menu 02  y medallas blanco y negro_6: 272164475
+      menu 02  y medallas blanco y negro_7: -369418132
+      menu 02  y medallas blanco y negro_8: 122711165
+      menu 02  y medallas blanco y negro_9: -1510943716
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
