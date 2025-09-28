@@ -1,26 +1,42 @@
 using TMPro;
 using UnityEngine;
+using UtilidadesLaEME;
 
 [RequireComponent(typeof(TMP_InputField))]
 [ExecuteAlways]
-public class InputFieldUtilities : MonoBehaviour
+public class InputFieldUtilities : AsterizcoObligatorio, ICampoObligatorioComprobacion
 {
-    public TMP_InputField inputTarget;
+    public TMP_InputField inputField;
     public bool borrarTextoAlHabilitar = true;
 
     private void OnValidate()
     {
-        if (inputTarget == null)
+        if (inputField == null)
         {
-            inputTarget = GetComponent<TMP_InputField>();
+            inputField = GetComponent<TMP_InputField>();
         }
+
+        ToggleObligatorio();
+    }
+
+    public void ToggleObligatorio()
+    {
+        obligatorio_TMP.gameObject.SetActive(!EstaContestado() && campoObligatorio);
     }
 
     private void OnEnable()
     {
         if (borrarTextoAlHabilitar)
         {
-            inputTarget.text = string.Empty;
+            inputField.text = string.Empty;
         }
+
+        ToggleObligatorio();
+    }
+
+    public bool EstaContestado()
+    {
+        contestado = !string.IsNullOrEmpty(inputField.text.TrimEdges());
+        return contestado;
     }
 }

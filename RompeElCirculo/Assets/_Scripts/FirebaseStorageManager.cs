@@ -7,6 +7,7 @@ using UnityEngine.Events;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using UtilidadesLaEME;
 
 public class FirebaseStorageManager : MonoBehaviour
 {
@@ -111,7 +112,7 @@ public class FirebaseStorageManager : MonoBehaviour
 
     public async void SaveData(Data data, string userId, bool overwrite, System.Action<string> onResult, bool debeEsperar = true)
     {
-        data.ultimoDispositivo = AppManager.GetDeviceID();
+        data.ultimoDispositivo = Utilities.GetDeviceID();
         data.fechaUltimaConexion = DateTime.Now.ToString();
 
         if (!CanCallFirebase() && debeEsperar)

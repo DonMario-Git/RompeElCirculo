@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
@@ -14,6 +15,14 @@ namespace UtilidadesLaEME
                 int r = Random.Range(i, n);
                 (list[i], list[r]) = (list[r], list[i]);
             }
+        }
+
+        /// <summary>
+        /// Obtiene el ID único del dispositivo
+        /// </summary>
+        public static string GetDeviceID()
+        {
+            return SystemInfo.deviceUniqueIdentifier; 
         }
 
         /// <summary>
@@ -108,6 +117,15 @@ namespace UtilidadesLaEME
             obj.enabled = true;
         }
     }
+
+    public enum Direccion
+    {
+        IZQUIERDA, DERECHA
+    }
+
+    public interface ICampoObligatorioComprobacion
+    {
+        public bool EstaContestado();
+        public void ToggleObligatorio();
+    }
 }
-
-

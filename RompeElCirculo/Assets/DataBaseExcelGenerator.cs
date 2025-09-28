@@ -7,7 +7,7 @@ public class DataBaseExcelGenerator : MonoBehaviour
     [ContextMenu(nameof(Execute))]
     public void Execute()
     {
-        var firebaseManager = Object.FindFirstObjectByType<FirebaseStorageManager>();
+        var firebaseManager = FindFirstObjectByType<FirebaseStorageManager>();
         if (firebaseManager == null)
         {
             Debug.LogError("No se encontró FirebaseStorageManager en la escena.");

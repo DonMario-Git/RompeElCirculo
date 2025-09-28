@@ -1,22 +1,22 @@
 {
   "project_info": {
-    "project_number": "660805764246",
-    "firebase_url": "https://lonida-database-default-rtdb.firebaseio.com",
-    "project_id": "lonida-database",
-    "storage_bucket": "lonida-database.firebasestorage.app"
+    "project_number": "891755908483",
+    "firebase_url": "https://rompeelcirculoapp-default-rtdb.firebaseio.com",
+    "project_id": "rompeelcirculoapp",
+    "storage_bucket": "rompeelcirculoapp.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:660805764246:android:ed353d1fcb2d5a834aeeb7",
+        "mobilesdk_app_id": "1:891755908483:android:bf4eafaf60612be438fab6",
         "android_client_info": {
-          "package_name": "com.LonidaApp.com"
+          "package_name": "com.RompeElCirculo.com"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCbnzBWLjMR3dYnp4gUiGsM8qJyKlKGTfo"
+          "current_key": "AIzaSyC8MArqgtwkOCWXGLLxivaSLPtOkIi8hzw"
         }
       ],
       "services": {
