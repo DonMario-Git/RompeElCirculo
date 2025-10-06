@@ -1,33 +1,43 @@
 using DG.Tweening;
+using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 using UtilidadesLaEME;
 
 public class PestañasManager : MonoBehaviour
 {
+    public static PestañasManager singleton;
     public PestañaController[] pestañas;
     public Image _FRENTE;
     public Transform _PESTAÑAS;
 
-    private void Start()
+    private void Awake()
     {
-        InicializarApp();
+        singleton = this;
     }
 
     public void CambiarPestaña(int indice)
     {
         PantallaTransicionController.singleton.Transicionar(() => {
 
-            foreach (var item in pestañas)
-            {
-                item.gameObject.Disable();
-            }
-
-            pestañas[indice].gameObject.Enable();
+            CambiarPestañaSinTransicion(indice);
         });
     }
 
-    public void InicializarApp()
+    public void CambiarPestañaSinTransicion(int indice, System.Action AlCambiar = null)
+    {
+        foreach (var item in pestañas)
+        {
+            item.gameObject.DesactivarObjeto();
+        }
+
+        pestañas[indice].gameObject.ActivarObjeto();
+
+        AlCambiar?.Invoke();
+    }
+
+    public void AnimacionInicio()
     {
         _PESTAÑAS.localScale = Vector3.one * 1.2f;
         _PESTAÑAS.DOKill();

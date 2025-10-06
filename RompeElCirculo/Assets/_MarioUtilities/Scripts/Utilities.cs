@@ -87,34 +87,64 @@ namespace UtilidadesLaEME
             return text;
         }
 
-        public static void Disable(this GameObject obj)
+        public static void DesactivarObjeto(this GameObject obj)
         {
             obj.SetActive(false);
         }
 
-        public static void Enable(this GameObject obj)
+        public static void ActivarObjeto(this GameObject obj)
         {
             obj.SetActive(true);
         }
 
-        public static void Disable(this MonoBehaviour obj)
+        public static void DesactivarComponente(this MonoBehaviour obj)
         {
             obj.enabled = false;
         }
 
-        public static void Enable(this MonoBehaviour obj)
+        public static void ActivarComponente(this MonoBehaviour obj)
         {
             obj.enabled = true;
         }
 
-        public static void Disable(this Renderer obj)
+        public static void DesactivarComponente(this Renderer obj)
         {
             obj.enabled = false;
         }
 
-        public static void Enable(this Renderer obj)
+        public static void ActivarComponente(this Renderer obj)
         {
             obj.enabled = true;
+        }
+
+        /// <summary>
+        /// Valida que tan confiable es un Email
+        /// </summary>
+        public static bool EsUnEmailValido(this string email)
+        {
+            string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+            return Regex.IsMatch(email, pattern);
+        }
+
+        /// <summary>
+        /// Valida la seguridad de una contraseña y retorna un mensaje de recomendación
+        /// </summary>
+        public static bool ValidarCaracteresContraseña(this string password, out string result)
+        {
+            if (password.Length < 8)
+            {
+                result = "La contraseña debe tener al menos 8 caracteres.";
+                return false;
+            }
+
+            if (password.Contains(" "))
+            {
+                result = "La contraseña no puede contener espacios.";
+                return false;
+            }
+
+            result = string.Empty;
+            return true; // Todo bien
         }
     }
 

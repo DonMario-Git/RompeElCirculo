@@ -61,12 +61,12 @@ public class CuadroOpcionItemController : MonoBehaviour
             if (refPregunta.cuadroSeleccionado == this)
             {
                 buton.image.color = buton.colors.pressedColor;
-                circuloInterno.Enable();
+                circuloInterno.ActivarComponente();
             }
             else
             {
                 buton.image.color = buton.colors.normalColor;
-                circuloInterno.Disable();
+                circuloInterno.DesactivarComponente();
             }
         }    
     }

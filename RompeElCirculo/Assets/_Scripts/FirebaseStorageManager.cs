@@ -7,7 +7,6 @@ using UnityEngine.Events;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using UtilidadesLaEME;
 
 public class FirebaseStorageManager : MonoBehaviour
 {
@@ -18,13 +17,21 @@ public class FirebaseStorageManager : MonoBehaviour
 
     private void Awake()
     {
-        singleton = this;
-        FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(false);
+        if (singleton != null)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            DontDestroyOnLoad(gameObject);
+            singleton = this;
+            FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(false);
+        }     
     }
 
     private async void Start()
     {
-        await InitializeFirebase();
+        if (singleton == this) await InitializeFirebase();
     }
 
     private async Task InitializeFirebase()
@@ -42,7 +49,7 @@ public class FirebaseStorageManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Error en dependencias de Firebase: " + dependencyStatus);
+            Debug.LogError("Error en dependencias: " + dependencyStatus);
         }
     }
 
@@ -61,7 +68,7 @@ public class FirebaseStorageManager : MonoBehaviour
     {
         if (!CanCallFirebase())
         {
-            onSuccess?.Invoke(null, "Debes esperar 5 segundos entre operaciones de Firebase.");
+            onSuccess?.Invoke(null, "Debes esperar 5 segundos entre operaciones.");
             return;
         }
 
@@ -79,7 +86,7 @@ public class FirebaseStorageManager : MonoBehaviour
             return;
         }
 
-        var userRef = dbReference.Child("users").Child(userId);
+        var userRef = dbReference.Child("usuarios").Child(userId);
         userRef.KeepSynced(false);
 
         userRef.GetValueAsync()
@@ -96,7 +103,7 @@ public class FirebaseStorageManager : MonoBehaviour
                 {
                     string json = task.Result.GetRawJsonValue();
                     Data data = JsonConvert.DeserializeObject<Data>(json);
-                    data.fechaUltimaConexion = DateTime.Now.ToString();
+
                     debug = null;
                     Debug.Log("Datos cargados desde servidor.");
                     onSuccess?.Invoke(data, debug);
@@ -112,12 +119,9 @@ public class FirebaseStorageManager : MonoBehaviour
 
     public async void SaveData(Data data, string userId, bool overwrite, System.Action<string> onResult, bool debeEsperar = true)
     {
-        data.ultimoDispositivo = Utilities.GetDeviceID();
-        data.fechaUltimaConexion = DateTime.Now.ToString();
-
         if (!CanCallFirebase() && debeEsperar)
         {
-            onResult?.Invoke("Debes esperar 5 segundos entre operaciones de Firebase.");
+            onResult?.Invoke("Debes esperar 5 segundos entre operaciones.");
             return;
         }
 
@@ -135,7 +139,7 @@ public class FirebaseStorageManager : MonoBehaviour
 
         if (!overwrite)
         {
-            var snapshotTask = dbReference.Child("users").GetValueAsync();
+            var snapshotTask = dbReference.Child("usuarios").GetValueAsync();
             await snapshotTask;
 
             if (snapshotTask.IsFaulted || snapshotTask.IsCanceled)
@@ -150,8 +154,8 @@ public class FirebaseStorageManager : MonoBehaviour
                 string childJson = child.GetRawJsonValue();
                 Data existingData = JsonConvert.DeserializeObject<Data>(childJson);
                 if (existingData != null &&
-                    (existingData.CorreoElecctronico == data.CorreoElecctronico ||
-                     existingData.Nombres == data.Nombres))
+                    (existingData.email == data.email ||
+                     existingData.nombreCompleto == data.nombreCompleto))
                 {
                     onResult?.Invoke("Ya existe un usuario con ese correo o nombre.");
                     return;
@@ -160,7 +164,7 @@ public class FirebaseStorageManager : MonoBehaviour
         }
 
         string json = JsonConvert.SerializeObject(data);
-        var saveTask = dbReference.Child("users").Child(userId).SetRawJsonValueAsync(json);
+        var saveTask = dbReference.Child("usuarios").Child(userId).SetRawJsonValueAsync(json);
         await saveTask;
 
         if (saveTask.IsFaulted || saveTask.IsCanceled)
@@ -170,7 +174,7 @@ public class FirebaseStorageManager : MonoBehaviour
         else
         {
             onResult?.Invoke(null);
-            print($"Se guardó correctamente {data.Nombres}");
+            print($"Se guardó correctamente {data.nombreCompleto}");
         }
     }
 
@@ -189,7 +193,7 @@ public class FirebaseStorageManager : MonoBehaviour
             return;
         }
 
-        dbReference.Child("users").GetValueAsync().ContinueWithOnMainThread(task =>
+        dbReference.Child("usuarios").GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsFaulted || task.IsCanceled)
             {
@@ -214,29 +218,14 @@ public class FirebaseStorageManager : MonoBehaviour
 [System.Serializable]
 public class Data
 {
-    public string Nombres;
-    public string Apellidos;
-    public string CorreoElecctronico;
-    public string Contrasenia;
-    public bool hizoFormulario;
-    public int[] respuestasFormularioInicial;
-    public string dispositivoCreacion;
-    public string ultimoDispositivo;
-    public int numeroDocumento;
-    public bool activo;
-    public bool esAdmin;
-    public string fechaUltimaConexion;
-
-    public int numeroRango;
-    public int numeroSiguienteNivel;
-}
-
-[System.Serializable]
-public class UserData
-{
-    public string Nombres;
-    public string Contrasenia;
-    public string ultimoDispositivo;
-    public bool vioNoticia;
-    public string ultimaVersion;
+    public string nombreCompleto;
+    public string tipoDocumento;
+    public string numeroDocumento;
+    public string numeroCelular;
+    public string sexo;
+    public string fechaNacimiento;
+    public string nacionalidad;
+    public string direccion;
+    public string email;
+    public string contrasena;
 }

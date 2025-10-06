@@ -28,7 +28,7 @@ public class PantallaTransicionController : MonoBehaviour
     {
         if (!puedeCambiar) return;
         puedeCambiar = false;
-        im.Enable();
+        im.ActivarComponente();
         im.DOKill();
         im.color = Color.black;
         transform.localPosition = new Vector3(offSetXMaximo, 0, 0);
@@ -37,7 +37,7 @@ public class PantallaTransicionController : MonoBehaviour
         {
             im.DOKill();
             im.DOFade(0, 0.1f).OnComplete(() => { 
-                im.Disable(); 
+                im.DesactivarComponente(); 
                 puedeCambiar = true;
             });
 

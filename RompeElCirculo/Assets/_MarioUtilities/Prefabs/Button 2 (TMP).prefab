@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7000521846456653522}
   - component: {fileID: 8564277246449829251}
   - component: {fileID: 8045498173681831254}
+  - component: {fileID: 175009555158058652}
   m_Layer: 5
   m_Name: Button 2 (TMP)
   m_TagString: Untagged
@@ -121,6 +122,38 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &175009555158058652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1616828351556161888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31ff287204646204ca63ad2f1cd97266, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonExtrasController
+  button: {fileID: 8045498173681831254}
+  targetscale_down: {x: 0.9, y: 0.9, z: 0.9}
+  time_down: 0.2
+  ease_down: 9
+  targetscale_Up: {x: 1, y: 1, z: 1}
+  time_Up: 0.2
+  ease_Up: 9
+  textFeatures: 1
+  textButton: {fileID: 202908702000041104}
+  defautColor: {r: 0.6039216, g: 0.20784315, b: 0.54901963, a: 1}
+  disableColor: {r: 1, g: 1, b: 1, a: 0.5}
+  disableLicence: 0
+  desactivarDeUna: 0
+  shadowFeatures: 0
+  OnPointerDown:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSetInteractable:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7946017351858199224
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,7 +213,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

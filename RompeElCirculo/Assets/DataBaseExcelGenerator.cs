@@ -28,22 +28,22 @@ public class DataBaseExcelGenerator : MonoBehaviour
 
     void ExportarComoCSV(List<Data> usuarios)
     {
-        // Ruta al escritorio
-        string desktopPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop);
-        string path = Path.Combine(desktopPath, "usuarios.csv");
+        //// Ruta al escritorio
+        //string desktopPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop);
+        //string path = Path.Combine(desktopPath, "usuarios.csv");
 
-        using (StreamWriter writer = new StreamWriter(path))
-        {
-            // Cabeceras (ajusta según los campos de Data)
-            writer.WriteLine("Nombres,Apellidos,CorreoElecctronico,Contrasenia,hizoFormulario,numeroDocumento,activo,numeroRango,numeroSiguienteNivel,dispositivoCreacion,ultimoDispositivo");
+        //using (StreamWriter writer = new StreamWriter(path))
+        //{
+        //    // Cabeceras (ajusta según los campos de Data)
+        //    writer.WriteLine("Nombres,CorreoElecctronico,Contrasenia,hizoFormulario,numeroDocumento,activo,numeroRango,numeroSiguienteNivel,dispositivoCreacion,ultimoDispositivo");
 
-            // Filas de datos
-            foreach (var u in usuarios)
-            {
-                writer.WriteLine($"{u.Nombres},{u.Apellidos},{u.CorreoElecctronico},{u.Contrasenia},{u.hizoFormulario},{u.numeroDocumento},{u.activo},{u.numeroRango},{u.numeroSiguienteNivel},{u.dispositivoCreacion},{u.ultimoDispositivo}");
-            }
-        }
+        //    // Filas de datos
+        //    foreach (var u in usuarios)
+        //    {
+        //        writer.WriteLine($"{u.nombreCompleto},{u.CorreoElecctronico},{u.Contrasenia},{u.hizoFormulario},{u.numeroDocumento},{u.numeroRango},{u.numeroSiguienteNivel},{u.dispositivoCreacion},{u.ultimoDispositivo}");
+        //    }
+        //}
 
-        Debug.Log("CSV generado en: " + path);
+        //Debug.Log("CSV generado en: " + path);
     }
 }
