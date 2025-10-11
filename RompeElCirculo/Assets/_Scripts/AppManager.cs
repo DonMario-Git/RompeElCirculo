@@ -3,13 +3,24 @@ using Newtonsoft.Json;
 using System;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class AppManager : MonoBehaviour
 {
     public static AppManager singleton;
-    public static Data userData;
+    private static Data _userData;
+    public static Data userData
+    {
+        get => _userData;
+        set
+        {
+            _userData = value;
+            OnDataLoad?.Invoke();
+        }
+    }
+    public static event Action OnDataLoad;
     public static event Action OnBackPressed;
     public static string dataPath;
 
@@ -77,6 +88,11 @@ public class AppManager : MonoBehaviour
         }
     }
 
+    public void AbrirLink(string link)
+    {
+        Application.OpenURL(link);
+    }
+
     public void LlamarPorWhatsApp(string numero)
     {
         string url = $"https://wa.me/{numero}";
@@ -98,7 +114,18 @@ public class AppManager : MonoBehaviour
             try
             {
                 json = File.ReadAllText(dataPath);
-                return JsonConvert.DeserializeObject<Data>(json);
+                Data data = JsonConvert.DeserializeObject<Data>(json);
+
+                if (data != null)
+                {
+                    userData = data;
+                    return data;
+                }
+                else
+                {
+                    UnityEngine.Debug.LogError($"[IntroController] Error al leer el archivo: conversion incorrecta");
+                    return null;
+                }  
             }
             catch (Exception ex)
             {

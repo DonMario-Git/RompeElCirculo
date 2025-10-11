@@ -1,7 +1,5 @@
 using DG.Tweening;
-using System.Text.RegularExpressions;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.UI;
 using UtilidadesLaEME;
 

@@ -1,22 +1,12 @@
-using System;
 using UnityEngine;
 
+[ExecuteAlways]
 public class PestañaController : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public ScreenOrientation orientacion = ScreenOrientation.Portrait;
 
-    // Update is called once per frame
-    void Update()
+    private void OnEnable()
     {
-        
-    }
-
-    public static implicit operator PestañaController(PestañasManager v)
-    {
-        throw new NotImplementedException();
+        Screen.orientation = orientacion;
     }
 }
