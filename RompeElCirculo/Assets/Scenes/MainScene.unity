@@ -3483,6 +3483,7 @@ Transform:
   - {fileID: 519420032}
   - {fileID: 11581804}
   - {fileID: 446758721}
+  - {fileID: 1070303259}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &321383458
@@ -12126,6 +12127,56 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4908457121942416097, guid: ec7c706b6855eeb4f93633a84dd78ca2, type: 3}
   m_PrefabInstance: {fileID: 1036923938}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1070303257
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1070303259}
+  - component: {fileID: 1070303258}
+  m_Layer: 0
+  m_Name: EmailSender
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1070303258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1070303257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a913d64d3961fb4489330a44c024e401, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EmailSender
+  a: 
+  titulo: PRUEBA 1
+  cuerpo: Cuerpo 1 Cuerpo 1 Cuerpo 1 Cuerpo 1Cuerpo 1Cuerpo 1Cuerpo 1 Cuerpo 1
+  remitentes:
+  - mariorrd.113@gmail.com
+  - mariorrd.11@gmail.com
+--- !u!4 &1070303259
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1070303257}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2.36099, y: -1.2147, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 321383457}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1074197726
 GameObject:
   m_ObjectHideFlags: 0
