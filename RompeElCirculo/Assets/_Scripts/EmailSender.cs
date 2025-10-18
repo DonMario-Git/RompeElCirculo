@@ -5,21 +5,22 @@ using System.Text;
 using AwesomeAttributes;
 
 public class EmailSender : MonoBehaviour
-{   
-    [Button(nameof(TestSendIncidentReport))]
-    public string a;
-    [TextArea(1, 20)]
-    public string titulo;
-    [TextArea(1, 20)]
-    public string cuerpo;
-    public string[] remitentes;
+{
+    public static EmailSender singleton;
+    public string[] mailsEmpresasRemitentes;
 
     // ¡IMPORTANTE! Reemplaza esto con la URL HTTP generada por tu flujo de Power Automate.
     private const string PowerAutomateURL = "https://default357c54bb70a94d6f82ee69b067933d.3f.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/7dacb0cd7fc34bafa0467cb83da47aad/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=KV_Pnz8899yTQGin6GM3T1gHcoOmF7VtQ-SYMV5VOB4";
 
+    private void Awake()
+    {
+        singleton = this;
+    }
+
     /// <summary>
     /// Estructura para serializar los datos del reporte de incidente a JSON.
     /// </summary>
+    /// 
     [System.Serializable]
     public struct IncidentReportData
     {
@@ -47,7 +48,7 @@ public class EmailSender : MonoBehaviour
     /// <param name="body">Descripción del caso.</param>
     /// <param name="severity">Nivel de severidad.</param>
     /// <param name="recipients">Array de destinatarios.</param>
-    public void SendIncidentReport(string subject, string body, string severity, string[] recipients)
+    public void EnviarReporte(string subject, string body, string severity, string[] recipients)
     {
         IncidentReportData data = new IncidentReportData
         {
@@ -93,14 +94,5 @@ public class EmailSender : MonoBehaviour
                 Debug.Log("Respuesta del servidor: " + www.downloadHandler.text);
             }
         }
-    }
-
-    // --- Ejemplo de uso ---
-    [ContextMenu(nameof(TestSendIncidentReport))]
-    public void TestSendIncidentReport()
-    {
-        string testSeverity = "alta";
-
-        SendIncidentReport(titulo, cuerpo, testSeverity, remitentes);
     }
 }

@@ -1,8 +1,9 @@
-- Hacer formulario de reportes en donde se utilice la informacion de la persona para enviar casos
-- Hacer una coleccion de firebase llamada reportes 
-- Hacer que cada caso se guarde con un indice
+- Hacer formulario de reportes en donde se utilice la informacion de la persona para enviar casos (V)
+- Hacer una coleccion de firebase llamada reportes (v)
+- Hacer que cada caso se guarde con un ID (v)
 
-- Crear sistema para entidades
+- Crear sistema para entidades ()
 
-- Enviar notificacion a la entidad correspondiente
-- Hacer sistema de recepcion de casos a travez de las notificaciones
+- Enviar notificacion a la entidad correspondiente ()
+- Hacer sistema de recepcion de casos a travez de las notificaciones ()
+- Hacer el sistema de busqueda de caso por ID ()

@@ -12,7 +12,6 @@ using UtilidadesLaEME;
 public class CentroNotificacionesController : MonoBehaviour
 {
     public static CentroNotificacionesController singleton;
-    public float periodoBuscarNotificaciones = 60;
 
     [Title("Contenido")]
 
@@ -21,6 +20,7 @@ public class CentroNotificacionesController : MonoBehaviour
     public Image ruedaCarga;
     public GameObject plantillaNotificacion;
     public Transform objetoPadre;
+    private bool inicializado;
 
     private void Awake()
     {
@@ -36,6 +36,14 @@ public class CentroNotificacionesController : MonoBehaviour
         AppManager.OnDataLoad += IniciarSistemaNotificaciones;
     }
 
+    private void OnEnable()
+    {
+        if (inicializado)
+        {
+            VerificarCantidadNotificacionesNuevas();
+        }
+    }
+
     public void IniciarSistemaNotificaciones()
     {
         if (singleton != this) return;
@@ -45,40 +53,53 @@ public class CentroNotificacionesController : MonoBehaviour
         IEnumerator Corrutina()
         {
             yield return new WaitForSeconds(1);
-
-            while (true)
-            {
-                VerificarCantidadNotificacionesNuevas();
-
-                yield return new WaitForSeconds(periodoBuscarNotificaciones);
-            }
+            VerificarCantidadNotificacionesNuevas();
+            inicializado = true;
         } 
     }
 
-    [ContextMenu(nameof(EnviarNotificacionPrueba))]
-    public void EnviarNotificacionPrueba()
+    public void EnviarNotificacion(string para, string titulo, string mensaje)
     {
-        if (string.IsNullOrEmpty(AppManager.userData.nombreCompleto))
+        if (string.IsNullOrEmpty(para))
         {
             Debug.LogWarning("userId vacío. No se puede enviar la notificación.");
             return;
         }
 
-        Notificacion noti = new Notificacion
+        Notificacion noti = new()
         {
-            titulo = "Notificación de Prueba",
-            mensaje = "Este es un mensaje de prueba.",
+            titulo = titulo,
+            mensaje = mensaje,
             timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
             leido = false
         };
 
-        FirebaseStorageManager.singleton.AddNotification(AppManager.userData.nombreCompleto, noti, (error) =>
+        FirebaseStorageManager.singleton.AddNotification(para, noti, (error) =>
         {
             if (!string.IsNullOrEmpty(error))
                 Debug.LogError("Error al enviar notificación de prueba: " + error);
             else
                 Debug.Log("Notificación de prueba enviada correctamente.");
         });
+    }
+
+    public void EnviarNotificacion(string[] para, string titulo, string mensaje)
+    {
+        if (para == null || para.Length == 0)
+        {
+            Debug.LogWarning("Array de userId vacío. No se puede enviar la notificación.");
+            return;
+        }
+        foreach (var usuario in para)
+        {
+            if (string.IsNullOrEmpty(usuario))
+            {
+                Debug.LogWarning($"userId vacío en el elemento. No se puede enviar la notificación.");
+                return;
+            }
+
+            EnviarNotificacion(usuario, titulo, mensaje);
+        }
     }
 
     [ContextMenu(nameof(VerificarCantidadNotificacionesNuevas))]

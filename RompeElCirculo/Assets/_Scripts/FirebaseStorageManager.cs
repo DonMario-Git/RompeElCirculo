@@ -426,6 +426,37 @@ public class FirebaseStorageManager : MonoBehaviour
             onResult?.Invoke(count, null);
         });
     }
+
+    // Método para añadir un ReporteCaso con ID único a Firebase
+    public void AddReporteCaso(Caso reporte, Action<string> onResult)
+    {
+        if (!isInitialized)
+        {
+            onResult?.Invoke("Firebase no está inicializado.");
+            return;
+        }
+
+        if (Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            onResult?.Invoke("No hay conexión a internet.");
+            return;
+        }
+
+        var reporteRef = dbReference.Child("reportes").Push();
+        reporte.ID = reporteRef.Key; // Asigna el ID único generado por Firebase
+        string json = JsonConvert.SerializeObject(reporte);
+        reporteRef.SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
+        {
+            if (task.IsFaulted || task.IsCanceled)
+            {
+                onResult?.Invoke("Error al subir el reporte: " + task.Exception);
+            }
+            else
+            {
+                onResult?.Invoke(null); // Éxito
+            }
+        });
+    }
 }
 
 [System.Serializable]
@@ -451,4 +482,19 @@ public class Notificacion
     public int ID_Icono;
     public long timestamp;
     public bool leido;
+}
+
+public class Caso
+{
+    public string ID;
+    public string nombreCompleto;
+    public string tipoDocumento;
+    public string numeroDocumento;
+    public string numeroCelular;
+    public string sexo;
+    public string direccion;
+    public string hechoAReportar;
+    public string tipoViolencia;
+    public string estadoCaso;
+    public string fechaCaso; // Nueva propiedad para la fecha del caso
 }

@@ -1,13 +1,20 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace UtilidadesLaEME
 {
     public static class Utilities
     {
-        public static void Shuffle<T>(this IList<T> list)
+        /// <summary>
+        /// Desordena los elementos de una lista
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        public static void ShuffleList<T>(this IList<T> list)
         {
             int n = list.Count;
             for (int i = 0; i < n; i++)
@@ -15,6 +22,17 @@ namespace UtilidadesLaEME
                 int r = Random.Range(i, n);
                 (list[i], list[r]) = (list[r], list[i]);
             }
+        }
+
+
+        public static string DateTimeToString(DateTime fecha)
+        {
+            return fecha.ToString("dd/MM/yy");
+        }
+
+        public static DateTime StringToDateTime(string fecha)
+        {
+            return DateTime.ParseExact(fecha, "dd/MM/yy", System.Globalization.CultureInfo.InvariantCulture);
         }
 
         /// <summary>
