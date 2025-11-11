@@ -20,7 +20,6 @@ public class CentroNotificacionesController : MonoBehaviour
     public Image ruedaCarga;
     public GameObject plantillaNotificacion;
     public Transform objetoPadre;
-    private bool inicializado;
 
     private void Awake()
     {
@@ -36,14 +35,6 @@ public class CentroNotificacionesController : MonoBehaviour
         AppManager.OnDataLoad += IniciarSistemaNotificaciones;
     }
 
-    private void OnEnable()
-    {
-        if (inicializado)
-        {
-            VerificarCantidadNotificacionesNuevas();
-        }
-    }
-
     public void IniciarSistemaNotificaciones()
     {
         if (singleton != this) return;
@@ -54,7 +45,6 @@ public class CentroNotificacionesController : MonoBehaviour
         {
             yield return new WaitForSeconds(1);
             VerificarCantidadNotificacionesNuevas();
-            inicializado = true;
         } 
     }
 
@@ -119,13 +109,8 @@ public class CentroNotificacionesController : MonoBehaviour
         });
     }
 
-    private void OnNotificationsReceived(List<Notificacion> notificaciones, string error)
+    private void OnNotificationsReceived(List<Notificacion> notificaciones)
     {
-        if (!string.IsNullOrEmpty(error))
-        {
-            Debug.LogError($"Error al obtener notificaciones: {error}");
-            return;
-        }
         Debug.Log($"Notificaciones recibidas: {notificaciones.Count}");
         if (notificaciones.Count > 0)
         {
@@ -163,19 +148,26 @@ public class CentroNotificacionesController : MonoBehaviour
 
         FirebaseStorageManager.singleton.GetNotifications(AppManager.userData.nombreCompleto, (notificaciones, error) =>
         {
-            ruedaCarga.transform.DOKill();
-            ruedaCarga.gameObject.DesactivarObjeto();
+            if (string.IsNullOrEmpty(error))
+            {      
+                ruedaCarga.transform.DOKill();
+                ruedaCarga.gameObject.DesactivarObjeto();
 
-            foreach (var item in notificaciones)
-            {
-                var nuevaNotificacion = Instantiate(plantillaNotificacion, objetoPadre).GetComponent<NotificacionElementoController>();
-                nuevaNotificacion.titulo.text = item.titulo;
-                nuevaNotificacion.contenido.text = item.mensaje;
-                nuevaNotificacion.gameObject.ActivarObjeto();
-                nuevaNotificacion.nuevoIcono.SetActive(!item.leido);
+                foreach (var item in notificaciones)
+                {
+                    var nuevaNotificacion = Instantiate(plantillaNotificacion, objetoPadre).GetComponent<NotificacionElementoController>();
+                    nuevaNotificacion.titulo.text = item.titulo;
+                    nuevaNotificacion.contenido.text = item.mensaje;
+                    nuevaNotificacion.gameObject.ActivarObjeto();
+                    nuevaNotificacion.nuevoIcono.SetActive(!item.leido);
+                }
+
+                OnNotificationsReceived(notificaciones);
             }
-
-            OnNotificationsReceived(notificaciones, error);
+            else
+            {
+                Debug.LogWarning(error);
+            }      
         });
     }
 

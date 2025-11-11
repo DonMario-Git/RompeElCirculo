@@ -3,6 +3,7 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Text;
 using AwesomeAttributes;
+using System;
 
 public class EmailSender : MonoBehaviour
 {
@@ -48,7 +49,7 @@ public class EmailSender : MonoBehaviour
     /// <param name="body">Descripción del caso.</param>
     /// <param name="severity">Nivel de severidad.</param>
     /// <param name="recipients">Array de destinatarios.</param>
-    public void EnviarReporte(string subject, string body, string severity, string[] recipients)
+    public void EnviarReporte(string subject, string body, string severity, string[] recipients, Action<string> OnComplete)
     {
         IncidentReportData data = new IncidentReportData
         {
@@ -59,7 +60,7 @@ public class EmailSender : MonoBehaviour
         };
 
         string jsonPayload = JsonUtility.ToJson(data);
-        StartCoroutine(PostRequest(jsonPayload));
+        StartCoroutine(PostRequest(jsonPayload, OnComplete));
     }
 
     /// <summary>
@@ -67,7 +68,7 @@ public class EmailSender : MonoBehaviour
     /// </summary>
     /// <param name="jsonPayload">La cadena JSON con los datos del reporte.</param>
     /// <returns></returns>
-    IEnumerator PostRequest(string jsonPayload)
+    IEnumerator PostRequest(string jsonPayload, Action<string> OnComplete)
     {
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonPayload);
 
@@ -87,11 +88,13 @@ public class EmailSender : MonoBehaviour
             {
                 Debug.LogError("Error al enviar el reporte: " + www.error);
                 Debug.LogError("Respuesta del servidor: " + www.downloadHandler.text);
+                OnComplete?.Invoke("Error al enviar el reporte");
             }
             else
             {
                 Debug.Log("Reporte enviado con éxito.");
                 Debug.Log("Respuesta del servidor: " + www.downloadHandler.text);
+                OnComplete?.Invoke(null);
             }
         }
     }

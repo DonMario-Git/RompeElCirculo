@@ -2,10 +2,12 @@ using DG.Tweening;
 using Newtonsoft.Json;
 using System;
 using System.IO;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UtilidadesLaEME;
 
 public class AppManager : MonoBehaviour
 {
@@ -24,10 +26,18 @@ public class AppManager : MonoBehaviour
     public static event Action OnBackPressed;
     public static string dataPath;
 
+    public TextMeshProUGUI textoNombre;
+    public GameObject objetoVerificado;
+
     private void Awake()
     {
         dataPath = Application.persistentDataPath + "/userData.json";
         singleton = this;
+
+        OnDataLoad += () => {
+            textoNombre.text = Utilities.GetFirstWord(userData.nombreCompleto);
+            objetoVerificado.SetActive(userData.verificado);
+        };
     }
 
     void Start()
@@ -52,11 +62,8 @@ public class AppManager : MonoBehaviour
         {
             PestañasManager.singleton._FRENTE.raycastTarget = true;
             PestañasManager.singleton._FRENTE.DOKill();
-            PestañasManager.singleton._FRENTE.DOFade(1, 0.3f).SetDelay(0.2f).OnComplete(() => { 
-                File.Delete(dataPath);                
-                SceneManager.LoadScene(0); 
-                PestañasManager.singleton._FRENTE.DOKill();
-            });        
+            File.Delete(dataPath);
+            Application.Quit();     
         }
     }
 
@@ -119,6 +126,7 @@ public class AppManager : MonoBehaviour
                 if (data != null)
                 {
                     userData = data;
+                    UnityEngine.Debug.Log("Datos del disco cargados correctamente");
                     return data;
                 }
                 else

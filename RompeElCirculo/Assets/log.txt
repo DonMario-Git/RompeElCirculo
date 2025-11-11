@@ -1,9 +1,4 @@
-- Hacer formulario de reportes en donde se utilice la informacion de la persona para enviar casos (V)
-- Hacer una coleccion de firebase llamada reportes (v)
-- Hacer que cada caso se guarde con un ID (v)
-
-- Crear sistema para entidades ()
-
-- Enviar notificacion a la entidad correspondiente ()
-- Hacer sistema de recepcion de casos a travez de las notificaciones ()
-- Hacer el sistema de busqueda de caso por ID ()
+-Añadir logo gob en pestaña principal (v)
+-Hacer que violeta salude una vez y explique como se usa la app (P)
+-Añadir la ruta de atencion (P)
+-Mejorar violentómetro con su herramienta de detector de violencia (P)

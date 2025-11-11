@@ -24,6 +24,12 @@ namespace UtilidadesLaEME
             }
         }
 
+        public static string GetFirstWord(string texto)
+        {
+            if (string.IsNullOrWhiteSpace(texto)) return string.Empty;
+            var palabras = texto.Trim().Split(' ');
+            return palabras.Length > 0 ? palabras[0] : string.Empty;
+        }
 
         public static string DateTimeToString(DateTime fecha)
         {
@@ -32,7 +38,19 @@ namespace UtilidadesLaEME
 
         public static DateTime StringToDateTime(string fecha)
         {
-            return DateTime.ParseExact(fecha, "dd/MM/yy", System.Globalization.CultureInfo.InvariantCulture);
+            try
+            {
+                return DateTime.ParseExact(fecha, "dd/MM/yy", System.Globalization.CultureInfo.InvariantCulture);
+            }
+            catch (FormatException)
+            {
+                throw new FormatException($"El string '{fecha}' no tiene el formato esperado dd/MM/yy.");
+            }
+        }
+
+        public static DateTime CrearFecha(int dia, int mes, int año)
+        {
+            return new DateTime(año, mes, dia);
         }
 
         /// <summary>
@@ -163,6 +181,17 @@ namespace UtilidadesLaEME
 
             result = string.Empty;
             return true; // Todo bien
+        }
+
+        /// <summary>
+        /// Calcula la edad en años entre dos fechas (fechaNacimiento y fechaActual).
+        /// </summary>
+        public static int CalcularEdad(DateTime fechaNacimiento, DateTime fechaActual)
+        {
+            int edad = fechaActual.Year - fechaNacimiento.Year;
+            if (fechaActual < fechaNacimiento.AddYears(edad))
+                edad--;
+            return edad;
         }
     }
 

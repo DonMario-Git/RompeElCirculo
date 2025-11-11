@@ -47,9 +47,10 @@ public class PreguntaSeleccionMultipleController : AsterizcoObligatorio, ICampoO
             items[i].Actualizar();
             items[i].indiceRespuesta = i;
         }
-
-        OnSelect?.Invoke(cuadroSeleccionado != null ? cuadroSeleccionado.indiceRespuesta : -1);
+        
         ToggleObligatorio();
+
+        OnSelect?.Invoke(cuadroSeleccionado != null ? cuadroSeleccionado.indiceRespuesta : -1);      
     }
 
     public bool EstaContestado()

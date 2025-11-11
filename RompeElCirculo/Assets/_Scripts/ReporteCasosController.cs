@@ -1,9 +1,8 @@
-using UnityEngine;
-using System;
-using Firebase.Database;
-using Firebase.Extensions;
-using UtilidadesLaEME;
 using DG.Tweening;
+using System;
+using TMPro; 
+using UnityEngine;
+using UtilidadesLaEME;
 
 public class ReporteCasosController : MonoBehaviour
 {
@@ -18,19 +17,20 @@ public class ReporteCasosController : MonoBehaviour
 
     public GameObject pantallaNegra;
     public Transform ventanaListo;
+    public Transform ruedaCarga;
 
-    private void AbrirVentanaListo()
-    {
-        pantallaNegra.ActivarObjeto();
-        ventanaListo.localScale = Vector3.one * 1.2f;
-        ventanaListo.gameObject.ActivarObjeto();
-        ventanaListo.DOKill();
-        ventanaListo.DOScale(1, 0.3f);
-    }
-        
-    private void CerrarVentanaListo()
+    public Transform ventanaError;
+    public TextMeshProUGUI textoError;
+
+    private void OnEnable()
     {
         pantallaNegra.DesactivarObjeto();
+        ventanaListo.gameObject.DesactivarObjeto();
+        ventanaError.gameObject.DesactivarObjeto();
+    }
+
+    public void VolverPrincipal()
+    {
         PestañasManager.singleton.CambiarPestaña(0);
     }
 
@@ -50,87 +50,64 @@ public class ReporteCasosController : MonoBehaviour
             sexo = incluirNombre.cuadroSeleccionado.indiceRespuesta == 1 ? "[Anonimo]" : AppManager.userData.sexo,
             direccion = incluirNombre.cuadroSeleccionado.indiceRespuesta == 1 ? "[Anonimo]" : AppManager.userData.direccion,
             fechaCaso = Utilities.DateTimeToString(DateTime.Now),
+            fechaNacimiento = incluirNombre.cuadroSeleccionado.indiceRespuesta == 1 ? "[Anonimo]" : AppManager.userData.fechaNacimiento,
 
             hechoAReportar = descripcionReporte.inputField.text,
-            estadoCaso = "pendiente"
+            tipoAvance = 0,
+            estadoDelCaso = 0
         };
+
+        ruedaCarga.gameObject.ActivarObjeto();
+        ruedaCarga.DOKill();
+        ruedaCarga.DORotate(new Vector3(0, 0, 360), 1, RotateMode.FastBeyond360)
+        .SetEase(Ease.Linear)
+        .SetLoops(-1, LoopType.Restart);
+
+        pantallaNegra.ActivarObjeto();
 
         SubirReporteCaso(nuevoCaso, (error) => {
             if (!string.IsNullOrEmpty(error))
             {
+                ruedaCarga.transform.DOKill();
+                ruedaCarga.gameObject.DesactivarObjeto();
                 Debug.LogWarning(error);
+                textoError.text = error;
+                ventanaError.localScale = Vector3.one * 1.2f;
+                ventanaError.gameObject.ActivarObjeto();
+                ventanaError.DOKill();
+                ventanaError.DOScale(1, 0.3f);
             }
             else
             {
                 //CentroNotificacionesController.singleton.EnviarNotificacion(AppManager.userData.email, $"Reporte de botón violeta", "Enviado correctamente, espere atención pronto");
-                EmailSender.singleton.EnviarReporte($"Reporte de botón violeta [ID : {nuevoCaso.ID}]", $"Se reportó un caso en la fecha {nuevoCaso.fechaCaso}, a nombre de {nuevoCaso.nombreCompleto}, con {nuevoCaso.tipoDocumento} {nuevoCaso.numeroDocumento} en donde se reporta lo siguiente: {nuevoCaso.hechoAReportar}. {(contactarParaApoyo.cuadroSeleccionado.indiceRespuesta == 1 ? "" : $"Se pide contactar al emisor con el numero {nuevoCaso.numeroCelular} para ofrecer apoyo lo más pronto posible")}", "alta", EmailSender.singleton.mailsEmpresasRemitentes);
-                CentroNotificacionesController.singleton.EnviarNotificacion(entidadesReceptoras, $"Reporte de botón violeta", $"De: '{nuevoCaso.nombreCompleto}'");
+                EmailSender.singleton.EnviarReporte($"Reporte de botón violeta [ID : {nuevoCaso.ID}]", $"Se reportó un caso en la fecha {nuevoCaso.fechaCaso}, a nombre de {nuevoCaso.nombreCompleto}, con {nuevoCaso.tipoDocumento} {nuevoCaso.numeroDocumento} en donde se reporta lo siguiente: {nuevoCaso.hechoAReportar}. {(contactarParaApoyo.cuadroSeleccionado.indiceRespuesta == 1 ? "" : $"Se pide contactar al emisor con el numero {nuevoCaso.numeroCelular} para ofrecer apoyo lo más pronto posible")}", "alta", EmailSender.singleton.mailsEmpresasRemitentes, (error2) => {
+                    ruedaCarga.transform.DOKill();
+                    ruedaCarga.gameObject.DesactivarObjeto();
+                    CentroNotificacionesController.singleton.EnviarNotificacion(entidadesReceptoras, $"Reporte de botón violeta", $"De: '{nuevoCaso.nombreCompleto}'");
+
+                    if (string.IsNullOrEmpty(error2))
+                    {
+                        ventanaListo.localScale = Vector3.one * 1.2f;
+                        ventanaListo.gameObject.ActivarObjeto();
+                        ventanaListo.DOKill();
+                        ventanaListo.DOScale(1, 0.3f);
+                    }
+                    else
+                    {
+                        textoError.text = error2;
+                        ventanaError.localScale = Vector3.one * 1.2f;
+                        ventanaError.gameObject.ActivarObjeto();
+                        ventanaError.DOKill();
+                        ventanaError.DOScale(1, 0.3f);
+                    }
+                });   
             }
         });
     }
 
-
-    // Subir un ReporteCaso a Firebase con ID único
+    // Subir un ReporteCaso a Firebase with unqiue ID
     public void SubirReporteCaso(Caso reporte, Action<string> onResult)
     {
         FirebaseStorageManager.singleton.AddReporteCaso(reporte, onResult);
-    }
-
-    // Eliminar un ReporteCaso por ID
-    public void EliminarReporteCaso(string reporteId, Action<string> onResult)
-    {
-        if (!FirebaseStorageManager.singleton.isInitialized)
-        {
-            onResult?.Invoke("Firebase no está inicializado.");
-            return;
-        }
-        if (Application.internetReachability == NetworkReachability.NotReachable)
-        {
-            onResult?.Invoke("No hay conexión a internet.");
-            return;
-        }
-        var dbRef = typeof(FirebaseStorageManager)
-            .GetField("dbReference", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            .GetValue(FirebaseStorageManager.singleton) as DatabaseReference;
-        dbRef.Child("reportes").Child(reporteId).RemoveValueAsync().ContinueWithOnMainThread(task =>
-        {
-            if (task.IsFaulted || task.IsCanceled)
-            {
-                onResult?.Invoke("Error al eliminar el reporte: " + task.Exception);
-            }
-            else
-            {
-                onResult?.Invoke(null); // Éxito
-            }
-        });
-    }
-
-    // Editar un ReporteCaso por ID
-    public void EditarReporteCaso(string reporteId, Caso nuevoReporte, Action<string> onResult)
-    {
-        if (!FirebaseStorageManager.singleton.isInitialized)
-        {
-            onResult?.Invoke("Firebase no está inicializado.");
-            return;
-        }
-        if (Application.internetReachability == NetworkReachability.NotReachable)
-        {
-            onResult?.Invoke("No hay conexión a internet.");
-            return;
-        }
-        var dbRef = typeof(FirebaseStorageManager)
-            .GetField("dbReference", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            .GetValue(FirebaseStorageManager.singleton) as DatabaseReference;
-        dbRef.Child("reportes").Child(reporteId).SetRawJsonValueAsync(JsonUtility.ToJson(nuevoReporte)).ContinueWithOnMainThread(task =>
-        {
-            if (task.IsFaulted || task.IsCanceled)
-            {
-                onResult?.Invoke("Error al editar el reporte: " + task.Exception);
-            }
-            else
-            {
-                onResult?.Invoke(null); // Éxito
-            }
-        });
-    }
+    }  
 }

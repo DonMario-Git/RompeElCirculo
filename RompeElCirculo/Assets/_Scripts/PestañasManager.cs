@@ -31,6 +31,9 @@ public class PestañasManager : MonoBehaviour
         }
 
         pestañas[indice].gameObject.ActivarObjeto();
+        pestañas[indice].transform.localScale = Vector3.one * 1.1f;
+        pestañas[indice].DOKill();
+        pestañas[indice].transform.DOScale(1, 0.2f);
 
         AlCambiar?.Invoke();
     }

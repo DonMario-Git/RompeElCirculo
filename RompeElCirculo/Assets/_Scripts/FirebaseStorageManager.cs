@@ -12,9 +12,9 @@ using System.Linq;
 public class FirebaseStorageManager : MonoBehaviour
 {
     private DatabaseReference dbReference;
-    public UnityEvent OnInitialize;
     public bool isInitialized;
     public static FirebaseStorageManager singleton;
+    private bool isInitializing = false; // Nueva bandera para evitar inicializaciones concurrentes
 
     private void Awake()
     {
@@ -37,6 +37,16 @@ public class FirebaseStorageManager : MonoBehaviour
         if (singleton == this) await InitializeFirebase();
     }
 
+    private void Update()
+    {
+        // Solo intenta inicializar si no está inicializado, no está inicializando y hay conexión
+        if (!isInitialized && !isInitializing && Application.internetReachability != NetworkReachability.NotReachable)
+        {
+            isInitializing = true;
+            _ = InitializeFirebase();
+        }
+    }
+
     private async Task InitializeFirebase()
     {
         var dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
@@ -45,15 +55,15 @@ public class FirebaseStorageManager : MonoBehaviour
         {
             dbReference = FirebaseDatabase.DefaultInstance.RootReference;
             FirebaseDatabase.DefaultInstance.GoOnline();
-
-            OnInitialize?.Invoke();
             isInitialized = true;
             Debug.Log("Firebase Realtime Database listo.");
         }
         else
         {
+            isInitialized = false;
             Debug.LogError("Error en dependencias: " + dependencyStatus);
         }
+        isInitializing = false; // Libera la bandera al terminar
     }
 
     private float lastFirebaseCallTime = -5f;
@@ -69,6 +79,14 @@ public class FirebaseStorageManager : MonoBehaviour
 
     public void LoadData(string userId, System.Action<Data, string> onSuccess)
     {
+        if (Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            string debug = "No hay conexión a internet. No se pueden cargar los datos.";
+            Debug.LogError(debug);
+            onSuccess?.Invoke(null, debug);
+            return;
+        }
+
         if (!CanCallFirebase())
         {
             onSuccess?.Invoke(null, "Debes esperar 5 segundos entre operaciones.");
@@ -79,15 +97,7 @@ public class FirebaseStorageManager : MonoBehaviour
         {
             onSuccess?.Invoke(null, null);
             return;
-        }
-
-        if (Application.internetReachability == NetworkReachability.NotReachable)
-        {
-            string debug = "No hay conexión a internet. No se pueden cargar los datos.";
-            Debug.LogError(debug);
-            onSuccess?.Invoke(null, debug);
-            return;
-        }
+        }  
 
         var userRef = dbReference.Child("usuarios").Child(userId);
         userRef.KeepSynced(false);
@@ -122,6 +132,12 @@ public class FirebaseStorageManager : MonoBehaviour
 
     public async void SaveData(Data data, string userId, bool overwrite, System.Action<string> onResult, bool debeEsperar = true)
     {
+        if (Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            onResult?.Invoke("No hay conexión a internet. No se pueden guardar los datos.");
+            return;
+        }
+
         if (!CanCallFirebase() && debeEsperar)
         {
             onResult?.Invoke("Debes esperar 5 segundos entre operaciones.");
@@ -131,12 +147,6 @@ public class FirebaseStorageManager : MonoBehaviour
         if (!isInitialized)
         {
             onResult?.Invoke("Firebase no está inicializado.");
-            return;
-        }
-
-        if (Application.internetReachability == NetworkReachability.NotReachable)
-        {
-            onResult?.Invoke("No hay conexión a internet. No se pueden guardar los datos.");
             return;
         }
 
@@ -184,15 +194,15 @@ public class FirebaseStorageManager : MonoBehaviour
     // Método para obtener todos los usuarios de la base de datos
     public void GetAllUsers(Action<List<Data>, string> onResult)
     {
-        if (!isInitialized)
-        {
-            onResult?.Invoke(null, "Firebase no está inicializado.");
-            return;
-        }
-
         if (Application.internetReachability == NetworkReachability.NotReachable)
         {
             onResult?.Invoke(null, "No hay conexión a internet.");
+            return;
+        }
+
+        if (!isInitialized)
+        {
+            onResult?.Invoke(null, "Firebase no está inicializado.");
             return;
         }
 
@@ -220,17 +230,17 @@ public class FirebaseStorageManager : MonoBehaviour
     // Método para obtener notificaciones de un usuario
     public void GetNotifications(string userId, Action<List<Notificacion>, string> onResult)
     {
-        if (!isInitialized)
-        {
-            onResult?.Invoke(null, "Firebase no está inicializado.");
-            return;
-        }
-
         if (Application.internetReachability == NetworkReachability.NotReachable)
         {
             onResult?.Invoke(null, "No hay conexión a internet.");
             return;
         }
+
+        if (!isInitialized)
+        {
+            onResult?.Invoke(null, "Firebase no está inicializado.");
+            return;
+        } 
 
         dbReference.Child("notificaciones").Child(userId).GetValueAsync().ContinueWithOnMainThread(task =>
         {
@@ -259,15 +269,15 @@ public class FirebaseStorageManager : MonoBehaviour
     // Método para añadir una notificación a un usuario
     public void AddNotification(string userId, Notificacion notificacion, Action<string> onResult)
     {
-        if (!isInitialized)
-        {
-            onResult?.Invoke("Firebase no está inicializado.");
-            return;
-        }
-
         if (Application.internetReachability == NetworkReachability.NotReachable)
         {
             onResult?.Invoke("No hay conexión a internet.");
+            return;
+        }
+
+        if (!isInitialized)
+        {
+            onResult?.Invoke("Firebase no está inicializado.");
             return;
         }
 
@@ -290,16 +300,18 @@ public class FirebaseStorageManager : MonoBehaviour
     // Método para marcar notificaciones como leídas
     public void MarkNotificationsAsRead(string userId, List<string> notificationIds, Action<string> onResult)
     {
-        if (!isInitialized)
-        {
-            onResult?.Invoke("Firebase no está inicializado.");
-            return;
-        }
         if (Application.internetReachability == NetworkReachability.NotReachable)
         {
             onResult?.Invoke("No hay conexión a internet.");
             return;
         }
+
+        if (!isInitialized)
+        {
+            onResult?.Invoke("Firebase no está inicializado.");
+            return;
+        }
+        
         int total = notificationIds.Count;
         int done = 0;
         string errorMsg = null;
@@ -324,16 +336,18 @@ public class FirebaseStorageManager : MonoBehaviour
     // Método para borrar notificaciones
     public void DeleteNotifications(string userId, List<string> notificationIds, Action<string> onResult)
     {
-        if (!isInitialized)
-        {
-            onResult?.Invoke("Firebase no está inicializado.");
-            return;
-        }
         if (Application.internetReachability == NetworkReachability.NotReachable)
         {
             onResult?.Invoke("No hay conexión a internet.");
             return;
         }
+
+        if (!isInitialized)
+        {
+            onResult?.Invoke("Firebase no está inicializado.");
+            return;
+        }
+        
         int total = notificationIds.Count;
         int done = 0;
         string errorMsg = null;
@@ -389,15 +403,15 @@ public class FirebaseStorageManager : MonoBehaviour
     // Método para obtener la cantidad de notificaciones de un usuario
     public void GetNewNotificationCount(string userId, Action<int, string> onResult)
     {
-        if (!isInitialized)
-        {
-            onResult?.Invoke(0, "Firebase no está inicializado.");
-            return;
-        }
-
         if (Application.internetReachability == NetworkReachability.NotReachable)
         {
             onResult?.Invoke(0, "No hay conexión a internet.");
+            return;
+        }
+
+        if (!isInitialized)
+        {
+            onResult?.Invoke(0, "Firebase no está inicializado.");
             return;
         }
 
@@ -430,15 +444,15 @@ public class FirebaseStorageManager : MonoBehaviour
     // Método para añadir un ReporteCaso con ID único a Firebase
     public void AddReporteCaso(Caso reporte, Action<string> onResult)
     {
-        if (!isInitialized)
-        {
-            onResult?.Invoke("Firebase no está inicializado.");
-            return;
-        }
-
         if (Application.internetReachability == NetworkReachability.NotReachable)
         {
             onResult?.Invoke("No hay conexión a internet.");
+            return;
+        }
+
+        if (!isInitialized)
+        {
+            onResult?.Invoke("Firebase no está inicializado.");
             return;
         }
 
@@ -449,11 +463,108 @@ public class FirebaseStorageManager : MonoBehaviour
         {
             if (task.IsFaulted || task.IsCanceled)
             {
-                onResult?.Invoke("Error al subir el reporte: " + task.Exception);
+                onResult?.Invoke("Error al subir el reporte");
             }
             else
             {
                 onResult?.Invoke(null); // Éxito
+            }
+        });
+    }
+
+    // Eliminar un ReporteCaso por ID
+    public void EliminarReporteCaso(string reporteId, Action<string> onResult)
+    {
+        if (!FirebaseStorageManager.singleton.isInitialized)
+        {
+            onResult?.Invoke("Firebase no está inicializado.");
+            return;
+        }
+        if (Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            onResult?.Invoke("No hay conexión a internet.");
+            return;
+        }
+        var dbRef = typeof(FirebaseStorageManager)
+            .GetField("dbReference", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            .GetValue(FirebaseStorageManager.singleton) as DatabaseReference;
+        dbRef.Child("reportes").Child(reporteId).RemoveValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsFaulted || task.IsCanceled)
+            {
+                onResult?.Invoke("Error al eliminar el reporte: " + task.Exception);
+            }
+            else
+            {
+                onResult?.Invoke(null); // Éxito
+            }
+        });
+    }
+
+    // Editar un ReporteCaso por ID
+    public void EditarReporteCaso(string reporteId, Caso nuevoReporte, Action<string> onResult)
+    {
+        if (!FirebaseStorageManager.singleton.isInitialized)
+        {
+            onResult?.Invoke("Firebase no está inicializado.");
+            return;
+        }
+        if (Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            onResult?.Invoke("No hay conexión a internet.");
+            return;
+        }
+        var dbRef = typeof(FirebaseStorageManager)
+            .GetField("dbReference", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            .GetValue(FirebaseStorageManager.singleton) as DatabaseReference;
+        dbRef.Child("reportes").Child(reporteId).SetRawJsonValueAsync(JsonUtility.ToJson(nuevoReporte)).ContinueWithOnMainThread(task =>
+        {
+            if (task.IsFaulted || task.IsCanceled)
+            {
+                onResult?.Invoke("Error al editar el reporte: " + task.Exception);
+            }
+            else
+            {
+                onResult?.Invoke(null); // Éxito
+            }
+        });
+    }
+
+    // Obtener un ReporteCaso por ID
+    public void BuscarCasoPorID(string reporteId, Action<Caso, string> onResult)
+    {
+        if (!FirebaseStorageManager.singleton.isInitialized)
+        {
+            onResult?.Invoke(null, "Firebase no está inicializado.");
+            return;
+        }
+        if (Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            onResult?.Invoke(null, "No hay conexión a internet.");
+            return;
+        }
+        var dbRef = typeof(FirebaseStorageManager)
+            .GetField("dbReference", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            .GetValue(FirebaseStorageManager.singleton) as DatabaseReference;
+        dbRef.Child("reportes").Child(reporteId).GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsFaulted || task.IsCanceled)
+            {
+                onResult?.Invoke(null, "Error al obtener el reporte: " + task.Exception);
+            }
+            else
+            {
+                var snapshot = task.Result;
+                if (snapshot.Exists)
+                {
+                    var json = snapshot.GetRawJsonValue();
+                    Caso caso = JsonUtility.FromJson<Caso>(json);
+                    onResult?.Invoke(caso, null);
+                }
+                else
+                {
+                    onResult?.Invoke(null, "No se encontró el reporte con el ID especificado.");
+                }
             }
         });
     }
@@ -467,6 +578,7 @@ public class Data
     public string numeroDocumento;
     public string numeroCelular;
     public string sexo;
+    public bool verificado;
     public string fechaNacimiento;
     public string nacionalidad;
     public string direccion;
@@ -484,6 +596,7 @@ public class Notificacion
     public bool leido;
 }
 
+[SerializeField]
 public class Caso
 {
     public string ID;
@@ -491,10 +604,15 @@ public class Caso
     public string tipoDocumento;
     public string numeroDocumento;
     public string numeroCelular;
+    public string fechaNacimiento;
     public string sexo;
     public string direccion;
     public string hechoAReportar;
-    public string tipoViolencia;
-    public string estadoCaso;
+
+    public int[] tipoViolencia;
+
+    public int tipoAvance;
+    public string descripcionDeAvance;
+    public int estadoDelCaso;
     public string fechaCaso; // Nueva propiedad para la fecha del caso
 }

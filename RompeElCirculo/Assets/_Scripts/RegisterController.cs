@@ -2,15 +2,18 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UtilidadesLaEME;
+using System;
 
 public class RegisterController : MonoBehaviour
 {
     public static RegisterController singleton;
 
-    public InputFieldUtilities nombreCompleto, numeroDocumento, numeroCelular, fechaNacimiento, otraNacionalidad, direccion, email, contraseña, confirmarContraseña;
+    public InputFieldUtilities nombreCompleto, numeroDocumento, numeroCelular, otraNacionalidad, direccion, email, contraseña, confirmarContraseña;
     public TMP_Dropdown tipoDocumento;
     public PreguntaSeleccionMultipleController sexo, nacionalidad;
     public TextMeshProUGUI textoTituloOtraNacionalidad, mensajeError;
+
+    public InputFieldUtilities diaNacimiento, mesNacimiento, añoNacimiento;
 
     public void VerificarNacionalidad(int indice)
     {
@@ -45,7 +48,7 @@ public class RegisterController : MonoBehaviour
                 numeroDocumento = numeroDocumento.inputField.text,
                 numeroCelular = numeroCelular.inputField.text,
                 sexo = sexo.cuadroSeleccionado.respuestaEMP.text,
-                fechaNacimiento = fechaNacimiento.inputField.text,
+                fechaNacimiento = Utilities.DateTimeToString(Utilities.CrearFecha(int.Parse(diaNacimiento.inputField.text), int.Parse(mesNacimiento.inputField.text), int.Parse(añoNacimiento.inputField.text))),
                 nacionalidad = !otraNacionalidad.gameObject.activeInHierarchy ? nacionalidad.cuadroSeleccionado.respuestaEMP.text : otraNacionalidad.inputField.text,
                 direccion = direccion.inputField.text,
                 email = email.inputField.text,
@@ -86,7 +89,7 @@ public class RegisterController : MonoBehaviour
 
     public bool ValidarDatos(out string mensajeError)
     {
-        if (!(nombreCompleto.contestado && numeroDocumento.contestado && numeroCelular.contestado && fechaNacimiento.contestado 
+        if (!(nombreCompleto.contestado && numeroDocumento.contestado && numeroCelular.contestado && diaNacimiento.contestado && mesNacimiento && añoNacimiento
             && direccion.contestado && email.contestado && contraseña.contestado && confirmarContraseña.contestado 
             && sexo.contestado && !(nacionalidad.cuadroSeleccionado.indiceRespuesta == 2 && !otraNacionalidad.contestado)))
         {
@@ -114,5 +117,5 @@ public class RegisterController : MonoBehaviour
 
         mensajeError = string.Empty;
         return true;
-    }
+    }  
 }
