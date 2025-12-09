@@ -12,7 +12,7 @@ Library: D:\PROYECTOS UNITY\GitHub\RompeElCirculo\RompeElCirculo\RompeElCirculo\
 --float-mode=Fast
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=D:\PROYECTOS UNITY\GitHub\RompeElCirculo\RompeElCirculo\RompeElCirculo\Temp\Burst
---key-folder=C:/Program Files/Unity/Hub/Editor/6000.2.2f1/Editor/Data/PlaybackEngines/AndroidPlayer
+--key-folder=C:/Program Files/Unity/Hub/Editor/6000.2.10f1/Editor/Data/PlaybackEngines/AndroidPlayer
 --decode-folder=D:\PROYECTOS UNITY\GitHub\RompeElCirculo\RompeElCirculo\RompeElCirculo\Library\Burst
 --output=D:\PROYECTOS UNITY\GitHub\RompeElCirculo\RompeElCirculo\RompeElCirculo\Temp\BurstOutput\tempburstlibs\arm64-v8a\lib_burst_generated
 --pdb-search-paths=Temp/ManagedSymbols/
@@ -30,7 +30,7 @@ Library: D:\PROYECTOS UNITY\GitHub\RompeElCirculo\RompeElCirculo\RompeElCirculo\
 --target-framework=NetFramework
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=D:\PROYECTOS UNITY\GitHub\RompeElCirculo\RompeElCirculo\RompeElCirculo\Temp\Burst
---key-folder=C:/Program Files/Unity/Hub/Editor/6000.2.2f1/Editor/Data/PlaybackEngines/AndroidPlayer
+--key-folder=C:/Program Files/Unity/Hub/Editor/6000.2.10f1/Editor/Data/PlaybackEngines/AndroidPlayer
 --decode-folder=D:\PROYECTOS UNITY\GitHub\RompeElCirculo\RompeElCirculo\RompeElCirculo\Library\Burst
 --output=D:\PROYECTOS UNITY\GitHub\RompeElCirculo\RompeElCirculo\RompeElCirculo\Temp\BurstOutput\tempburstlibs\arm64-v8a\lib_burst_generated
 --pdb-search-paths=Temp/ManagedSymbols/

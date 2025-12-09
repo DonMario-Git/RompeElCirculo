@@ -2,6 +2,7 @@ using DG.Tweening;
 using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -58,13 +59,42 @@ public class AppManager : MonoBehaviour
 
     public void CerrarSesion()
     {
+        // Ensure UI blocks and animations are stopped immediately
+        PestañasManager.singleton._FRENTE.raycastTarget = true;
+        PestañasManager.singleton._FRENTE.DOKill();
+        // Start coroutine to delete file and wait until it's removed before quitting
+        StartCoroutine(CerrarSesionCoroutine());
+    }
+
+    private IEnumerator CerrarSesionCoroutine()
+    {
         if (File.Exists(dataPath))
         {
-            PestañasManager.singleton._FRENTE.raycastTarget = true;
-            PestañasManager.singleton._FRENTE.DOKill();
-            File.Delete(dataPath);
-            Application.Quit();     
+            try
+            {
+                File.Delete(dataPath);
+            }
+            catch (Exception ex)
+            {
+                UnityEngine.Debug.LogError($"[AppManager] Error al eliminar archivo: {ex.Message}");
+            }
+
+            // Wait until the file no longer exists or until a timeout to avoid hanging forever
+            float timeout = 5f;
+            float startTime = Time.realtimeSinceStartup;
+            while (File.Exists(dataPath) && Time.realtimeSinceStartup - startTime < timeout)
+            {
+                yield return null;
+            }
+
+            if (File.Exists(dataPath))
+            {
+                UnityEngine.Debug.LogError("[AppManager] No se pudo eliminar el archivo antes del timeout.");
+                yield break;
+            }
         }
+
+        Application.Quit();     
     }
 
     public void InicializarApp()
