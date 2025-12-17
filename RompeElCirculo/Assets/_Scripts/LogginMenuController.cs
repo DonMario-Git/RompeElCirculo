@@ -1,5 +1,6 @@
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Video;
 using UtilidadesLaEME;
 
 public class LogginMenuController : MonoBehaviour
@@ -9,10 +10,20 @@ public class LogginMenuController : MonoBehaviour
     public int indicePestañaActual;
     public bool puedeCambiarPestaña = true;
 
+    public VideoPlayer abrirVideo;
+
     private void Awake()
     {
         AppManager.OnBackPressed += OnBackPress;
         singleton = this;
+    }
+
+    public void ReproducirVideoIntroduccion()
+    {
+        if (abrirVideo != null)
+        {
+            abrirVideo.Play();
+        }
     }
 
     private void OnBackPress()
