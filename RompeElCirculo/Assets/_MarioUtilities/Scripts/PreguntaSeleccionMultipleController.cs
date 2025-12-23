@@ -69,6 +69,6 @@ public class PreguntaSeleccionMultipleController : AsterizcoObligatorio, ICampoO
 
     public void ToggleObligatorio()
     {
-        obligatorio_TMP.gameObject.SetActive(!EstaContestado() && campoObligatorio);
+        if (obligatorio_TMP != null) obligatorio_TMP.gameObject.SetActive(!EstaContestado() && campoObligatorio);
     }
 }

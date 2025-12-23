@@ -584,6 +584,7 @@ public class Data
     public string direccion;
     public string email;
     public string contrasena;
+    public bool[] respuestasViolentometro;
 }
 
 public class Notificacion

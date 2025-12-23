@@ -86,7 +86,7 @@ public class ButtonExtrasController : MonoBehaviour, IPointerDownHandler, IPoint
 
                 if (textButton == null)
                 {
-                    Debug.LogWarning($"No se encontro componente TextMeshProUGUI en '{gameObject.name}'.");
+                    Debug.LogWarning($"No se encontro componente TextMeshProUGUI en '{gameObject.name}'.", gameObject);
                 }
                 else
                 {
@@ -158,7 +158,7 @@ public class ButtonExtrasController : MonoBehaviour, IPointerDownHandler, IPoint
         if (button.interactable)
         {
             core.Kill();
-            core = transform.DOScale(targetscale_down, time_down).SetEase(ease_down);
+            if (time_down > 0) core = transform.DOScale(targetscale_down, time_down).SetEase(ease_down);
             OnPointerDown?.Invoke();
         }      
     }
@@ -168,7 +168,7 @@ public class ButtonExtrasController : MonoBehaviour, IPointerDownHandler, IPoint
         if (button.interactable)
         {
             core.Kill();
-            core = transform.DOScale(targetscale_Up, time_Up).SetEase(ease_Up);
+            if (time_Up > 0) core = transform.DOScale(targetscale_Up, time_Up).SetEase(ease_Up);
         }      
     }
 
