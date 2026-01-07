@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System;
+using System.Net;
 using TMPro; 
 using UnityEngine;
 using UtilidadesLaEME;
@@ -79,8 +80,26 @@ public class ReporteCasosController : MonoBehaviour
             }
             else
             {
-                //CentroNotificacionesController.singleton.EnviarNotificacion(AppManager.userData.email, $"Reporte de botón violeta", "Enviado correctamente, espere atención pronto");
-                EmailSender.singleton.EnviarReporte($"Reporte de botón violeta [ID : {nuevoCaso.ID}]", $"Se reportó un caso en la fecha {nuevoCaso.fechaCaso}, a nombre de {nuevoCaso.nombreCompleto}, con {nuevoCaso.tipoDocumento} {nuevoCaso.numeroDocumento} en donde se reporta lo siguiente: {nuevoCaso.hechoAReportar}. {(contactarParaApoyo.cuadroSeleccionado.indiceRespuesta == 1 ? "" : $"Se pide contactar al emisor con el numero {nuevoCaso.numeroCelular} para ofrecer apoyo lo más pronto posible")}", "alta", EmailSender.singleton.mailsEmpresasRemitentes, (error2) => {
+                // Cuerpo en HTML; escapamos entradas de usuario y convertimos saltos a <br/>
+                string hechoEscapado = WebUtility.HtmlEncode(nuevoCaso.hechoAReportar).Replace("\r\n", "<br/>").Replace("\n", "<br/>");
+                string contactoHtml = contactarParaApoyo.cuadroSeleccionado.indiceRespuesta == 1
+                    ? string.Empty
+                    : $"<p><strong>Solicitar contacto al emisor:</strong> {WebUtility.HtmlEncode(nuevoCaso.numeroCelular)}</p>";
+
+                string cuerpo = $@"<html><body>
+<p>Se reportó un caso en la fecha {WebUtility.HtmlEncode(nuevoCaso.fechaCaso)}.</p>
+
+<p><strong>A nombre de:</strong> {WebUtility.HtmlEncode(nuevoCaso.nombreCompleto)}<br/>
+<strong>Documento:</strong> {WebUtility.HtmlEncode(nuevoCaso.tipoDocumento)} {WebUtility.HtmlEncode(nuevoCaso.numeroDocumento)}</p>
+
+<p><strong>Hecho a reportar:</strong><br/>{hechoEscapado}</p>
+
+{contactoHtml}
+
+<p><em>ID del caso: {WebUtility.HtmlEncode(nuevoCaso.ID)}</em></p>
+</body></html>";
+
+                EmailSender.singleton.EnviarReporte("Reporte de botón violeta", cuerpo, "alta", EmailSender.singleton.mailsEmpresasRemitentes, (error2) => {
                     ruedaCarga.transform.DOKill();
                     ruedaCarga.gameObject.DesactivarObjeto();
                     CentroNotificacionesController.singleton.EnviarNotificacion(entidadesReceptoras, $"Reporte de botón violeta", $"De: '{nuevoCaso.nombreCompleto}'");

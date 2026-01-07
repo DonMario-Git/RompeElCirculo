@@ -19399,7 +19399,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -0.000030517578, y: -363}
+  m_AnchoredPosition: {x: 0, y: -363}
   m_SizeDelta: {x: 305.08, y: 410.02002}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &475988431
@@ -41115,6 +41115,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EmailSender
   mailsEmpresasRemitentes:
   - pcemtunity@gmail.com
+  - Mecuc.coman@policia.gov.co
+  - mecuc.purpura@policia.gov.co
+  - Denor.polco@policia.gov.co
+  - Denor.emfag@policia.gov.co
+  - saludsexual@ids.gov.co
+  - dirsec.nortesantander@fiscalia.gov.co
 --- !u!4 &1070303259
 Transform:
   m_ObjectHideFlags: 0
@@ -47458,7 +47464,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1235800167
 RectTransform:
   m_ObjectHideFlags: 0
@@ -53803,12 +53809,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: LeTai.TrueShadow::LeTai.TrueShadow.TrueShadow
   algorithm: 0
-  size: 32
+  size: 37.94
   spread: 0
   useGlobalAngle: 0
-  offsetAngle: 158.55228
+  offsetAngle: 141.70982
   offsetDistance: 12
-  offset: {x: -11.16902, y: -4.387825}
+  offset: {x: -9.418592, y: -7.435733}
   color: {r: 0, g: 0, b: 0, a: 0.3764706}
   inset: 0
   blendMode: 0
@@ -71398,7 +71404,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000001858, y: 4206.364}
+  m_AnchoredPosition: {x: 0.000001858, y: -0.0010911052}
   m_SizeDelta: {x: 0, y: 5496.75}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1910602532
