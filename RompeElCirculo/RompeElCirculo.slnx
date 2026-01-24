@@ -42,6 +42,7 @@
   <Project Path="UnityEngine.SpatialTracking.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Unity.Services.Core.Environments.Internal.csproj" />
+  <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="Unity.Services.Core.Networking.csproj" />
   <Project Path="LeTai.Asset.TranslucentImage.Demo.csproj" />
   <Project Path="Unity.Services.Core.Scheduler.csproj" />
@@ -51,7 +52,6 @@
   <Project Path="Unity.Services.Core.Components.csproj" />
   <Project Path="LeTai.Common.csproj" />
   <Project Path="LeTai.Paraform.Scaffold.csproj" />
-  <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="Unity.Services.Core.Threading.csproj" />
   <Project Path="Unity.CollabProxy.Editor.csproj" />
   <Project Path="Unity.Services.Core.Device.csproj" />
