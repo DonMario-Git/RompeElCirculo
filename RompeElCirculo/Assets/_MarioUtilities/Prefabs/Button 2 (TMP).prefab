@@ -77,7 +77,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 8
+  m_PixelsPerUnitMultiplier: 5
 --- !u!114 &8045498173681831254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,7 +145,6 @@ MonoBehaviour:
   textButton: {fileID: 202908702000041104}
   defautColor: {r: 0.6039216, g: 0.20784315, b: 0.54901963, a: 1}
   disableColor: {r: 1, g: 1, b: 1, a: 0.5}
-  disableLicence: 0
   desactivarDeUna: 0
   shadowFeatures: 0
   OnPointerDown:
