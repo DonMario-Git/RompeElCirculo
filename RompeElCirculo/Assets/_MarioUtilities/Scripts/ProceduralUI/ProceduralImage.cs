@@ -280,6 +280,8 @@ public class ProceduralImage : MaskableGraphic, ITrueShadowCustomHashProviderV2
     // ITrueShadowCustomHashProviderV2 implementation
     public event Action<int> trueShadowCustomHashChanged;
 
+#if UNITY_EDITOR
+
     protected override void OnValidate()
     {
         base.OnValidate();
@@ -295,6 +297,8 @@ public class ProceduralImage : MaskableGraphic, ITrueShadowCustomHashProviderV2
         SetVerticesDirty();
         SetMaterialDirty();
     }
+
+#endif
 
     // Precise raycast for rounded corners
     public override bool Raycast(Vector2 sp, Camera eventCamera)

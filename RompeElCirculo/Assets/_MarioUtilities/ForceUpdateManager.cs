@@ -12,8 +12,6 @@ public class ForceUpdateManager : MonoBehaviour
 #if UNITY_ANDROID && !UNITY_EDITOR
         appUpdateManager = new AppUpdateManager();
         StartCoroutine(CheckForUpdateCoroutine());
-#else
-        Debug.LogWarning("In-app updates only supported on Android. Skipping update check in Editor.");
 #endif
     }
 

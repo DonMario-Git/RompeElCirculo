@@ -10,8 +10,14 @@ public class RutaAtencionController : MonoBehaviour
 
     private void OnEnable()
     {
+        pestañaDesplegable.DOKill();
         pestañaDesplegable.anchoredPosition = new Vector2(0, -2163);
         pestañaDesplegable.gameObject.SetActive(false);
+
+        foreach (var pestaña in pestañasInformacion)
+        {
+            pestaña.SetActive(false);
+        }
     }
 
     public void AbrirPestañaInformacion(int index)
