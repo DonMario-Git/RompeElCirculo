@@ -35,9 +35,9 @@
   <Project Path="LeTai.TrueShadow.Demo.csproj" />
   <Project Path="Assembly-CSharp-firstpass.csproj" />
   <Project Path="AwesomeAttributes.Attributes.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Unity.Services.Authentication.PlayerAccounts.Editor.csproj" />
   <Project Path="Unity.Recorder.csproj" />
-  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Unity.Services.Core.Analytics.csproj" />
   <Project Path="Google.Play.Core.csproj" />
   <Project Path="UnityEngine.SpatialTracking.csproj" />

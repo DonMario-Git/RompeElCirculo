@@ -1,4 +1,0 @@
--Añadir logo gob en pestaña principal (v)
--Hacer que violeta salude una vez y explique como se usa la app (P)
--Añadir la ruta de atencion (P)
--Mejorar violentómetro con su herramienta de detector de violencia (P)

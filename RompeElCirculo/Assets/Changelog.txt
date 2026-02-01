@@ -1,3 +1,0 @@
-- Se añadió el sistema de noticias
-- Se añadió el modo admin
-- Se añadieron minijuegos de matematicas aleatorios 
