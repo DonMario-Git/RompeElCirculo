@@ -2,21 +2,8 @@ apply plugin: 'com.android.library'
 apply from: '../shared/keepUnitySymbols.gradle'
 **APPLY_PLUGINS**
 
-// Apply Kotlin stdlib version forcing to all projects (includes launcher module)
-allprojects {
-    configurations.all {
-        resolutionStrategy {
-            force 'org.jetbrains.kotlin:kotlin-stdlib:1.8.10'
-            force 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.10'
-            force 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.10'
-        }
-    }
-}
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.activity:activity:1.7.2'
-    implementation 'androidx.activity:activity-ktx:1.7.2'
 // Android Resolver Dependencies Start
     implementation 'com.google.android.gms:play-services-base:18.10.0' // Assets/Firebase/Editor/DatabaseDependencies.xml:20
     implementation 'com.google.android.play:app-update:2.1.0' // Assets/GooglePlayPlugins/com.google.play.appupdate/Editor/Dependencies.xml:3
@@ -36,16 +23,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage-unity:13.0.0' // Assets/Firebase/Editor/StorageDependencies.xml:20
 // Android Resolver Dependencies End
 **DEPS**}
-
-// Force Kotlin stdlib versions to avoid duplicate-class conflicts between plugins
-configurations.all {
-    resolutionStrategy {
-        // Ensure all kotlin stdlib artifacts use a single compatible version
-        force 'org.jetbrains.kotlin:kotlin-stdlib:1.8.10'
-        force 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.10'
-        force 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.10'
-    }
-}
 
 // Android Resolver Exclusions Start
 android {
