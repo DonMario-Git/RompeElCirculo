@@ -95,7 +95,7 @@ public class CentroNotificacionesController : MonoBehaviour
     [ContextMenu(nameof(VerificarCantidadNotificacionesNuevas))]
     private void VerificarCantidadNotificacionesNuevas()
     {
-        FirebaseStorageManager.singleton.GetNewNotificationCount(AppManager.userData.nombreCompleto, (cantidad, error) =>
+        FirebaseStorageManager.singleton.GetNewNotificationCount(AppManager.UserData.nombreCompleto, (cantidad, error) =>
         {
             if (cantidad != 0)
             {
@@ -117,14 +117,14 @@ public class CentroNotificacionesController : MonoBehaviour
             // Procesar y mostrar notificaciones aquí
             // Marcar como leídas
             var ids = notificaciones.Select(n => n.id).ToList();
-            FirebaseStorageManager.singleton.MarkNotificationsAsRead(AppManager.userData.nombreCompleto, ids, (err) =>
+            FirebaseStorageManager.singleton.MarkNotificationsAsRead(AppManager.UserData.nombreCompleto, ids, (err) =>
             {
                 if (!string.IsNullOrEmpty(err))
                     Debug.LogError(err);
                 else
                     Debug.Log("Notificaciones marcadas como leídas.");
                 // Limpiar notificaciones leídas si hay más de 30
-                FirebaseStorageManager.singleton.CleanupReadNotifications(AppManager.userData.nombreCompleto, (cleanupErr) =>
+                FirebaseStorageManager.singleton.CleanupReadNotifications(AppManager.UserData.nombreCompleto, (cleanupErr) =>
                 {
                     if (!string.IsNullOrEmpty(cleanupErr))
                         Debug.LogError(cleanupErr);
@@ -146,7 +146,7 @@ public class CentroNotificacionesController : MonoBehaviour
         .SetEase(Ease.Linear)
         .SetLoops(-1, LoopType.Restart);
 
-        FirebaseStorageManager.singleton.GetNotifications(AppManager.userData.nombreCompleto, (notificaciones, error) =>
+        FirebaseStorageManager.singleton.GetNotifications(AppManager.UserData.nombreCompleto, (notificaciones, error) =>
         {
             if (string.IsNullOrEmpty(error))
             {      

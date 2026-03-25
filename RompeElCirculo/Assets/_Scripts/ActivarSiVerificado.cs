@@ -4,6 +4,6 @@ public class ActivarSiVerificado : MonoBehaviour
 {
     private void OnEnable()
     {
-        gameObject.SetActive(AppManager.userData.verificado);
+        gameObject.SetActive(AppManager.UserData.verificado);
     }
 }

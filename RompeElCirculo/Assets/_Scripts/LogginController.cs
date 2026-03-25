@@ -55,7 +55,7 @@ public class LogginController : MonoBehaviour
             // Usuario y contraseña correctos
             TirarMensaje("Inicio de sesión exitoso", Color.green);
             ruedaCarga.gameObject.DesactivarObjeto();
-            AppManager.userData = usuario;
+            AppManager.UserData = usuario;
             AppManager.singleton.GuardarDatosDisco();
 
             PestañasManager.singleton._FRENTE.raycastTarget = true;

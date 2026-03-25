@@ -44,14 +44,14 @@ public class ReporteCasosController : MonoBehaviour
     {
         Caso nuevoCaso = new()
         {
-            nombreCompleto = incluirNombre.cuadroSeleccionado.indiceRespuesta == 1 ? "[Anonimo]" : AppManager.userData.nombreCompleto,
-            tipoDocumento = incluirNombre.cuadroSeleccionado.indiceRespuesta == 1 ? "[Anonimo]" : AppManager.userData.tipoDocumento,
-            numeroDocumento = incluirNombre.cuadroSeleccionado.indiceRespuesta == 1 ? "[Anonimo]" : AppManager.userData.numeroDocumento,
-            numeroCelular = contactarParaApoyo.cuadroSeleccionado.indiceRespuesta == 1 ? "[Anonimo]" : AppManager.userData.numeroCelular,
-            sexo = incluirNombre.cuadroSeleccionado.indiceRespuesta == 1 ? "[Anonimo]" : AppManager.userData.sexo,
-            direccion = incluirNombre.cuadroSeleccionado.indiceRespuesta == 1 ? "[Anonimo]" : AppManager.userData.direccion,
+            nombreCompleto = incluirNombre.cuadroSeleccionado.indiceRespuesta == 1 ? "[Anonimo]" : AppManager.UserData.nombreCompleto,
+            tipoDocumento = incluirNombre.cuadroSeleccionado.indiceRespuesta == 1 ? "[Anonimo]" : AppManager.UserData.tipoDocumento,
+            numeroDocumento = incluirNombre.cuadroSeleccionado.indiceRespuesta == 1 ? "[Anonimo]" : AppManager.UserData.numeroDocumento,
+            numeroCelular = contactarParaApoyo.cuadroSeleccionado.indiceRespuesta == 1 ? "[Anonimo]" : AppManager.UserData.numeroCelular,
+            sexo = incluirNombre.cuadroSeleccionado.indiceRespuesta == 1 ? "[Anonimo]" : AppManager.UserData.sexo,
+            direccion = incluirNombre.cuadroSeleccionado.indiceRespuesta == 1 ? "[Anonimo]" : AppManager.UserData.direccion,
             fechaCaso = Utilities.DateTimeToString(DateTime.Now),
-            fechaNacimiento = incluirNombre.cuadroSeleccionado.indiceRespuesta == 1 ? "[Anonimo]" : AppManager.userData.fechaNacimiento,
+            fechaNacimiento = incluirNombre.cuadroSeleccionado.indiceRespuesta == 1 ? "[Anonimo]" : AppManager.UserData.fechaNacimiento,
 
             hechoAReportar = descripcionReporte.inputField.text,
             tipoAvance = 0,

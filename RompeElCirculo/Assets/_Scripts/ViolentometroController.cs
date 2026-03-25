@@ -27,7 +27,7 @@ public class ViolentometroController : MonoBehaviour
         ruedaCarga.localEulerAngles = Vector3.zero;
         ruedaCarga.DORotate(new Vector3(0, 0, -360), 1f, RotateMode.FastBeyond360).SetLoops(-1).SetEase(Ease.Linear);
 
-        AppManager.userData.respuestasViolentometro ??= new bool[15];
+        AppManager.UserData.respuestasViolentometro ??= new bool[15];
 
         List<bool> respuestasLista = new();
 
@@ -46,9 +46,9 @@ public class ViolentometroController : MonoBehaviour
             respuestasLista.Add(pregunta3.cuadrosMultiplesSeleccionados.Contains(pregunta3.items[i]));
         }
 
-        AppManager.userData.respuestasViolentometro = respuestasLista.ToArray();
+        AppManager.UserData.respuestasViolentometro = respuestasLista.ToArray();
 
-        FirebaseStorageManager.singleton.SaveData(AppManager.userData, AppManager.userData.nombreCompleto, true, (error) => {
+        FirebaseStorageManager.singleton.SaveData(AppManager.UserData, AppManager.UserData.nombreCompleto, true, (error) => {
             if (!string.IsNullOrEmpty(error)) Debug.LogWarning(error);
             ruedaCarga.DOKill();
             MostrarRespuesta();

@@ -5,16 +5,13 @@ using System.IO;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UtilidadesLaEME;
 
 public class AppManager : MonoBehaviour
 {
     public static AppManager singleton;
     private static Data _userData;
-    public static Data userData
+    public static Data UserData
     {
         get => _userData;
         set
@@ -36,8 +33,8 @@ public class AppManager : MonoBehaviour
         singleton = this;
 
         OnDataLoad += () => {
-            textoNombre.text = Utilities.GetFirstWord(userData.nombreCompleto);
-            objetoVerificado.SetActive(userData.verificado);
+            textoNombre.text = Utilities.GetFirstWord(UserData.nombreCompleto);
+            objetoVerificado.SetActive(UserData.verificado);
         };
     }
 
@@ -115,7 +112,7 @@ public class AppManager : MonoBehaviour
     {
         try
         {
-            string json = JsonConvert.SerializeObject(userData);
+            string json = JsonConvert.SerializeObject(UserData);
             File.WriteAllText(dataPath, json);
             UnityEngine.Debug.Log("[IntroController] Se guardó en el disco correctamente.");
         }
@@ -155,7 +152,7 @@ public class AppManager : MonoBehaviour
 
                 if (data != null)
                 {
-                    userData = data;
+                    UserData = data;
                     UnityEngine.Debug.Log("Datos del disco cargados correctamente");
                     return data;
                 }
