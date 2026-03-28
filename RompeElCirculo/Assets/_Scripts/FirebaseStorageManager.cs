@@ -24,10 +24,124 @@ public class FirebaseStorageManager : MonoBehaviour
         }
         else
         {
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
             singleton = this;
             FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(false);
         }     
+    }
+
+    // Genera un código numérico (6 dígitos) y lo guarda en la base de datos bajo emailVerificationCodes/{userId}
+    // Devuelve el código en el callback para que el desarrollador lo envíe por correo desde su servidor o servicio externo.
+    public void GenerateEmailVerificationCode(string userId, string email, Action<string, string> onResult)
+    {
+        if (Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            onResult?.Invoke(null, "No hay conexión a internet.");
+            return;
+        }
+
+        if (!isInitialized)
+        {
+            onResult?.Invoke(null, "Firebase no está inicializado.");
+            return;
+        }
+
+        // Generar código de 6 dígitos
+        var rnd = new System.Random();
+        string code = rnd.Next(0, 1000000).ToString("D6");
+
+        var payload = new Dictionary<string, object>()
+        {
+            { "code", code },
+            { "email", email },
+            { "createdAt", DateTimeOffset.UtcNow.ToUnixTimeSeconds() }
+        };
+
+        dbReference.Child("emailVerificationCodes").Child(userId).SetValueAsync(payload).ContinueWithOnMainThread(task =>
+        {
+            if (task.IsFaulted || task.IsCanceled)
+            {
+                onResult?.Invoke(null, "Error al generar código: " + task.Exception);
+            }
+            else
+            {
+                // Devuelve el código para que pueda ser enviado por correo desde un servicio externo o usado en pruebas
+                onResult?.Invoke(code, null);
+            }
+        });
+    }
+
+    // Verifica un código ingresado por el usuario. Si es correcto y no ha expirado, marca usuarios/{userId}/correoVerificado = true y elimina el código.
+    public void VerifyEmailCode(string userId, string code, Action<bool, string> onResult, int expirySeconds = 3600)
+    {
+        if (Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            onResult?.Invoke(false, "No hay conexión a internet.");
+            return;
+        }
+
+        if (!isInitialized)
+        {
+            onResult?.Invoke(false, "Firebase no está inicializado.");
+            return;
+        }
+
+        dbReference.Child("emailVerificationCodes").Child(userId).GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsFaulted || task.IsCanceled)
+            {
+                onResult?.Invoke(false, "Error al leer código: " + task.Exception);
+                return;
+            }
+
+            var snapshot = task.Result;
+            if (!snapshot.Exists)
+            {
+                onResult?.Invoke(false, "No hay código registrado para este usuario.");
+                return;
+            }
+
+            string savedCode = snapshot.Child("code").Value?.ToString();
+            long createdAt = 0;
+            try { createdAt = (long)snapshot.Child("createdAt").Value; } catch { }
+
+            long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            if (createdAt > 0 && now - createdAt > expirySeconds)
+            {
+                // Código expirado: eliminar y devolver error
+                dbReference.Child("emailVerificationCodes").Child(userId).RemoveValueAsync();
+                onResult?.Invoke(false, "Código expirado.");
+                return;
+            }
+
+            if (savedCode == code)
+            {
+                // Marcar como verificado en la entrada del usuario
+                var updates = new Dictionary<string, object>()
+                {
+                    { "correoVerificado", true },
+                    { "verificado", true }
+                };
+
+                dbReference.Child("usuarios").Child(userId).UpdateChildrenAsync(updates).ContinueWithOnMainThread(updateTask =>
+                {
+                    if (updateTask.IsFaulted || updateTask.IsCanceled)
+                    {
+                        onResult?.Invoke(false, "Error al actualizar usuario: " + updateTask.Exception);
+                    }
+                    else
+                    {
+                        // eliminar el código usado
+                        dbReference.Child("emailVerificationCodes").Child(userId).RemoveValueAsync();
+                        onResult?.Invoke(true, null);
+                    }
+                });
+            }
+            else
+            {
+                onResult?.Invoke(false, "Código incorrecto.");
+            }
+        });
     }
 
     private async void Start()
@@ -579,6 +693,7 @@ public class Data
     public string numeroCelular;
     public string sexo;
     public bool verificado;
+    public bool correoVerificado;
     public string fechaNacimiento;
     public string nacionalidad;
     public string direccion;

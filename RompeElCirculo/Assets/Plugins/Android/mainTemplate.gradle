@@ -26,9 +26,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-appcheck-debug:19.0.0' // Assets/Firebase/Editor/AppCheckDependencies.xml:15
     implementation 'com.google.firebase:firebase-appcheck-playintegrity:19.0.0' // Assets/Firebase/Editor/AppCheckDependencies.xml:17
     implementation 'com.google.firebase:firebase-appcheck-unity:13.0.0' // Assets/Firebase/Editor/AppCheckDependencies.xml:24
-    implementation 'com.google.firebase:firebase-app-unity:13.7.0' // Assets/Firebase/Editor/AppDependencies.xml:25
+    implementation 'com.google.firebase:firebase-app-unity:13.8.0' // Assets/Firebase/Editor/AppDependencies.xml:25
     implementation 'com.google.firebase:firebase-auth:24.0.1' // Assets/Firebase/Editor/AuthDependencies.xml:16
-    implementation 'com.google.firebase:firebase-auth-unity:13.7.0' // Assets/Firebase/Editor/AuthDependencies.xml:23
+    implementation 'com.google.firebase:firebase-auth-unity:13.8.0' // Assets/Firebase/Editor/AuthDependencies.xml:23
     implementation 'com.google.firebase:firebase-common:22.0.1' // Assets/Firebase/Editor/AppDependencies.xml:16
     implementation 'com.google.firebase:firebase-database:22.0.1' // Assets/Firebase/Editor/DatabaseDependencies.xml:16
     implementation 'com.google.firebase:firebase-database-unity:13.7.0' // Assets/Firebase/Editor/DatabaseDependencies.xml:25

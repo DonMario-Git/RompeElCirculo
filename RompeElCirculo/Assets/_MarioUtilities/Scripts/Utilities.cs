@@ -123,34 +123,51 @@ namespace UtilidadesLaEME
             return text;
         }
 
+        public static string CorregirAcentos(this string texto)
+        {
+            if (string.IsNullOrEmpty(texto)) return texto;
+
+            return texto
+                .Replace("à", "á")
+                .Replace("è", "é")
+                .Replace("ì", "í")
+                .Replace("ò", "ó")
+                .Replace("ù", "ú")
+                .Replace("À", "Á")
+                .Replace("È", "É")
+                .Replace("Ì", "Í")
+                .Replace("Ò", "Ó")
+                .Replace("Ù", "Ú");
+        }
+
         public static void DesactivarObjeto(this GameObject obj)
         {
-            obj.SetActive(false);
+            if (obj != null) obj.SetActive(false);
         }
 
         public static void ActivarObjeto(this GameObject obj)
         {
-            obj.SetActive(true);
+            if (obj != null) obj.SetActive(true);
         }
 
         public static void DesactivarComponente(this MonoBehaviour obj)
         {
-            obj.enabled = false;
+            if (obj != null) obj.enabled = false;
         }
 
         public static void ActivarComponente(this MonoBehaviour obj)
         {
-            obj.enabled = true;
+            if (obj != null) obj.enabled = true;
         }
 
         public static void DesactivarComponente(this Renderer obj)
         {
-            obj.enabled = false;
+            if (obj != null) obj.enabled = false;
         }
 
         public static void ActivarComponente(this Renderer obj)
         {
-            obj.enabled = true;
+            if (obj != null) obj.enabled = true;
         }
 
         /// <summary>
