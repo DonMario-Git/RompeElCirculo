@@ -2,163 +2,35 @@ using UnityEngine;
 using Firebase;
 using Firebase.Database;
 using Firebase.Extensions;
+using Firebase.Auth;
 using System.Threading.Tasks;
 using UnityEngine.Events;
 using Newtonsoft.Json;
 using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 
-public class FirebaseStorageManager : MonoBehaviour
+public class FirebaseStorageManager : Singleton<FirebaseStorageManager>
 {
     private DatabaseReference dbReference;
     public bool isInitialized;
-    public static FirebaseStorageManager singleton;
-    private bool isInitializing = false; // Nueva bandera para evitar inicializaciones concurrentes
+    public FirebaseUser currentAuthUser;
 
-    private void Awake()
+    #region Inicio
+
+    protected override void Awake()
     {
-        if (singleton != null)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            //DontDestroyOnLoad(gameObject);
-            singleton = this;
-            FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(false);
-        }     
+        base.Awake();
+        DontDestroyOnLoad(gameObject);
+        FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(false);
     }
-
-    // Genera un código numérico (6 dígitos) y lo guarda en la base de datos bajo emailVerificationCodes/{userId}
-    // Devuelve el código en el callback para que el desarrollador lo envíe por correo desde su servidor o servicio externo.
-    public void GenerateEmailVerificationCode(string userId, string email, Action<string, string> onResult)
-    {
-        if (Application.internetReachability == NetworkReachability.NotReachable)
-        {
-            onResult?.Invoke(null, "No hay conexión a internet.");
-            return;
-        }
-
-        if (!isInitialized)
-        {
-            onResult?.Invoke(null, "Firebase no está inicializado.");
-            return;
-        }
-
-        // Generar código de 6 dígitos
-        var rnd = new System.Random();
-        string code = rnd.Next(0, 1000000).ToString("D6");
-
-        var payload = new Dictionary<string, object>()
-        {
-            { "code", code },
-            { "email", email },
-            { "createdAt", DateTimeOffset.UtcNow.ToUnixTimeSeconds() }
-        };
-
-        dbReference.Child("emailVerificationCodes").Child(userId).SetValueAsync(payload).ContinueWithOnMainThread(task =>
-        {
-            if (task.IsFaulted || task.IsCanceled)
-            {
-                onResult?.Invoke(null, "Error al generar código: " + task.Exception);
-            }
-            else
-            {
-                // Devuelve el código para que pueda ser enviado por correo desde un servicio externo o usado en pruebas
-                onResult?.Invoke(code, null);
-            }
-        });
-    }
-
-    // Verifica un código ingresado por el usuario. Si es correcto y no ha expirado, marca usuarios/{userId}/correoVerificado = true y elimina el código.
-    public void VerifyEmailCode(string userId, string code, Action<bool, string> onResult, int expirySeconds = 3600)
-    {
-        if (Application.internetReachability == NetworkReachability.NotReachable)
-        {
-            onResult?.Invoke(false, "No hay conexión a internet.");
-            return;
-        }
-
-        if (!isInitialized)
-        {
-            onResult?.Invoke(false, "Firebase no está inicializado.");
-            return;
-        }
-
-        dbReference.Child("emailVerificationCodes").Child(userId).GetValueAsync().ContinueWithOnMainThread(task =>
-        {
-            if (task.IsFaulted || task.IsCanceled)
-            {
-                onResult?.Invoke(false, "Error al leer código: " + task.Exception);
-                return;
-            }
-
-            var snapshot = task.Result;
-            if (!snapshot.Exists)
-            {
-                onResult?.Invoke(false, "No hay código registrado para este usuario.");
-                return;
-            }
-
-            string savedCode = snapshot.Child("code").Value?.ToString();
-            long createdAt = 0;
-            try { createdAt = (long)snapshot.Child("createdAt").Value; } catch { }
-
-            long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            if (createdAt > 0 && now - createdAt > expirySeconds)
-            {
-                // Código expirado: eliminar y devolver error
-                dbReference.Child("emailVerificationCodes").Child(userId).RemoveValueAsync();
-                onResult?.Invoke(false, "Código expirado.");
-                return;
-            }
-
-            if (savedCode == code)
-            {
-                // Marcar como verificado en la entrada del usuario
-                var updates = new Dictionary<string, object>()
-                {
-                    { "correoVerificado", true },
-                    { "verificado", true }
-                };
-
-                dbReference.Child("usuarios").Child(userId).UpdateChildrenAsync(updates).ContinueWithOnMainThread(updateTask =>
-                {
-                    if (updateTask.IsFaulted || updateTask.IsCanceled)
-                    {
-                        onResult?.Invoke(false, "Error al actualizar usuario: " + updateTask.Exception);
-                    }
-                    else
-                    {
-                        // eliminar el código usado
-                        dbReference.Child("emailVerificationCodes").Child(userId).RemoveValueAsync();
-                        onResult?.Invoke(true, null);
-                    }
-                });
-            }
-            else
-            {
-                onResult?.Invoke(false, "Código incorrecto.");
-            }
-        });
-    }
-
+    
     private async void Start()
     {
         if (Application.internetReachability == NetworkReachability.NotReachable) return;
 
         if (singleton == this) await InitializeFirebase();
-    }
-
-    private void Update()
-    {
-        // Solo intenta inicializar si no está inicializado, no está inicializando y hay conexión
-        if (!isInitialized && !isInitializing && Application.internetReachability != NetworkReachability.NotReachable)
-        {
-            isInitializing = true;
-            _ = InitializeFirebase();
-        }
     }
 
     private async Task InitializeFirebase()
@@ -177,12 +49,166 @@ public class FirebaseStorageManager : MonoBehaviour
             isInitialized = false;
             Debug.LogError("Error en dependencias: " + dependencyStatus);
         }
-        isInitializing = false; // Libera la bandera al terminar
     }
+
+    #endregion
+
+    #region Autenticacion
+
+    // Crear usuario con FirebaseAuth y guardar sus datos en la base de datos
+    public async void CreateAuthUser(string email, string password, Action<FirebaseUser, string> onResult)
+    {
+        if (Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            onResult?.Invoke(null, "No hay conexión a internet. No se puede crear el usuario.");
+            return;
+        }
+
+        if (!isInitialized)
+        {
+            onResult?.Invoke(null, "Firebase no está inicializado.");
+            return;
+        }
+
+        var auth = FirebaseAuth.DefaultInstance;
+        try
+        {
+            // Esperar a que se cree el usuario. Dependiendo de la versión del SDK
+            // este método puede devolver un AuthResult o FirebaseUser, pero auth.CurrentUser
+            // se actualizará en ambos casos.
+            await auth.CreateUserWithEmailAndPasswordAsync(email, password);
+
+            FirebaseUser newUser = auth.CurrentUser;
+            if (newUser == null)
+            {
+                onResult?.Invoke(null, "No se pudo obtener el usuario creado.");
+                return;
+            }
+            else
+            {
+                onResult?.Invoke(newUser, string.Empty);
+                Debug.Log($"Usuario registrado correctamente con nombre {newUser.UserId}");
+            }
+        }
+        catch (Exception e)
+        {
+            onResult?.Invoke(null, "Error al crear usuario: " + e.Message);
+        }
+    }
+
+    // Iniciar sesión con email/clave, almacenar el usuario autenticado y sus datos en variables
+    public async void SignInAuthUser(string email, string password, Action<FirebaseUser, string> onResult)
+    {
+        if (Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            onResult?.Invoke(null, "No hay conexión a internet.");
+            return;
+        }
+
+        if (!isInitialized)
+        {
+            onResult?.Invoke(null, "Firebase no está inicializado.");
+            return;
+        }
+
+        var auth = FirebaseAuth.DefaultInstance;
+        try
+        {
+            await auth.SignInWithEmailAndPasswordAsync(email, password);
+            FirebaseUser newUser = auth.CurrentUser;
+            if (newUser == null)
+            {
+                onResult?.Invoke(null, "No se pudo obtener el usuario autenticado.");
+                return;
+            }
+            else
+            {
+                onResult?.Invoke(newUser, "InicioSesionCorrectamente");
+                return;
+            }
+        }
+        catch (Exception e)
+        {
+            onResult?.Invoke(null, "Error al iniciar sesión: " + e.Message);
+        }
+    }
+
+    public void SendEmailVerification(Action<bool, string> onResult)
+    {
+        if (currentAuthUser == null)
+        {
+            onResult?.Invoke(false, "No hay usuario logueado.");
+            return;
+        }
+
+        currentAuthUser.SendEmailVerificationAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCanceled)
+            {
+                onResult?.Invoke(false, "Operación cancelada.");
+                return;
+            }
+
+            if (task.IsFaulted)
+            {
+                var msg = task.Exception?.GetBaseException()?.Message;
+                Debug.LogError("Error enviando verificación: " + msg);
+                onResult?.Invoke(false, msg);
+                return;
+            }
+
+            Debug.Log("Email de verificación enviado.");
+            onResult?.Invoke(true, null);
+        });
+    }
+
+    /// <summary>
+    /// Verifica si el correo esta verificado
+    /// </summary>
+    /// <param name="onResult"></param>
+    public void CheckEmailVerified(Action<bool, string> onResult)
+    {
+        if (currentAuthUser == null)
+        {
+            onResult?.Invoke(false, "No hay usuario logueado.");
+            return;
+        }
+
+        currentAuthUser.ReloadAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCanceled)
+            {
+                onResult?.Invoke(false, "Operación cancelada.");
+                return;
+            }
+
+            if (task.IsFaulted)
+            {
+                var msg = task.Exception?.GetBaseException()?.Message;
+                Debug.LogError("Error recargando usuario: " + msg);
+                onResult?.Invoke(false, msg);
+                return;
+            }
+
+            bool isVerified = currentAuthUser.IsEmailVerified;
+
+            Debug.Log("Email verificado: " + isVerified);
+
+            onResult?.Invoke(isVerified, null);
+        });
+    }
+
+    #endregion
+
+    #region DataBase
 
     private float lastFirebaseCallTime = -5f;
     private const float firebaseCallCooldown = 5f;
 
+    /// <summary>
+    /// Esto es lo de esperar los 5 segundos
+    /// </summary>
+    /// <returns></returns>
     private bool CanCallFirebase()
     {
         if (Time.time - lastFirebaseCallTime < firebaseCallCooldown)
@@ -196,7 +222,6 @@ public class FirebaseStorageManager : MonoBehaviour
         if (Application.internetReachability == NetworkReachability.NotReachable)
         {
             string debug = "No hay conexión a internet. No se pueden cargar los datos.";
-            Debug.LogError(debug);
             onSuccess?.Invoke(null, debug);
             return;
         }
@@ -209,7 +234,7 @@ public class FirebaseStorageManager : MonoBehaviour
 
         if (!isInitialized)
         {
-            onSuccess?.Invoke(null, null);
+            onSuccess?.Invoke(null, "Error de sistemas no iniciados");
             return;
         }  
 
@@ -232,7 +257,7 @@ public class FirebaseStorageManager : MonoBehaviour
                     Data data = JsonConvert.DeserializeObject<Data>(json);
 
                     debug = null;
-                    Debug.Log("Datos cargados desde servidor.");
+                    Debug.Log("Datos cargados correctamenste");
                     onSuccess?.Invoke(data, debug);
                 }
                 else
@@ -340,6 +365,10 @@ public class FirebaseStorageManager : MonoBehaviour
             onResult?.Invoke(usuarios, null);
         });
     }
+
+    #endregion
+
+    #region GestionNotificaciones
 
     // Método para obtener notificaciones de un usuario
     public void GetNotifications(string userId, Action<List<Notificacion>, string> onResult)
@@ -555,6 +584,10 @@ public class FirebaseStorageManager : MonoBehaviour
         });
     }
 
+    #endregion
+
+    #region GestionCasos
+
     // Método para añadir un ReporteCaso con ID único a Firebase
     public void AddReporteCaso(Caso reporte, Action<string> onResult)
     {
@@ -682,20 +715,24 @@ public class FirebaseStorageManager : MonoBehaviour
             }
         });
     }
+
+    #endregion
 }
 
 [System.Serializable]
 public class Data
 {
+    public string versionDatosUsuario;
     public string nombreCompleto;
     public string tipoDocumento;
     public string numeroDocumento;
     public string numeroCelular;
     public string sexo;
+    public bool correoAutenticado;
     public bool verificado;
-    public bool correoVerificado;
     public string fechaNacimiento;
     public string nacionalidad;
+    public string departamento;
     public string direccion;
     public string email;
     public string contrasena;
@@ -730,5 +767,5 @@ public class Caso
     public int tipoAvance;
     public string descripcionDeAvance;
     public int estadoDelCaso;
-    public string fechaCaso; // Nueva propiedad para la fecha del caso
+    public string fechaCaso;
 }

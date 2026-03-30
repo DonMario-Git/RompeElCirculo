@@ -9,7 +9,7 @@ public class RegisterController : MonoBehaviour
     public static RegisterController singleton;
 
     public InputFieldUtilities nombreCompleto, numeroDocumento, numeroCelular, otraNacionalidad, direccion, email, contraseña, confirmarContraseña;
-    public TMP_Dropdown tipoDocumento;
+    public TMP_Dropdown tipoDocumento, departamento;
     public PreguntaSeleccionMultipleController sexo, nacionalidad;
     public TextMeshProUGUI textoTituloOtraNacionalidad, mensajeError;
 
@@ -50,24 +50,35 @@ public class RegisterController : MonoBehaviour
                 sexo = sexo.cuadroSeleccionado.respuestaEMP.text,
                 fechaNacimiento = Utilities.DateTimeToString(Utilities.CrearFecha(int.Parse(diaNacimiento.inputField.text), int.Parse(mesNacimiento.inputField.text), int.Parse(añoNacimiento.inputField.text))),
                 nacionalidad = !otraNacionalidad.gameObject.activeInHierarchy ? nacionalidad.cuadroSeleccionado.respuestaEMP.text : otraNacionalidad.inputField.text,
+                departamento = departamento.options[departamento.value].text,
                 direccion = direccion.inputField.text,
                 email = email.inputField.text,
                 contrasena = contraseña.inputField.text
             };
 
-            // Usar el nombreCompleto como userId
-            string userId = nombreCompleto.inputField.text;
-            FirebaseStorageManager.singleton.SaveData(data, userId, false, (resultError) =>
-            {
-                if (!string.IsNullOrEmpty(resultError))
+            FirebaseStorageManager.singleton.CreateAuthUser(email.inputField.text.TrimEdges(), contraseña.inputField.text.TrimEdges(), (user, mensaje) => {
+
+                if (user == null)
                 {
-                    TirarMensaje(resultError, Color.red);
-                    Debug.Log("error: " + resultError);
+                    Debug.LogWarning(mensaje);
+                    TirarMensaje("mensaje", Color.red);
+                    return;
                 }
                 else
                 {
-                    TirarMensaje("Usuario registrado correctamente.", Color.green);
-                    Debug.Log("Usuario registrado correctamente.");
+                    FirebaseStorageManager.singleton.SaveData(data, user.UserId, false, (resultError) =>
+                    {
+                        if (!string.IsNullOrEmpty(resultError))
+                        {
+                            TirarMensaje(resultError, Color.red);
+                            Debug.Log("error: " + resultError);
+                        }
+                        else
+                        {
+                            TirarMensaje("Usuario registrado correctamente.", Color.green);
+                            Debug.Log("Usuario registrado correctamente.");
+                        }
+                    });
                 }
             });
         }
@@ -109,7 +120,7 @@ public class RegisterController : MonoBehaviour
             return false;
         }
 
-        if (contraseña.inputField.text != confirmarContraseña.inputField.text)
+        if (contraseña.inputField.text.TrimEdges() != confirmarContraseña.inputField.text.TrimEdges())
         {
             mensajeError = "Las contraseñas no coinciden";
             return false;

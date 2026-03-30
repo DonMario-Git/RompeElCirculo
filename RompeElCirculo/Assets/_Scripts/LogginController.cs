@@ -1,13 +1,14 @@
 using DG.Tweening;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UtilidadesLaEME;
 
-public class LogginController : MonoBehaviour
+public class LogginController : Singleton<LogginController>
 {
     public InputFieldUtilities gmail, contraseña;
-    public ButtonExtrasController btn_IntentarIniciarSesion;
+    public ButtonExtrasController btn_IntentarIniciarSesion, btn_VerificacionCorreo;
     public TextMeshProUGUI mensajeError;
     public Image ruedaCarga;
 
@@ -19,51 +20,94 @@ public class LogginController : MonoBehaviour
         .SetEase(Ease.Linear)
         .SetLoops(-1, LoopType.Restart);
         mensajeError.text = string.Empty;
-        string emailIngresado = gmail.inputField.text;
-        string contrasenaIngresada = contraseña.inputField.text;
 
         btn_IntentarIniciarSesion.button.interactable = false;
 
-        FirebaseStorageManager.singleton.GetAllUsers((usuarios, error) =>
+
+        IntentarIniciarSesion(gmail.inputField.text, contraseña.inputField.text, ColocarDatosIniciarApp);
+    }
+
+    public void ColocarDatosIniciarApp(Data datos, string mensaje)
+    {
+        if (datos != null)
         {
-            btn_IntentarIniciarSesion.button.interactable = true;
-            if (!string.IsNullOrEmpty(error))
-            {
-                TirarMensaje(error, Color.red);
-                ruedaCarga.gameObject.DesactivarObjeto();
-                return;
-            }
-            if (usuarios == null || usuarios.Count == 0)
-            {
-                TirarMensaje("No se encontraron usuarios registrados", Color.red);
-                ruedaCarga.gameObject.DesactivarObjeto();
-                return;
-            }
-            var usuario = usuarios.Find(u => u.email == emailIngresado);
-            if (usuario == null)
-            {
-                TirarMensaje("Usuario no encontrado", Color.red);
-                ruedaCarga.gameObject.DesactivarObjeto();
-                return;
-            }
-            if (usuario.contrasena != contrasenaIngresada)
-            {
-                TirarMensaje("Contraseña incorrecta", Color.red);
-                ruedaCarga.gameObject.DesactivarObjeto();
-                return;
-            }
-            // Usuario y contraseña correctos
-            TirarMensaje("Inicio de sesión exitoso", Color.green);
-            ruedaCarga.gameObject.DesactivarObjeto();
-            AppManager.UserData = usuario;
+            AppManager.UserData = datos;
             AppManager.singleton.GuardarDatosDisco();
 
-            PestañasManager.singleton._FRENTE.raycastTarget = true;
-            PestañasManager.singleton._FRENTE.DOKill();
-            PestañasManager.singleton._FRENTE.DOFade(1, 0.3f).SetDelay(0.5f).OnComplete(() => {
-                PestañasManager.singleton.CambiarPestañaSinTransicion(0);
-                PestañasManager.singleton.AnimacionInicio();
-            });            
+            EjecutarAnimacionEntrada();
+        }
+
+        ruedaCarga.gameObject.DesactivarObjeto();
+        TirarMensaje(mensaje, datos == null ? Color.red : Color.green);
+        
+        btn_IntentarIniciarSesion.button.interactable = true;
+    }
+
+    private void EjecutarAnimacionEntrada()
+    {
+        PestañasManager.singleton._FRENTE.raycastTarget = true;
+        PestañasManager.singleton._FRENTE.DOKill();
+        PestañasManager.singleton._FRENTE.DOFade(1, 0.3f).SetDelay(0.5f).OnComplete(() =>
+        {
+            PestañasManager.singleton.CambiarPestañaSinTransicion(0);
+            PestañasManager.singleton.AnimacionInicio();
+        });
+    }
+
+    private void IntentarIniciarSesion(string emailIngresado, string contrasenaIngresada, Action<Data, string> OnComplete)
+    {
+        FirebaseStorageManager.singleton.SignInAuthUser(emailIngresado, contrasenaIngresada, (usuarioAuth, mensaje) => {
+
+            if (usuarioAuth == null)
+            {
+                OnComplete?.Invoke(null, mensaje);
+                return;
+            }
+            else
+            {
+                FirebaseStorageManager.singleton.currentAuthUser = usuarioAuth;
+                FirebaseStorageManager.singleton.LoadData(usuarioAuth.UserId, (datos, mensaje) => {
+
+                    if (datos == null)
+                    {
+                        OnComplete?.Invoke(null, mensaje);
+                        return;
+                    }
+                    else
+                    {
+                        FirebaseStorageManager.singleton.CheckEmailVerified((estaVerificado, mensajeErrorVericacion) => {
+
+                            if (!string.IsNullOrEmpty(mensajeErrorVericacion))
+                            {
+                                OnComplete?.Invoke(null, mensajeErrorVericacion);
+                                return;
+                            }
+
+                            if (estaVerificado)
+                            {
+                                OnComplete?.Invoke(datos, "Inicio de sesión exitoso");
+                                return;
+                            }
+                            else
+                            {
+                                FirebaseStorageManager.singleton.SendEmailVerification((mailEnviado, mensajeErrorAlenviar) => {
+
+                                    if (!mailEnviado)
+                                    {
+                                        OnComplete?.Invoke(null, mensajeErrorAlenviar);
+                                        return;
+                                    }
+                                    else
+                                    {
+                                        ConfirmacionCorreoController.singleton.datosParaAñadir = datos;
+                                        LogginMenuController.singleton.CambiarPestaña(3);
+                                    }
+                                });              
+                            }
+                        });
+                    }
+                });
+            }
         });
     }
 

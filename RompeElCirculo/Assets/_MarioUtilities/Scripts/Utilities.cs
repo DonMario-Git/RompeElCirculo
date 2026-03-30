@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using UnityEngine;
@@ -36,6 +37,70 @@ namespace UtilidadesLaEME
             return fecha.ToString("dd/MM/yy");
         }
 
+        public static DateTime GetSafeDateTime(DateTime input, bool toUTC = true)
+        {
+            DateTime result = input;
+
+            if (toUTC)
+            {
+                if (result.Kind == DateTimeKind.Unspecified)
+                    result = DateTime.SpecifyKind(result, DateTimeKind.Local);
+
+                result = result.ToUniversalTime();
+            }
+
+            return result;
+        }
+
+        public static DateTime GetSafeDateTime(string input, bool toUTC = true)
+        {
+            string[] formatos =
+            {
+            "yyyy-MM-dd",
+            "yyyy-MM-ddTHH:mm:ss",
+            "yyyy-MM-ddTHH:mm:ssZ",
+            "dd-MM-yyyy",
+            "MM-dd-yyyy",
+            "dd/MM/yyyy",
+            "MM/dd/yyyy"
+        };
+
+            if (!DateTime.TryParseExact(
+                input,
+                formatos,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.AssumeLocal,
+                out DateTime result))
+            {
+                throw new Exception("Formato de fecha inválido: " + input);
+            }
+
+            // Detección básica de ambigüedad
+            if (input.Contains("-"))
+            {
+                var partes = input.Split('-');
+                if (partes.Length >= 2 &&
+                    int.TryParse(partes[0], out int a) &&
+                    int.TryParse(partes[1], out int b))
+                {
+                    if (a <= 12 && b <= 12)
+                    {
+                        Debug.LogWarning("Fecha potencialmente ambigua: " + input);
+                    }
+                }
+            }
+
+            if (toUTC)
+            {
+                if (result.Kind == DateTimeKind.Unspecified)
+                    result = DateTime.SpecifyKind(result, DateTimeKind.Local);
+
+                result = result.ToUniversalTime();
+            }
+
+            return result;
+        }
+
         public static DateTime StringToDateTime(string fecha)
         {
             try
@@ -46,6 +111,18 @@ namespace UtilidadesLaEME
             {
                 throw new FormatException($"El string '{fecha}' no tiene el formato esperado dd/MM/yy.");
             }
+        }
+
+        public static DateTime UTCToLocal(DateTime utcTime)
+        {
+            // Asegurar que el DateTime sea UTC
+            if (utcTime.Kind == DateTimeKind.Unspecified)
+                utcTime = DateTime.SpecifyKind(utcTime, DateTimeKind.Utc);
+
+            if (utcTime.Kind == DateTimeKind.Local)
+                return utcTime; // ya es local
+
+            return utcTime.ToLocalTime();
         }
 
         public static DateTime CrearFecha(int dia, int mes, int año)

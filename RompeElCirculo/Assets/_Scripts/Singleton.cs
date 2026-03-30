@@ -10,7 +10,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         {
             if (_s == null)
             {
-                _s = FindFirstObjectByType<T>();
+                _s = FindFirstObjectByType<T>(FindObjectsInactive.Include);
 
                 if (_s == null)
                 {
