@@ -21,19 +21,13 @@ dependencies {
     implementation 'com.google.android.gms:play-services-base:18.10.0' // Assets/Firebase/Editor/DatabaseDependencies.xml:20
     implementation 'com.google.android.play:app-update:2.1.0' // Assets/GooglePlayPlugins/com.google.play.appupdate/Editor/Dependencies.xml:3
     implementation 'com.google.android.play:core-common:2.0.4' // Assets/GooglePlayPlugins/com.google.play.core/Editor/Dependencies.xml:3
-    implementation 'com.google.firebase:firebase-analytics:23.0.0' // Assets/Firebase/Editor/StorageDependencies.xml:15
-    implementation 'com.google.firebase:firebase-appcheck:19.0.0' // Assets/Firebase/Editor/AppCheckDependencies.xml:13
-    implementation 'com.google.firebase:firebase-appcheck-debug:19.0.0' // Assets/Firebase/Editor/AppCheckDependencies.xml:15
-    implementation 'com.google.firebase:firebase-appcheck-playintegrity:19.0.0' // Assets/Firebase/Editor/AppCheckDependencies.xml:17
-    implementation 'com.google.firebase:firebase-appcheck-unity:13.0.0' // Assets/Firebase/Editor/AppCheckDependencies.xml:24
-    implementation 'com.google.firebase:firebase-app-unity:13.8.0' // Assets/Firebase/Editor/AppDependencies.xml:25
+    implementation 'com.google.firebase:firebase-analytics:23.0.0' // Assets/Firebase/Editor/DatabaseDependencies.xml:18
+    implementation 'com.google.firebase:firebase-app-unity:13.9.0' // Assets/Firebase/Editor/AppDependencies.xml:25
     implementation 'com.google.firebase:firebase-auth:24.0.1' // Assets/Firebase/Editor/AuthDependencies.xml:16
-    implementation 'com.google.firebase:firebase-auth-unity:13.8.0' // Assets/Firebase/Editor/AuthDependencies.xml:23
+    implementation 'com.google.firebase:firebase-auth-unity:13.9.0' // Assets/Firebase/Editor/AuthDependencies.xml:23
     implementation 'com.google.firebase:firebase-common:22.0.1' // Assets/Firebase/Editor/AppDependencies.xml:16
     implementation 'com.google.firebase:firebase-database:22.0.1' // Assets/Firebase/Editor/DatabaseDependencies.xml:16
-    implementation 'com.google.firebase:firebase-database-unity:13.8.0' // Assets/Firebase/Editor/DatabaseDependencies.xml:25
-    implementation 'com.google.firebase:firebase-storage:22.0.0' // Assets/Firebase/Editor/StorageDependencies.xml:13
-    implementation 'com.google.firebase:firebase-storage-unity:13.0.0' // Assets/Firebase/Editor/StorageDependencies.xml:20
+    implementation 'com.google.firebase:firebase-database-unity:13.9.0' // Assets/Firebase/Editor/DatabaseDependencies.xml:25
 // Android Resolver Dependencies End
 **DEPS**}
 
