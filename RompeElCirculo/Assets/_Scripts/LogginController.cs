@@ -85,7 +85,7 @@ public class LogginController : Singleton<LogginController>
 
                             if (estaVerificado)
                             {
-                                OnComplete?.Invoke(datos, "Inicio de sesión exitoso");
+                                OnComplete?.Invoke(datos, "Inicio de sesión exitoso");  
                                 return;
                             }
                             else
