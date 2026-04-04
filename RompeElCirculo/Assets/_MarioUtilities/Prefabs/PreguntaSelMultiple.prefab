@@ -621,6 +621,7 @@ GameObject:
   - component: {fileID: 1406660119696037057}
   - component: {fileID: 1119966454512260741}
   - component: {fileID: 4727845319497149546}
+  - component: {fileID: 6276346820618032791}
   m_Layer: 5
   m_Name: CuadroOpcion (2)
   m_TagString: Untagged
@@ -724,6 +725,38 @@ MonoBehaviour:
   circuloInterno: {fileID: 3173533400454440924}
   circuloChulo: {fileID: 2071723605047531978}
   indiceRespuesta: 2
+--- !u!114 &6276346820618032791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1993159810627468421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52c162dc854d2f24fa639ba0623de5ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  algorithm: 0
+  size: 8
+  spread: 0
+  useGlobalAngle: 0
+  offsetAngle: 90
+  offsetDistance: 7
+  offset: {x: 0.00000041723257, y: -7}
+  color: {r: 0, g: 0, b: 0, a: 0.11}
+  inset: 0
+  blendMode: 0
+  useCasterAlpha: 1
+  ignoreCasterColor: 0
+  skipTextHashing: 0
+  deallocateOnDisable: 0
+  disableFitCompensation: 0
+  shadowAsSibling: 0
+  cutout: 0
+  baked: 0
+  modifiedFromInspector: 0
+  bakedShadows: []
 --- !u!1 &2817023927012400288
 GameObject:
   m_ObjectHideFlags: 0
@@ -888,6 +921,7 @@ GameObject:
   - component: {fileID: 7134118946345293879}
   - component: {fileID: 4434404004360718549}
   - component: {fileID: 7372155177445854925}
+  - component: {fileID: 5088060022511707869}
   m_Layer: 5
   m_Name: CuadroOpcion (3)
   m_TagString: Untagged
@@ -991,6 +1025,38 @@ MonoBehaviour:
   circuloInterno: {fileID: 906603339186740845}
   circuloChulo: {fileID: 2722249765250800376}
   indiceRespuesta: 3
+--- !u!114 &5088060022511707869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3103703788233773571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52c162dc854d2f24fa639ba0623de5ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  algorithm: 0
+  size: 8
+  spread: 0
+  useGlobalAngle: 0
+  offsetAngle: 90
+  offsetDistance: 7
+  offset: {x: 0.00000041723257, y: -7}
+  color: {r: 0, g: 0, b: 0, a: 0.11}
+  inset: 0
+  blendMode: 0
+  useCasterAlpha: 1
+  ignoreCasterColor: 0
+  skipTextHashing: 0
+  deallocateOnDisable: 0
+  disableFitCompensation: 0
+  shadowAsSibling: 0
+  cutout: 0
+  baked: 0
+  modifiedFromInspector: 0
+  bakedShadows: []
 --- !u!1 &3364315335992983544
 GameObject:
   m_ObjectHideFlags: 0
@@ -1301,6 +1367,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -2023,6 +2090,7 @@ GameObject:
   - component: {fileID: 5737948618056889409}
   - component: {fileID: 6156660975241938744}
   - component: {fileID: 6549389159030224604}
+  - component: {fileID: 2632582820172954774}
   m_Layer: 5
   m_Name: CuadroOpcion
   m_TagString: Untagged
@@ -2126,6 +2194,38 @@ MonoBehaviour:
   circuloInterno: {fileID: 5376781719838570422}
   circuloChulo: {fileID: 1053122319338647465}
   indiceRespuesta: 0
+--- !u!114 &2632582820172954774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4919437858535315997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52c162dc854d2f24fa639ba0623de5ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  algorithm: 0
+  size: 8
+  spread: 0
+  useGlobalAngle: 0
+  offsetAngle: 90
+  offsetDistance: 7
+  offset: {x: 0.00000041723257, y: -7}
+  color: {r: 0, g: 0, b: 0, a: 0.11}
+  inset: 0
+  blendMode: 0
+  useCasterAlpha: 1
+  ignoreCasterColor: 0
+  skipTextHashing: 0
+  deallocateOnDisable: 0
+  disableFitCompensation: 0
+  shadowAsSibling: 0
+  cutout: 0
+  baked: 0
+  modifiedFromInspector: 0
+  bakedShadows: []
 --- !u!1 &5845345269158103161
 GameObject:
   m_ObjectHideFlags: 0
@@ -2205,6 +2305,7 @@ GameObject:
   - component: {fileID: 7765760350352495849}
   - component: {fileID: 9085493231034904177}
   - component: {fileID: 2495132259075932336}
+  - component: {fileID: 205410552752754528}
   m_Layer: 5
   m_Name: CuadroOpcion (1)
   m_TagString: Untagged
@@ -2308,6 +2409,38 @@ MonoBehaviour:
   circuloInterno: {fileID: 6495448247600128027}
   circuloChulo: {fileID: 6450195058496494226}
   indiceRespuesta: 1
+--- !u!114 &205410552752754528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6149581856373654272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52c162dc854d2f24fa639ba0623de5ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  algorithm: 0
+  size: 8
+  spread: 0
+  useGlobalAngle: 0
+  offsetAngle: 90
+  offsetDistance: 7
+  offset: {x: 0.00000041723257, y: -7}
+  color: {r: 0, g: 0, b: 0, a: 0.11}
+  inset: 0
+  blendMode: 0
+  useCasterAlpha: 1
+  ignoreCasterColor: 0
+  skipTextHashing: 0
+  deallocateOnDisable: 0
+  disableFitCompensation: 0
+  shadowAsSibling: 0
+  cutout: 0
+  baked: 0
+  modifiedFromInspector: 0
+  bakedShadows: []
 --- !u!1 &8648858601691021286
 GameObject:
   m_ObjectHideFlags: 0
@@ -2546,7 +2679,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2533430354450333569, guid: 21f4d456af99d0242bf24e4b98b53b09, type: 3}
       propertyPath: m_fontSize
-      value: 45
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 2533430354450333569, guid: 21f4d456af99d0242bf24e4b98b53b09, type: 3}
       propertyPath: m_lineSpacing
@@ -2683,7 +2816,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2533430354450333569, guid: 21f4d456af99d0242bf24e4b98b53b09, type: 3}
       propertyPath: m_fontSize
-      value: 45
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 2533430354450333569, guid: 21f4d456af99d0242bf24e4b98b53b09, type: 3}
       propertyPath: m_lineSpacing
@@ -2930,7 +3063,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2533430354450333569, guid: 21f4d456af99d0242bf24e4b98b53b09, type: 3}
       propertyPath: m_fontSize
-      value: 45
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 2533430354450333569, guid: 21f4d456af99d0242bf24e4b98b53b09, type: 3}
       propertyPath: m_lineSpacing
@@ -3067,7 +3200,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2533430354450333569, guid: 21f4d456af99d0242bf24e4b98b53b09, type: 3}
       propertyPath: m_fontSize
-      value: 45
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 2533430354450333569, guid: 21f4d456af99d0242bf24e4b98b53b09, type: 3}
       propertyPath: m_lineSpacing

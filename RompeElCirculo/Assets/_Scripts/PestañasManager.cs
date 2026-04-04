@@ -7,8 +7,8 @@ public class PestañasManager : MonoBehaviour
 {
     public static PestañasManager singleton;
     public PestañaController[] pestañas;
+    private int? indiceActual = null;
     public Image _FRENTE;
-    public Transform _PESTAÑAS;
 
     private void Awake()
     {
@@ -17,34 +17,57 @@ public class PestañasManager : MonoBehaviour
 
     public void CambiarPestaña(int indice)
     {
-        PantallaTransicionController.singleton.Transicionar(() => {
-
-            CambiarPestañaSinTransicion(indice);
-        });
+        CambiarPestañaAnimacionAvanzar(indice);
     }
 
-    public void CambiarPestañaSinTransicion(int indice, System.Action AlCambiar = null)
+    public void CambiarPestañaAnimacionAvanzar(int indiceEntrante)
     {
         foreach (var item in pestañas)
         {
             item.gameObject.DesactivarObjeto();
         }
 
-        pestañas[indice].gameObject.ActivarObjeto();
-        pestañas[indice].transform.localScale = Vector3.one * 1.1f;
-        pestañas[indice].DOKill();
-        pestañas[indice].transform.DOScale(1, 0.2f);
+        if (indiceActual != null)
+        {
+            int sale = (int)indiceActual;
 
-        AlCambiar?.Invoke();
-    }
+            if (pestañas[sale].orden < pestañas[indiceEntrante].orden)
+            {
+                pestañas[sale].gameObject.ActivarObjeto();
+                pestañas[sale].transform.SetSiblingIndex(0);
 
-    public void AnimacionInicio()
-    {
-        _PESTAÑAS.localScale = Vector3.one * 1.2f;
-        _PESTAÑAS.DOKill();
-        _PESTAÑAS.DOScale(Vector3.one, 0.3f);
+                pestañas[indiceEntrante].transform.localPosition = new Vector2(1040, 0);
 
-        _FRENTE.DOKill();
-        _FRENTE.DOFade(0, 0.3f).OnComplete(() => _FRENTE.raycastTarget = false);
+                pestañas[indiceEntrante].transform.DOKill();
+                pestañas[sale].transform.DOKill();
+
+                pestañas[indiceEntrante].transform.DOLocalMoveX(0, 0.5f).SetEase(Ease.OutExpo);
+
+
+                pestañas[sale].transform.DOLocalMoveX(-240, 0.5f).SetEase(Ease.OutExpo).OnComplete(() => pestañas[sale].gameObject.DesactivarObjeto());
+                pestañas[indiceEntrante].transform.SetSiblingIndex(1);
+            }
+            else
+            {
+                pestañas[sale].gameObject.ActivarObjeto();
+                pestañas[sale].transform.SetSiblingIndex(1);
+
+                pestañas[sale].transform.localPosition = new Vector2(-240, 0);
+
+                pestañas[indiceEntrante].transform.DOKill();
+                pestañas[sale].transform.DOKill();
+
+                pestañas[indiceEntrante].transform.DOLocalMoveX(0, 0.5f).SetEase(Ease.OutExpo);
+
+                pestañas[sale].transform.DOLocalMoveX(1040, 0.5f).SetEase(Ease.OutExpo).OnComplete(() => pestañas[sale].gameObject.DesactivarObjeto());
+                pestañas[indiceEntrante].transform.SetSiblingIndex(0);
+            }
+        }
+
+        
+        pestañas[indiceEntrante].gameObject.ActivarObjeto();
+
+
+        indiceActual = indiceEntrante;
     }
 }

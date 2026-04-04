@@ -2,3 +2,6 @@
 
 # IDE0060: Quitar el parámetro no utilizado
 dotnet_diagnostic.IDE0060.severity = none
+
+# IDE0090: Usar "new(...)"
+dotnet_diagnostic.IDE0090.severity = none

@@ -98,14 +98,12 @@ public class AppManager : MonoBehaviour
     {
         if (CargarDatosDisco() != null)
         {
-            PestañasManager.singleton.CambiarPestañaSinTransicion(0);
+            PestañasManager.singleton.CambiarPestañaAnimacionAvanzar(0);
         }
         else
         {
-            PestañasManager.singleton.CambiarPestañaSinTransicion(2);   
+            PestañasManager.singleton.CambiarPestañaAnimacionAvanzar(2);   
         }
-
-        PestañasManager.singleton.AnimacionInicio();
     }
 
     public void GuardarDatosDisco()

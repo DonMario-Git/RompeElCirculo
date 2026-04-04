@@ -49,8 +49,7 @@ public class LogginController : Singleton<LogginController>
         PestañasManager.singleton._FRENTE.DOKill();
         PestañasManager.singleton._FRENTE.DOFade(1, 0.3f).SetDelay(0.5f).OnComplete(() =>
         {
-            PestañasManager.singleton.CambiarPestañaSinTransicion(0);
-            PestañasManager.singleton.AnimacionInicio();
+            PestañasManager.singleton.CambiarPestañaAnimacionAvanzar(0);
         });
     }
 

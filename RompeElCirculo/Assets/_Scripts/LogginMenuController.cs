@@ -36,13 +36,7 @@ public class LogginMenuController : MonoBehaviour
         }
         else
         {
-#if UNITY_ANDROID && !UNITY_EDITOR
-    using (AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
-    {
-        AndroidJavaObject currentActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
-        currentActivity.Call("moveTaskToBack", true);
-    }
-#endif
+            Application.Quit();
         }
     }
 

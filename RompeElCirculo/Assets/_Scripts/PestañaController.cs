@@ -1,3 +1,4 @@
+using AwesomeAttributes;
 using TMPro;
 using UnityEngine;
 
@@ -5,6 +6,7 @@ using UnityEngine;
 public class PestañaController : MonoBehaviour
 {
     public ScreenOrientation orientacion = ScreenOrientation.Portrait;
+    public int orden;
 
     private void OnEnable()
     {

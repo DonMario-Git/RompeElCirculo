@@ -30,11 +30,6 @@ public class ReporteCasosController : MonoBehaviour
         ventanaError.gameObject.DesactivarObjeto();
     }
 
-    public void VolverPrincipal()
-    {
-        PestañasManager.singleton.CambiarPestaña(0);
-    }
-
     public void VerificarRespuestas()
     {
         botonReportar.button.interactable = incluirNombre.contestado && contactarParaApoyo.contestado && descripcionReporte.contestado && tipoViolencia.contestado;

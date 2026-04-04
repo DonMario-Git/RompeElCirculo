@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "[Nuevo t\xEDtulo]"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 351ea3bf14d2fe6439e6b8cc249fee29, type: 2}
-  m_sharedMaterial: {fileID: 8452636651791567135, guid: 351ea3bf14d2fe6439e6b8cc249fee29, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b5f686b3b46eb224aa625509a9fab41b, type: 2}
+  m_sharedMaterial: {fileID: -7491783227454041412, guid: b5f686b3b46eb224aa625509a9fab41b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -92,17 +92,18 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
+  m_fontSize: 0
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 0
   m_fontSizeMax: 50
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
