@@ -87,7 +87,6 @@ GameObject:
   - component: {fileID: 5214152035366279708}
   - component: {fileID: 4683224416965301363}
   - component: {fileID: 5426004749640456733}
-  - component: {fileID: 7068241101778053992}
   m_Layer: 5
   m_Name: CuadradoTick
   m_TagString: Untagged
@@ -136,7 +135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.42352942, g: 0.2784314, b: 0.58431375, a: 1}
+  m_Color: {r: 0.54509807, g: 0.13725491, b: 0.7137255, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -153,21 +152,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 9.6
---- !u!114 &7068241101778053992
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 367228894822693493}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
-  m_EffectColor: {r: 0.42352942, g: 0.2784314, b: 0.58431375, a: 1}
-  m_EffectDistance: {x: 1, y: -1}
-  m_UseGraphicAlpha: 1
 --- !u!1 &697834104607319287
 GameObject:
   m_ObjectHideFlags: 0
@@ -2171,7 +2155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
-  m_EffectColor: {r: 0.6372718, g: 0.46337664, b: 0.8396226, a: 1}
+  m_EffectColor: {r: 0.54509807, g: 0.13725491, b: 0.7137255, a: 1}
   m_EffectDistance: {x: 3, y: -3}
   m_UseGraphicAlpha: 1
 --- !u!114 &6549389159030224604

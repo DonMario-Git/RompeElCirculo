@@ -27,6 +27,8 @@ public class AppManager : MonoBehaviour
     public TextMeshProUGUI textoNombre;
     public GameObject objetoVerificado;
 
+    public float timeScale = 1;
+
     private void Awake()
     {
         dataPath = Application.persistentDataPath + "/userData.json";
@@ -41,9 +43,7 @@ public class AppManager : MonoBehaviour
     void Start()
     {
         QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = 60;
-
-        InicializarApp();
+        Application.targetFrameRate = 60;  
     }
 
     void Update()
@@ -52,14 +52,12 @@ public class AppManager : MonoBehaviour
         {
             OnBackPressed?.Invoke();
         }
+
+        Time.timeScale = timeScale;
     }
 
     public void CerrarSesion()
     {
-        // Ensure UI blocks and animations are stopped immediately
-        PestañasManager.singleton._FRENTE.raycastTarget = true;
-        PestañasManager.singleton._FRENTE.DOKill();
-        // Start coroutine to delete file and wait until it's removed before quitting
         StartCoroutine(CerrarSesionCoroutine());
     }
 
@@ -98,11 +96,11 @@ public class AppManager : MonoBehaviour
     {
         if (CargarDatosDisco() != null)
         {
-            PestañasManager.singleton.CambiarPestañaAnimacionAvanzar(0);
+            PestañasManager.singleton.EjecutarAnimacionEntrada(4);
         }
         else
         {
-            PestañasManager.singleton.CambiarPestañaAnimacionAvanzar(2);   
+            PestañasManager.singleton.EjecutarAnimacionEntrada(0);
         }
     }
 

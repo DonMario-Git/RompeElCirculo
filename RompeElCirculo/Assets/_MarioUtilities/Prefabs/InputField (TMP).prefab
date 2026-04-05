@@ -208,9 +208,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Radius: 16
-  m_RaycastTargetLocal: 1
-  m_MaskableLocal: 1
   m_CustomSalt: -1063967682
   m_RadiusTopLeft: 5
   m_RadiusTopRight: 10
@@ -320,7 +317,7 @@ MonoBehaviour:
   m_CaretWidth: 1
   m_ReadOnly: 0
   m_RichText: 1
-  m_GlobalFontAsset: {fileID: 11400000, guid: 351ea3bf14d2fe6439e6b8cc249fee29, type: 2}
+  m_GlobalFontAsset: {fileID: 11400000, guid: 88e34406118ac7b478230c7767a05bdb, type: 2}
   m_OnFocusSelectAll: 1
   m_ResetOnDeActivation: 1
   m_KeepTextSelectionVisible: 0
@@ -672,8 +669,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u200B"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 351ea3bf14d2fe6439e6b8cc249fee29, type: 2}
-  m_sharedMaterial: {fileID: 8452636651791567135, guid: 351ea3bf14d2fe6439e6b8cc249fee29, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 88e34406118ac7b478230c7767a05bdb, type: 2}
+  m_sharedMaterial: {fileID: -3951549656524902923, guid: 88e34406118ac7b478230c7767a05bdb, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

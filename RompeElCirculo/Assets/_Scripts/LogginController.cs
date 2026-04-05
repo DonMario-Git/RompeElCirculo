@@ -34,23 +34,13 @@ public class LogginController : Singleton<LogginController>
             AppManager.UserData = datos;
             AppManager.singleton.GuardarDatosDisco();
 
-            EjecutarAnimacionEntrada();
+            PestañasManager.singleton.EjecutarAnimacionEntrada(4);
         }
 
         ruedaCarga.gameObject.DesactivarObjeto();
         TirarMensaje(mensaje, datos == null ? Color.red : Color.green);
         
         btn_IntentarIniciarSesion.button.interactable = true;
-    }
-
-    private void EjecutarAnimacionEntrada()
-    {
-        PestañasManager.singleton._FRENTE.raycastTarget = true;
-        PestañasManager.singleton._FRENTE.DOKill();
-        PestañasManager.singleton._FRENTE.DOFade(1, 0.3f).SetDelay(0.5f).OnComplete(() =>
-        {
-            PestañasManager.singleton.CambiarPestañaAnimacionAvanzar(0);
-        });
     }
 
     private void IntentarIniciarSesion(string emailIngresado, string contrasenaIngresada, Action<Data, string> OnComplete)
@@ -99,7 +89,7 @@ public class LogginController : Singleton<LogginController>
                                     else
                                     {
                                         ConfirmacionCorreoController.singleton.datosParaAñadir = datos;
-                                        LogginMenuController.singleton.CambiarPestaña(3);
+                                        PestañasManager.singleton.CambiarPestaña(3);
                                     }
                                 });              
                             }

@@ -16,6 +16,7 @@ public class FirebaseStorageManager : Singleton<FirebaseStorageManager>
     private DatabaseReference dbReference;
     public bool isInitialized;
     public FirebaseUser currentAuthUser;
+    public UnityEvent OnInitialized;
 
     #region Inicio
 
@@ -42,11 +43,13 @@ public class FirebaseStorageManager : Singleton<FirebaseStorageManager>
             dbReference = FirebaseDatabase.DefaultInstance.RootReference;
             FirebaseDatabase.DefaultInstance.GoOnline();
             isInitialized = true;
+            OnInitialized?.Invoke();
             Debug.Log("Firebase Realtime Database listo.");
         }
         else
         {
             isInitialized = false;
+            OnInitialized?.Invoke();
             Debug.LogError("Error en dependencias: " + dependencyStatus);
         }
     }

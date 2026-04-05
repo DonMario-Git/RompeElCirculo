@@ -7,6 +7,7 @@ using LeTai.TrueShadow.PluginInterfaces;
 
 [ExecuteAlways]
 [AddComponentMenu("UI/Procedural Image")]
+[RequireComponent(typeof(CanvasRenderer))]
 public class ProceduralImage : MaskableGraphic, ITrueShadowCustomHashProviderV2
 {
     [HideInInspector][SerializeField] private int m_CustomSalt = 0;

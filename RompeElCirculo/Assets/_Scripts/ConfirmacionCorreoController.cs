@@ -20,7 +20,7 @@ public class ConfirmacionCorreoController : Singleton<ConfirmacionCorreoControll
             if (!string.IsNullOrEmpty(mensajeErrorVericacion))
             {
                 Debug.LogWarning($"Error: {mensajeErrorVericacion}");
-                LogginMenuController.singleton.CambiarPestaña(1);
+                //LogginMenuController.singleton.CambiarPestaña(1);
             }
             else
             {
