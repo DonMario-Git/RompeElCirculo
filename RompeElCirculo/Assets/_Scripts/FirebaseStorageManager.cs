@@ -10,6 +10,8 @@ using System;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data;
+using UtilidadesLaEME;
 
 public class FirebaseStorageManager : Singleton<FirebaseStorageManager>
 {
@@ -279,6 +281,8 @@ public class FirebaseStorageManager : Singleton<FirebaseStorageManager>
 
     public async Task SaveData(Data data, string userId, bool overwrite, System.Action<string> onResult, bool debeEsperar = true)
     {
+        data.nombreCompleto = data.nombreCompleto.TrimEdges();
+
         if (Application.internetReachability == NetworkReachability.NotReachable)
         {
             onResult?.Invoke("No hay conexión a internet. No se pueden guardar los datos.");

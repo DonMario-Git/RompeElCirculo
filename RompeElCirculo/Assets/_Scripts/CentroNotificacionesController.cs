@@ -48,9 +48,9 @@ public class CentroNotificacionesController : MonoBehaviour
         } 
     }
 
-    public void EnviarNotificacion(string para, string titulo, string mensaje)
+    public void EnviarNotificacion(string userID, string titulo, string mensaje)
     {
-        if (string.IsNullOrEmpty(para))
+        if (string.IsNullOrEmpty(userID))
         {
             Debug.LogWarning("userId vacío. No se puede enviar la notificación.");
             return;
@@ -64,7 +64,7 @@ public class CentroNotificacionesController : MonoBehaviour
             leido = false
         };
 
-        FirebaseStorageManager.singleton.AddNotification(para, noti, (error) =>
+        FirebaseStorageManager.singleton.AddNotification(userID, noti, (error) =>
         {
             if (!string.IsNullOrEmpty(error))
                 Debug.LogError("Error al enviar notificación de prueba: " + error);
@@ -73,14 +73,14 @@ public class CentroNotificacionesController : MonoBehaviour
         });
     }
 
-    public void EnviarNotificacion(string[] para, string titulo, string mensaje)
+    public void EnviarNotificacion(string[] userID, string titulo, string mensaje)
     {
-        if (para == null || para.Length == 0)
+        if (userID == null || userID.Length == 0)
         {
             Debug.LogWarning("Array de userId vacío. No se puede enviar la notificación.");
             return;
         }
-        foreach (var usuario in para)
+        foreach (var usuario in userID)
         {
             if (string.IsNullOrEmpty(usuario))
             {
@@ -95,7 +95,7 @@ public class CentroNotificacionesController : MonoBehaviour
     [ContextMenu(nameof(VerificarCantidadNotificacionesNuevas))]
     private void VerificarCantidadNotificacionesNuevas()
     {
-        FirebaseStorageManager.singleton.GetNewNotificationCount(AppManager.UserData.nombreCompleto, (cantidad, error) =>
+        FirebaseStorageManager.singleton.GetNewNotificationCount(FirebaseStorageManager.singleton.currentAuthUser.UserId, (cantidad, error) =>
         {
             if (cantidad != 0)
             {
@@ -117,14 +117,14 @@ public class CentroNotificacionesController : MonoBehaviour
             // Procesar y mostrar notificaciones aquí
             // Marcar como leídas
             var ids = notificaciones.Select(n => n.id).ToList();
-            FirebaseStorageManager.singleton.MarkNotificationsAsRead(AppManager.UserData.nombreCompleto, ids, (err) =>
+            FirebaseStorageManager.singleton.MarkNotificationsAsRead(FirebaseStorageManager.singleton.currentAuthUser.UserId, ids, (err) =>
             {
                 if (!string.IsNullOrEmpty(err))
                     Debug.LogError(err);
                 else
                     Debug.Log("Notificaciones marcadas como leídas.");
                 // Limpiar notificaciones leídas si hay más de 30
-                FirebaseStorageManager.singleton.CleanupReadNotifications(AppManager.UserData.nombreCompleto, (cleanupErr) =>
+                FirebaseStorageManager.singleton.CleanupReadNotifications(FirebaseStorageManager.singleton.currentAuthUser.UserId, (cleanupErr) =>
                 {
                     if (!string.IsNullOrEmpty(cleanupErr))
                         Debug.LogError(cleanupErr);
@@ -146,7 +146,7 @@ public class CentroNotificacionesController : MonoBehaviour
         .SetEase(Ease.Linear)
         .SetLoops(-1, LoopType.Restart);
 
-        FirebaseStorageManager.singleton.GetNotifications(AppManager.UserData.nombreCompleto, (notificaciones, error) =>
+        FirebaseStorageManager.singleton.GetNotifications(FirebaseStorageManager.singleton.currentAuthUser.UserId, (notificaciones, error) =>
         {
             if (string.IsNullOrEmpty(error))
             {      

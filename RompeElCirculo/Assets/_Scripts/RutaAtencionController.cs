@@ -11,7 +11,7 @@ public class RutaAtencionController : MonoBehaviour
     private void OnEnable()
     {
         pestañaDesplegable.DOKill();
-        pestañaDesplegable.anchoredPosition = new Vector2(0, -2163);
+        pestañaDesplegable.anchoredPosition = new Vector2(0, -2463);
         pestañaDesplegable.gameObject.SetActive(false);
 
         foreach (var pestaña in pestañasInformacion)
@@ -26,13 +26,13 @@ public class RutaAtencionController : MonoBehaviour
         fondoNegro.gameObject.SetActive(true);
         pestañaDesplegable.gameObject.SetActive(true);
         pestañaDesplegable.DOKill();
-        pestañaDesplegable.DOAnchorPosY(0, 0.3f).SetEase(Ease.OutQuart);
+        pestañaDesplegable.DOAnchorPosY(0, 0.4f).SetEase(Ease.OutQuart);
     }
 
     public void CerrarTodasLasPestañas()
     {   
         pestañaDesplegable.DOKill();
-        pestañaDesplegable.DOAnchorPosY(-2163, 0.2f).SetEase(Ease.Linear).OnComplete(() =>
+        pestañaDesplegable.DOAnchorPosY(-2463, 0.2f).SetEase(Ease.InQuart).OnComplete(() =>
         {
             pestañaDesplegable.gameObject.SetActive(false);
             foreach (var pestaña in pestañasInformacion)
