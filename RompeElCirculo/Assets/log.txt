@@ -1,2 +1,2 @@
--Realizar mejoras gráficas
--Realizar 
+-Mejorar los mensajes de error
+-Incluir municipio de CUCUTA

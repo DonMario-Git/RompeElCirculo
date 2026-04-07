@@ -24,7 +24,7 @@ public class LogginController : Singleton<LogginController>
         btn_IntentarIniciarSesion.button.interactable = false;
 
 
-        IntentarIniciarSesion(gmail.inputField.text, contraseña.inputField.text, ColocarDatosIniciarApp);
+        IntentarIniciarSesionAuth(gmail.inputField.text, contraseña.inputField.text, ColocarDatosIniciarApp);
     }
 
     public void ColocarDatosIniciarApp(Data datos, string mensaje)
@@ -35,6 +35,8 @@ public class LogginController : Singleton<LogginController>
             AppManager.singleton.GuardarDatosDisco();
 
             PestañasManager.singleton.EjecutarAnimacionEntrada(4);
+
+            _ = FirebaseStorageManager.singleton.SaveData(AppManager.UserData, FirebaseStorageManager.singleton.currentAuthUser.UserId, true, null, false);
         }
 
         ruedaCarga.gameObject.DesactivarObjeto();
@@ -43,9 +45,9 @@ public class LogginController : Singleton<LogginController>
         btn_IntentarIniciarSesion.button.interactable = true;
     }
 
-    private void IntentarIniciarSesion(string emailIngresado, string contrasenaIngresada, Action<Data, string> OnComplete)
+    public void IntentarIniciarSesionAuth(string emailIngresado, string contrasenaIngresada, Action<Data, string> OnComplete, bool cargarDatosFireBase = true)
     {
-        FirebaseStorageManager.singleton.SignInAuthUser(emailIngresado, contrasenaIngresada, (usuarioAuth, mensaje) => {
+        _ = FirebaseStorageManager.singleton.SignInAuthUser(emailIngresado, contrasenaIngresada, (usuarioAuth, mensaje) => {
 
             if (usuarioAuth == null)
             {
@@ -55,11 +57,18 @@ public class LogginController : Singleton<LogginController>
             else
             {
                 FirebaseStorageManager.singleton.currentAuthUser = usuarioAuth;
+
+                if (!cargarDatosFireBase)
+                {
+                    OnComplete?.Invoke(null, "Inicio de sesión exitoso");
+                    return;
+                }
+
                 FirebaseStorageManager.singleton.LoadData(usuarioAuth.UserId, (datos, mensaje) => {
 
                     if (datos == null)
                     {
-                        OnComplete?.Invoke(null, mensaje);
+                        
                         return;
                     }
                     else
@@ -72,7 +81,7 @@ public class LogginController : Singleton<LogginController>
                                 return;
                             }
 
-                            if (estaVerificado)
+                            if (estaVerificado && datos.correoAutenticado)
                             {
                                 OnComplete?.Invoke(datos, "Inicio de sesión exitoso");  
                                 return;

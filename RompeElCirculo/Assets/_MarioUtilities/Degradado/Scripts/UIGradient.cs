@@ -24,7 +24,7 @@ public class UIGradient : BaseMeshEffect
 
             UIGradientUtils.Matrix2x3 localPositionMatrix = UIGradientUtils.LocalPositionMatrix(rect, dir);
 
-            UIVertex vertex = default(UIVertex);
+            UIVertex vertex = default;
             for (int i = 0; i < vh.currentVertCount; i++) {
                 vh.PopulateUIVertex (ref vertex, i);
                 Vector2 localPosition = localPositionMatrix * vertex.position;

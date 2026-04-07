@@ -48,7 +48,7 @@ public class ViolentometroController : MonoBehaviour
 
         AppManager.UserData.respuestasViolentometro = respuestasLista.ToArray();
 
-        FirebaseStorageManager.singleton.SaveData(AppManager.UserData, AppManager.UserData.nombreCompleto, true, (error) => {
+        _ = FirebaseStorageManager.singleton.SaveData(AppManager.UserData, FirebaseStorageManager.singleton.currentAuthUser.UserId, true, (error) => {
             if (!string.IsNullOrEmpty(error)) Debug.LogWarning(error);
             ruedaCarga.DOKill();
             MostrarRespuesta();

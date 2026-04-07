@@ -66,7 +66,7 @@ public class RegisterController : MonoBehaviour
                 }
                 else
                 {
-                    FirebaseStorageManager.singleton.SaveData(data, user.UserId, false, (resultError) =>
+                    _ = FirebaseStorageManager.singleton.SaveData(data, user.UserId, false, (resultError) =>
                     {
                         if (!string.IsNullOrEmpty(resultError))
                         {

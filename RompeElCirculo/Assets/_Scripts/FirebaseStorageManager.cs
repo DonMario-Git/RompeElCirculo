@@ -100,7 +100,7 @@ public class FirebaseStorageManager : Singleton<FirebaseStorageManager>
     }
 
     // Iniciar sesión con email/clave, almacenar el usuario autenticado y sus datos en variables
-    public async void SignInAuthUser(string email, string password, Action<FirebaseUser, string> onResult)
+    public async Task SignInAuthUser(string email, string password, Action<FirebaseUser, string> onResult)
     {
         if (Application.internetReachability == NetworkReachability.NotReachable)
         {
@@ -166,17 +166,11 @@ public class FirebaseStorageManager : Singleton<FirebaseStorageManager>
     }
 
     /// <summary>
-    /// Verifica si el correo esta verificado
+    /// Comprueba si el correo esta verificado
     /// </summary>
     /// <param name="onResult"></param>
     public void CheckEmailVerified(Action<bool, string> onResult)
     {
-        if (currentAuthUser == null)
-        {
-            onResult?.Invoke(false, "No hay usuario logueado.");
-            return;
-        }
-
         currentAuthUser.ReloadAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsCanceled)
@@ -193,11 +187,22 @@ public class FirebaseStorageManager : Singleton<FirebaseStorageManager>
                 return;
             }
 
-            bool isVerified = currentAuthUser.IsEmailVerified;
+            currentAuthUser.TokenAsync(true).ContinueWithOnMainThread(tokenTask =>
+            {
+                if (tokenTask.IsFaulted)
+                {
+                    var msg = tokenTask.Exception?.GetBaseException()?.Message;
+                    Debug.LogError("Error refrescando token: " + msg);
+                    onResult?.Invoke(false, msg);
+                    return;
+                }
 
-            Debug.Log("Email verificado: " + isVerified);
+                bool isVerified = currentAuthUser.IsEmailVerified;
 
-            onResult?.Invoke(isVerified, null);
+                Debug.Log("Email verificado (actualizado): " + isVerified);
+
+                onResult?.Invoke(isVerified, null);
+            });
         });
     }
 
@@ -272,7 +277,7 @@ public class FirebaseStorageManager : Singleton<FirebaseStorageManager>
             });
     }
 
-    public async void SaveData(Data data, string userId, bool overwrite, System.Action<string> onResult, bool debeEsperar = true)
+    public async Task SaveData(Data data, string userId, bool overwrite, System.Action<string> onResult, bool debeEsperar = true)
     {
         if (Application.internetReachability == NetworkReachability.NotReachable)
         {

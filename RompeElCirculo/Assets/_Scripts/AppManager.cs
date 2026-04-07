@@ -96,6 +96,12 @@ public class AppManager : MonoBehaviour
     {
         if (CargarDatosDisco() != null)
         {
+            LogginController.singleton.IntentarIniciarSesionAuth(UserData.email, UserData.contrasena, (datos, mensaje) =>
+            {
+                Debug.Log(mensaje);
+                _ = FirebaseStorageManager.singleton.SaveData(UserData, FirebaseStorageManager.singleton.currentAuthUser.UserId, true, null, false);
+            }, false);
+            
             PestañasManager.singleton.EjecutarAnimacionEntrada(4);
         }
         else
