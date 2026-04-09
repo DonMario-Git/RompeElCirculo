@@ -319,6 +319,14 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4211874460833005480, guid: 733886056ac98c94c8430b9667d08885, type: 3}
+      propertyPath: m_ContentType
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4211874460833005480, guid: 733886056ac98c94c8430b9667d08885, type: 3}
+      propertyPath: m_KeyboardType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4211874460833005480, guid: 733886056ac98c94c8430b9667d08885, type: 3}
       propertyPath: m_HideMobileInput
       value: 0
       objectReference: {fileID: 0}
@@ -6176,6 +6184,14 @@ PrefabInstance:
     - target: {fileID: 4211874460833005480, guid: 733886056ac98c94c8430b9667d08885, type: 3}
       propertyPath: m_InputType
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4211874460833005480, guid: 733886056ac98c94c8430b9667d08885, type: 3}
+      propertyPath: m_ContentType
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4211874460833005480, guid: 733886056ac98c94c8430b9667d08885, type: 3}
+      propertyPath: m_KeyboardType
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4211874460833005480, guid: 733886056ac98c94c8430b9667d08885, type: 3}
       propertyPath: m_HideMobileInput
@@ -46632,7 +46648,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 712854211}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
   m_Name: 
@@ -58373,6 +58389,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: InputField (TMP) (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 698707769399501938, guid: 733886056ac98c94c8430b9667d08885, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1022683492056022810, guid: 733886056ac98c94c8430b9667d08885, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -3.7999878
@@ -58400,6 +58420,14 @@ PrefabInstance:
     - target: {fileID: 4211874460833005480, guid: 733886056ac98c94c8430b9667d08885, type: 3}
       propertyPath: m_InputType
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4211874460833005480, guid: 733886056ac98c94c8430b9667d08885, type: 3}
+      propertyPath: m_ContentType
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4211874460833005480, guid: 733886056ac98c94c8430b9667d08885, type: 3}
+      propertyPath: m_KeyboardType
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4211874460833005480, guid: 733886056ac98c94c8430b9667d08885, type: 3}
       propertyPath: m_HideMobileInput
