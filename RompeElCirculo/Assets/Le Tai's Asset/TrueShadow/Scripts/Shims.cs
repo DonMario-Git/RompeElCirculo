@@ -12,7 +12,7 @@ public static class Shims
     {
 #if UNITY_2023_1_OR_NEWER
         if (sorted)
-            return Object.FindFirstObjectByType<T>(includeInactive ? FindObjectsInactive.Include : FindObjectsInactive.Exclude);
+            return Object.FindAnyObjectByType<T>(includeInactive ? FindObjectsInactive.Include : FindObjectsInactive.Exclude);
         else
             return Object.FindAnyObjectByType<T>(includeInactive ? FindObjectsInactive.Include : FindObjectsInactive.Exclude);
 #elif UNITY_2020_1_OR_NEWER
@@ -26,8 +26,7 @@ public static class Shims
     public static T[] FindObjectsOfType<T>(bool includeInactive = false) where T : Object
     {
 #if UNITY_2023_1_OR_NEWER
-        return Object.FindObjectsByType<T>(includeInactive ? FindObjectsInactive.Include : FindObjectsInactive.Exclude,
-                                           FindObjectsSortMode.None);
+        return Object.FindObjectsByType<T>(includeInactive ? FindObjectsInactive.Include : FindObjectsInactive.Exclude);
 #elif UNITY_2020_1_OR_NEWER
         return Object.FindObjectsOfType<T>(includeInactive);
 #else

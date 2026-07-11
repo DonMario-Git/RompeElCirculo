@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 8564277246449829251}
   - component: {fileID: 8045498173681831254}
   - component: {fileID: 175009555158058652}
-  - component: {fileID: 1673949275816027040}
   m_Layer: 5
   m_Name: Button 2 (TMP)
   m_TagString: Untagged
@@ -69,7 +68,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4b1ad0223fcf1b645989d68db9245dbd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ebc99f65e0c6ef44ab87443ee9f6b0e3, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -154,38 +153,6 @@ MonoBehaviour:
   OnSetInteractable:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1673949275816027040
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1616828351556161888}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52c162dc854d2f24fa639ba0623de5ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  algorithm: 0
-  size: 5
-  spread: 0
-  useGlobalAngle: 0
-  offsetAngle: 90
-  offsetDistance: 4
-  offset: {x: 0.0000002384186, y: -4}
-  color: {r: 0, g: 0, b: 0, a: 0.09}
-  inset: 0
-  blendMode: 0
-  useCasterAlpha: 1
-  ignoreCasterColor: 0
-  skipTextHashing: 0
-  deallocateOnDisable: 0
-  disableFitCompensation: 0
-  shadowAsSibling: 0
-  cutout: 0
-  baked: 0
-  modifiedFromInspector: 0
-  bakedShadows: []
 --- !u!1 &7946017351858199224
 GameObject:
   m_ObjectHideFlags: 0

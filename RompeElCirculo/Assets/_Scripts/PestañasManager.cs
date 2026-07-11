@@ -69,6 +69,7 @@ public class PestañasManager : MonoBehaviour
 
     public void CambiarPestañaAnimacionAvanzar(int indiceEntrante)
     {
+        Debug.Log("Cambiando a pagina + indiceEntrante");
         _BLOQUEADOR.raycastTarget = true;
         
         int sale = (int)indiceActual;

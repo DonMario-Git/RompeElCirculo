@@ -1,24 +1,25 @@
-using AwesomeAttributes;
+using NaughtyAttributes;
+using Newtonsoft.Json;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using UnityEngine;
 using UtilidadesLaEME;
 
 public class InformacionMunicipiosController : Singleton<InformacionMunicipiosController>
 {
     public InformacionMunicipios[] informacionMunicipios;
+    public TextAsset tsvAsset;
 
-    [Button(nameof(LoadAssignedTsv))]
-    public TextAsset tsvAsset; 
-
+    [Button]
     public void LoadAssignedTsv()
     {
         if (tsvAsset == null) return;
 
         try
         {
-            informacionMunicipios = ParseTsv(tsvAsset.text).ToArray();
+            informacionMunicipios = ParseTsv(tsvAsset.text);
 
             foreach (var item in informacionMunicipios)
             {
@@ -43,66 +44,94 @@ public class InformacionMunicipiosController : Singleton<InformacionMunicipiosCo
         }
     }
 
-    #region Conversor TSV a InformacionMunicipios
-
-    static IEnumerable<InformacionMunicipios> ParseTsv(string tsvText)
+    [Button]
+    public void OrdenarElementos()
     {
-        if (string.IsNullOrEmpty(tsvText))
-            yield break;
-
-        var lines = tsvText.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None)
-                           .Where(l => !string.IsNullOrWhiteSpace(l))
-                           .ToArray();
-
-        if (lines.Length == 0)
-            yield break;
-
-        string[] headerParts = SplitLine(lines[0]);
-        var headerIndex = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-        for (int i = 0; i < headerParts.Length; i++)
-        {
-            var key = headerParts[i].Trim();
-            if (!headerIndex.ContainsKey(key))
-                headerIndex[key] = i;
-        }
-
-        for (int li = 1; li < lines.Length; li++)
-        {
-            var parts = SplitLine(lines[li]);
-            InformacionMunicipios info = new InformacionMunicipios();
-
-            string Get(string key)
-            {
-                if (headerIndex.TryGetValue(key, out var idx) && idx >= 0 && idx < parts.Length)
-                    return parts[idx]?.Trim() ?? string.Empty;
-                // try lowercase header match if exact not found
-                var match = headerIndex.Keys.FirstOrDefault(k => string.Equals(k, key, StringComparison.OrdinalIgnoreCase));
-                if (match != null && headerIndex.TryGetValue(match, out idx) && idx >= 0 && idx < parts.Length)
-                    return parts[idx]?.Trim() ?? string.Empty;
-                return string.Empty;
-            }
-
-            info.nombre = Get("nombre");
-            info.nombreComisario = Get("nombreComisario");
-            info.correoElectronico = Get("correoElectronico");
-
-            info.nombreInspector = Get("nombreInspector");
-            info.numeroInspeccionPolicia = Get("numeroInspeccionPolicia");
-            info.correoInspector = Get("correoInspector");
-            info.direccionInspeccionPolicia = Get("direccionInspeccionPolicia");
-
-            info.nombrePersonero = Get("nombrePersonero");
-            info.telefonoContactoPersoneria = Get("telefonoContactoPersoneria");
-            info.correoPersonero = Get("correoPersonero");
-            info.direccionPersoneria = Get("direccionPersoneria");
-
-            yield return info;
-        }
+        InformacionMunicipios.OrdenarMunicipios(informacionMunicipios);
     }
 
-    static string[] SplitLine(string line)
+    #region Conversor TSV a InformacionMunicipios
+
+    // Nombres de columna esperados, en el mismo orden que los campos del modelo.
+    static readonly string[] Campos =
     {
-        return line.Split(new[] { '\t' }, StringSplitOptions.None);
+        "nombre", "nombreComisario", "correoElectronico",
+        "nombreInspector", "numeroInspeccionPolicia", "correoInspector", "direccionInspeccionPolicia",
+        "nombrePersonero", "telefonoContactoPersoneria", "correoPersonero", "direccionPersoneria"
+    };
+
+    static InformacionMunicipios[] ParseTsv(string tsvText)
+    {
+        if (string.IsNullOrEmpty(tsvText))
+            return Array.Empty<InformacionMunicipios>();
+
+        // Split manual sin LINQ, evitando allocaciones extra de Where().ToArray().
+        string[] rawLines = tsvText.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+
+        string[] headerParts = null;
+        Dictionary<string, int> headerIndex = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+
+        List<InformacionMunicipios> resultado = new List<InformacionMunicipios>(rawLines.Length);
+
+        // Índices de columna resueltos UNA sola vez, no por cada fila.
+        int[] indices = null;
+
+        for (int li = 0; li < rawLines.Length; li++)
+        {
+            string line = rawLines[li];
+            if (string.IsNullOrWhiteSpace(line))
+                continue;
+
+            string[] parts = line.Split('\t');
+
+            if (headerParts == null)
+            {
+                headerParts = parts;
+                for (int i = 0; i < headerParts.Length; i++)
+                {
+                    string key = headerParts[i].Trim();
+                    if (!headerIndex.ContainsKey(key))
+                        headerIndex[key] = i;
+                }
+
+                // Resolver el índice de columna de cada campo una única vez.
+                indices = new int[Campos.Length];
+                for (int c = 0; c < Campos.Length; c++)
+                {
+                    indices[c] = headerIndex.TryGetValue(Campos[c], out int idx) ? idx : -1;
+                }
+
+                continue; // esta línea era el header, no un dato
+            }
+
+            InformacionMunicipios info = new InformacionMunicipios
+            {
+                nombre = GetValor(parts, indices[0]),
+                nombreComisario = GetValor(parts, indices[1]),
+                correoElectronico = GetValor(parts, indices[2]),
+
+                nombreInspector = GetValor(parts, indices[3]),
+                numeroInspeccionPolicia = GetValor(parts, indices[4]),
+                correoInspector = GetValor(parts, indices[5]),
+                direccionInspeccionPolicia = GetValor(parts, indices[6]),
+
+                nombrePersonero = GetValor(parts, indices[7]),
+                telefonoContactoPersoneria = GetValor(parts, indices[8]),
+                correoPersonero = GetValor(parts, indices[9]),
+                direccionPersoneria = GetValor(parts, indices[10]),
+            };
+
+            resultado.Add(info);
+        }
+
+        return resultado.ToArray();
+    }
+
+    static string GetValor(string[] parts, int indice)
+    {
+        if (indice < 0 || indice >= parts.Length)
+            return string.Empty;
+        return parts[indice]?.Trim() ?? string.Empty;
     }
 
     #endregion
@@ -124,4 +153,35 @@ public class InformacionMunicipios
     public string telefonoContactoPersoneria;
     public string correoPersonero;
     public string direccionPersoneria;
+
+    public static void OrdenarMunicipios(InformacionMunicipios[] municipios)
+    {
+        Array.Sort(municipios, (a, b) =>
+        {
+            bool aEsCucuta = EsCucuta(a.nombre);
+            bool bEsCucuta = EsCucuta(b.nombre);
+
+            // CÚCUTA siempre primero
+            if (aEsCucuta && !bEsCucuta)
+                return -1;
+
+            if (!aEsCucuta && bEsCucuta)
+                return 1;
+
+            // Orden alfabético para el resto
+            return string.Compare(
+                a.nombre,
+                b.nombre,
+                CultureInfo.CurrentCulture,
+                CompareOptions.IgnoreCase);
+        });
+    }
+
+    private static bool EsCucuta(string nombre)
+    {
+        return string.Equals(
+            nombre?.Trim(),
+            "CÚCUTA",
+            StringComparison.CurrentCultureIgnoreCase);
+    }
 }

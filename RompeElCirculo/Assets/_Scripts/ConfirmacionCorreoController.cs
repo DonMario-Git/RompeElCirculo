@@ -52,7 +52,7 @@ public class ConfirmacionCorreoController : Singleton<ConfirmacionCorreoControll
 
     public void VerificarSiConfirmo()
     {
-        FirebaseStorageManager.singleton.CheckEmailVerified((estaConfirmado, mensajeErrorVericacion) => {
+        FirebaseStorageManager.singleton.ReloadAndCheckEmailVerified((esVerificado, mensajeErrorVericacion) => {
 
             if (!string.IsNullOrEmpty(mensajeErrorVericacion))
             {
@@ -61,7 +61,7 @@ public class ConfirmacionCorreoController : Singleton<ConfirmacionCorreoControll
             }
             else
             {
-                if (estaConfirmado)
+                if (esVerificado)
                 {
                     datosParaAñadir.correoAutenticado = true;
                     LogginController.singleton.ColocarDatosIniciarApp(datosParaAñadir, "Inicio sesion correctamente");
@@ -71,7 +71,6 @@ public class ConfirmacionCorreoController : Singleton<ConfirmacionCorreoControll
                 }
                 else
                 {
-                    datosParaAñadir.verificado = true;
                     texto.gameObject.ActivarObjeto();
                     texto.text = "Falta verificar el correo";
                     texto.color = Color.yellow;

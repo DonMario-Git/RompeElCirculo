@@ -23,7 +23,7 @@ class ShadowSettingSnapshot
         canvas      = shadow.Graphic.canvas;
         canvasRt    = (RectTransform)canvas.transform;
 
-        var    spriteMesh = shadow.SpriteMeshHandle.obj;
+        var    spriteMesh = shadow.CasterMesh;
         Bounds meshBound;
         if (spriteMesh)
         {
@@ -134,7 +134,13 @@ class ShadowSettingSnapshot
         case RawImage rawImage:
             var textureHash = 0;
             if (rawImage.texture)
+            {
+#if UNITY_6000_4_OR_NEWER
+                textureHash = rawImage.texture.GetEntityId().GetHashCode();
+#else
                 textureHash = rawImage.texture.GetInstanceID();
+#endif
+            }
 
             hash = HashUtils.CombineHashCodes(
                 commonHash,

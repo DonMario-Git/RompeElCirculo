@@ -8,7 +8,7 @@ using UtilidadesLaEME;
 public class LogginController : Singleton<LogginController>
 {
     public InputFieldUtilities gmail, contraseña;
-    public ButtonExtrasController btn_IntentarIniciarSesion, btn_VerificacionCorreo;
+    public ButtonExtrasController btn_IntentarIniciarSesion;
     public TextMeshProUGUI mensajeError;
     public Image ruedaCarga;
 
@@ -16,6 +16,7 @@ public class LogginController : Singleton<LogginController>
     {
         ruedaCarga.gameObject.ActivarObjeto();
         ruedaCarga.transform.DOKill();
+        ruedaCarga.transform.rotation = Quaternion.identity;
         ruedaCarga.transform.DORotate(new Vector3(0, 0, 360), 1, RotateMode.FastBeyond360)
         .SetEase(Ease.Linear)
         .SetLoops(-1, LoopType.Restart);
@@ -36,7 +37,7 @@ public class LogginController : Singleton<LogginController>
 
             PestañasManager.singleton.EjecutarAnimacionEntrada(4);
 
-            _ = FirebaseStorageManager.singleton.SaveData(AppManager.UserData, FirebaseStorageManager.singleton.currentAuthUser.UserId, true, null, false);
+            _ = FirebaseStorageManager.singleton.SaveUsuario(AppManager.UserData, FirebaseStorageManager.singleton.UserID, true, null, false);
         }
 
         ruedaCarga.gameObject.DesactivarObjeto();
@@ -47,48 +48,34 @@ public class LogginController : Singleton<LogginController>
 
     public void IntentarIniciarSesionAuth(string emailIngresado, string contrasenaIngresada, Action<Data, string> OnComplete, bool cargarDatosFireBase = true)
     {
-        _ = FirebaseStorageManager.singleton.SignInAuthUser(emailIngresado, contrasenaIngresada, (usuarioAuth, mensaje) => {
+        FirebaseStorageManager.singleton.Login(emailIngresado, contrasenaIngresada, (isError, mensaje) => {
 
-            if (usuarioAuth == null)
+            if (isError)
             {
                 OnComplete?.Invoke(null, mensaje);
                 return;
             }
             else
             {
-                FirebaseStorageManager.singleton.currentAuthUser = usuarioAuth;
-
-                if (!cargarDatosFireBase)
-                {
-                    OnComplete?.Invoke(null, "Inicio de sesión exitoso");
-                    return;
-                }
-
-                FirebaseStorageManager.singleton.LoadData(usuarioAuth.UserId, (datos, mensaje) => {
+                FirebaseStorageManager.singleton.LoadUsuario(FirebaseStorageManager.singleton.UserID, (datos, mensaje) => {
 
                     if (datos == null)
                     {
-                        
+                        OnComplete?.Invoke(null, "No se cargaron datos");
                         return;
                     }
                     else
                     {
-                        FirebaseStorageManager.singleton.CheckEmailVerified((estaVerificado, mensajeErrorVericacion) => {
+                        FirebaseStorageManager.singleton.ReloadAndCheckEmailVerified((esVerificado, mensajeErrorVericacion) => {
 
-                            if (!string.IsNullOrEmpty(mensajeErrorVericacion))
-                            {
-                                OnComplete?.Invoke(null, mensajeErrorVericacion);
-                                return;
-                            }
-
-                            if (estaVerificado && datos.correoAutenticado)
+                            if (esVerificado)
                             {
                                 OnComplete?.Invoke(datos, "Inicio de sesión exitoso");  
                                 return;
                             }
                             else
                             {
-                                FirebaseStorageManager.singleton.SendEmailVerification((mailEnviado, mensajeErrorAlenviar) => {
+                                FirebaseStorageManager.singleton.SendVerificationEmail((mailEnviado, mensajeErrorAlenviar) => {
 
                                     if (!mailEnviado)
                                     {

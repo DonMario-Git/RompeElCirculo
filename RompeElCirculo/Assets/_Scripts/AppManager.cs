@@ -6,6 +6,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UtilidadesLaEME;
+using UnityEngine.InputSystem;
 
 public class AppManager : MonoBehaviour
 {
@@ -22,38 +23,40 @@ public class AppManager : MonoBehaviour
     }
     public static event Action OnDataLoad;
     public static event Action OnBackPressed;
-    public static string dataPath;
+    public static string dataPath {get => Application.persistentDataPath + "/userData.json";}
 
     public TextMeshProUGUI textoNombre;
     public GameObject objetoVerificado;
 
-    public float timeScale = 1;
+    public static int versionActualInfoMunicipios;
+    public static InfoTablaMunicipios[] informacionMunicipios;
+
+
+    public static string comisariaArchivoPath { get => Application.persistentDataPath + $"/COMISARIAS_DE_FAMILIA_MUNICIPALES.json"; }
+    public static string versionArchivoComisaria { get => Application.persistentDataPath + $"/COMISARIAS_DE_FAMILIA_MUNICIPALES_version.txt"; }
 
     private void Awake()
     {
-        dataPath = Application.persistentDataPath + "/userData.json";
         singleton = this;
 
         OnDataLoad += () => {
             textoNombre.text = Utilities.GetFirstWord(UserData.nombreCompleto);
-            objetoVerificado.SetActive(UserData.verificado);
+            objetoVerificado.SetActive(UserData.isAdmin);
         };
     }
 
     void Start()
     {
         QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = 60;  
+        Application.targetFrameRate = 1000;  
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             OnBackPressed?.Invoke();
         }
-
-        Time.timeScale = timeScale;
     }
 
     public void CerrarSesion()
@@ -68,13 +71,22 @@ public class AppManager : MonoBehaviour
             try
             {
                 File.Delete(dataPath);
+
+                if (File.Exists(comisariaArchivoPath))
+                {
+                    File.Delete(comisariaArchivoPath);
+                }
+
+                if (File.Exists(versionArchivoComisaria))
+                {
+                    File.Delete(versionArchivoComisaria);
+                }
             }
             catch (Exception ex)
             {
-                UnityEngine.Debug.LogError($"[AppManager] Error al eliminar archivo: {ex.Message}");
+                Debug.LogError($"[AppManager] Error al eliminar archivo: {ex.Message}");
             }
 
-            // Wait until the file no longer exists or until a timeout to avoid hanging forever
             float timeout = 5f;
             float startTime = Time.realtimeSinceStartup;
             while (File.Exists(dataPath) && Time.realtimeSinceStartup - startTime < timeout)
@@ -84,7 +96,7 @@ public class AppManager : MonoBehaviour
 
             if (File.Exists(dataPath))
             {
-                UnityEngine.Debug.LogError("[AppManager] No se pudo eliminar el archivo antes del timeout.");
+                Debug.LogError("[AppManager] No se pudo eliminar el archivo antes del timeout.");
                 yield break;
             }
         }
@@ -99,7 +111,10 @@ public class AppManager : MonoBehaviour
             LogginController.singleton.IntentarIniciarSesionAuth(UserData.email, UserData.contrasena, (datos, mensaje) =>
             {
                 Debug.Log(mensaje);
-                _ = FirebaseStorageManager.singleton.SaveData(UserData, FirebaseStorageManager.singleton.currentAuthUser.UserId, true, null, false);
+
+                if (datos == null) return;
+
+                _ = FirebaseStorageManager.singleton.SaveUsuario(UserData, FirebaseStorageManager.singleton.CurrentUser.UserId, true, null, false);
             }, false);
             
             PestañasManager.singleton.EjecutarAnimacionEntrada(4);
@@ -110,17 +125,20 @@ public class AppManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Guarda UserData en el disco como un archivo JSON.
+    /// </summary>
     public void GuardarDatosDisco()
     {
         try
         {
             string json = JsonConvert.SerializeObject(UserData);
             File.WriteAllText(dataPath, json);
-            UnityEngine.Debug.Log("[IntroController] Se guardó en el disco correctamente.");
+            Debug.Log("[IntroController] Se guardó en el disco correctamente.");
         }
         catch (Exception ex)
         {
-            UnityEngine.Debug.LogError($"[IntroController] Error al guardar datos: {ex.Message}");
+            Debug.LogError($"[IntroController] Error al guardar datos: {ex.Message}");
         }
     }
 
@@ -141,12 +159,92 @@ public class AppManager : MonoBehaviour
         Application.OpenURL(url);
     }
 
+    public void AbrirDireccion(string direccion)
+    {
+        if (string.IsNullOrWhiteSpace(direccion))
+        {
+            Debug.LogWarning("La dirección está vacía.");
+            return;
+        }
+
+        string direccionCodificada = Uri.EscapeDataString(direccion);
+        string url = $"https://www.google.com/maps/search/?api=1&query={direccionCodificada}";
+
+        Application.OpenURL(url);
+    }
+
+    /// <summary>
+    /// Abre el cliente de correo con un mensaje nuevo vacío.
+    /// </summary>
+    public void RedactarCorreo(string destinatario)
+    {
+        string url = $"mailto:{destinatario}";
+        Application.OpenURL(url);
+    }
+
+    /// <summary>
+    /// devuelve true si hay que actualizar
+    /// </summary>
+    private void VerificarVersionTabla()
+    {
+        versionActualInfoMunicipios = File.Exists(versionArchivoComisaria) ? int.Parse(File.ReadAllText(versionArchivoComisaria)) : -1;
+
+        FirebaseStorageManager.singleton.LoadData("numeroVersion", (bool esError, string errorMessage, int versionEnBaseDatos) => {
+
+            if (esError)
+            {
+                Debug.LogError($"[AppManager] Error al verificar la versión de la tabla: {errorMessage}");
+                return;
+            }
+
+            if (versionActualInfoMunicipios != versionEnBaseDatos)
+            {
+                FirebaseStorageManager.singleton.LoadData("datosMunicipios", (bool esError, string errorMessage, string infoMunicipiosBaseDatos) => {
+
+                    if (esError)
+                    {
+                        Debug.LogError($"[AppManager] Error al buscar datos de la tabla: {errorMessage}");
+                        return;
+                    }
+
+                    informacionMunicipios = JsonConvert.DeserializeObject<InfoTablaMunicipios[]>(infoMunicipiosBaseDatos);
+                    versionActualInfoMunicipios = versionEnBaseDatos;
+
+                    string json = JsonConvert.SerializeObject(informacionMunicipios);
+                    File.WriteAllText(comisariaArchivoPath, json);
+
+                    File.WriteAllText(versionArchivoComisaria, versionActualInfoMunicipios.ToString());
+                }, false, true);
+            }
+            else
+            {
+                Debug.Log("El numero de versión es igual al del servidor. iniciando con datos de tabla locales");
+            }
+        }, false);
+    }
+
     public Data CargarDatosDisco()
     {
+        if (File.Exists(comisariaArchivoPath))
+        {
+            string jsonDesdeArchivo = File.ReadAllText(comisariaArchivoPath);
+
+            informacionMunicipios = JsonConvert.DeserializeObject<InfoTablaMunicipios[]>(jsonDesdeArchivo);  
+
+            // El archivo existe pero está corrupto/vacío/no interpretable -> se crea una tabla nueva.
+            if (informacionMunicipios == null || informacionMunicipios.Length == 0)
+            {
+                Debug.LogWarning("El archivo existe pero no contiene datos válidos, se creará una tabla nueva.");
+                CrearTablaNueva();
+            }
+        }
+
+        VerificarVersionTabla();
+
         if (File.Exists(dataPath))
         {
-            UnityEngine.Debug.Log("[IntroController] Archivo de usuario encontrado, leyendo datos...");
-            string json = string.Empty;
+            Debug.Log("[IntroController] Archivo de usuario encontrado, leyendo datos...");
+            string json;
             try
             {
                 json = File.ReadAllText(dataPath);
@@ -155,18 +253,18 @@ public class AppManager : MonoBehaviour
                 if (data != null)
                 {
                     UserData = data;
-                    UnityEngine.Debug.Log("Datos del disco cargados correctamente");
+                    Debug.Log("Datos del disco cargados correctamente");
                     return data;
                 }
                 else
                 {
-                    UnityEngine.Debug.LogError($"[IntroController] Error al leer el archivo: conversion incorrecta");
+                    Debug.LogError($"[IntroController] Error al leer el archivo: conversion incorrecta");
                     return null;
                 }  
             }
             catch (Exception ex)
             {
-                UnityEngine.Debug.LogError($"[IntroController] Error al leer el archivo: {ex.Message}");
+                Debug.LogError($"[IntroController] Error al leer el archivo: {ex.Message}");
                 return null;
             }
         }
@@ -174,5 +272,65 @@ public class AppManager : MonoBehaviour
         {
             return null;
         }
-    } 
+    }
+
+    /// <summary>
+    /// Crea 40 registros vacíos (no nulos) e inicializa cada campo de texto en ""
+    /// en vez de null, para que las celdas vacías se muestren y se guarden como tales
+    /// en lugar de perderse o romper la carga del JSON.
+    /// </summary>
+    private void CrearTablaNueva()
+    {
+        InfoTablaMunicipios[] nuevaData = new InfoTablaMunicipios[40];
+        for (int i = 0; i < nuevaData.Length; i++)
+        {
+            nuevaData[i] = CrearRegistroVacio();
+            nuevaData[i].No = (i + 1).ToString();
+        }
+
+        informacionMunicipios = nuevaData;
+
+        // NullValueHandling.Include asegura que cada propiedad aparezca en el JSON
+        // (aunque sea ""), en vez de que Newtonsoft omita campos vacíos/nulos.
+        string json = JsonConvert.SerializeObject(nuevaData, new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Include
+        });
+
+        GuardarTablaLocal();
+    }
+
+    /// <summary>
+    /// Crea una instancia de InfoTablaMunicipios con todos sus campos de texto
+    /// inicializados en string.Empty en vez de null, usando reflexión para no
+    /// depender de conocer cada nombre de campo de la clase.
+    /// </summary>
+    private static InfoTablaMunicipios CrearRegistroVacio()
+    {
+        InfoTablaMunicipios instancia = new InfoTablaMunicipios();
+
+        var campos = typeof(InfoTablaMunicipios).GetFields(
+            System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+
+        foreach (var campo in campos)
+        {
+            if (campo.FieldType == typeof(string))
+            {
+                campo.SetValue(instancia, string.Empty);
+            }
+        }
+
+        return instancia;
+    }
+
+    public string GuardarTablaLocal()
+    {
+        string json = EditorTablaController.singleton.ObtenerTablaActualJSON();
+        File.WriteAllText(comisariaArchivoPath, json);
+
+        string versionString = versionActualInfoMunicipios.ToString();
+        File.WriteAllText(versionArchivoComisaria, versionString);
+
+        return json;
+    }
 }

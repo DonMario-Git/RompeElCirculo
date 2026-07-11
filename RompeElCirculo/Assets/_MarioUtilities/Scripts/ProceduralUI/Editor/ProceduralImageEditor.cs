@@ -70,7 +70,7 @@ public class ProceduralImageEditor : Editor
         GameObject go = new GameObject("Procedural Image", typeof(RectTransform), typeof(CanvasRenderer));
         Canvas canvas = null;
 #if UNITY_2022_2_OR_NEWER
-        canvas = FindFirstObjectByType<Canvas>();
+        canvas = FindAnyObjectByType<Canvas>();
 #else
         canvas = Object.FindObjectOfType<Canvas>();
 #endif

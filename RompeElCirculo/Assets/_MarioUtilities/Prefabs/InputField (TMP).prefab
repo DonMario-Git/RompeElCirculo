@@ -151,7 +151,6 @@ GameObject:
   - component: {fileID: 4211874460833005480}
   - component: {fileID: 3304149080286542493}
   - component: {fileID: 1785575494033000326}
-  - component: {fileID: 4028393854485787384}
   m_Layer: 5
   m_Name: InputField (TMP)
   m_TagString: Untagged
@@ -358,41 +357,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0.8313726, g: 0.6666667, b: 0.8980393, a: 1}
+  m_EffectColor: {r: 0.54509807, g: 0.13333334, b: 0.7137255, a: 1}
   m_EffectDistance: {x: 3, y: -3}
   m_UseGraphicAlpha: 1
---- !u!114 &4028393854485787384
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 698707769399501938}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52c162dc854d2f24fa639ba0623de5ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  algorithm: 0
-  size: 5
-  spread: 0
-  useGlobalAngle: 0
-  offsetAngle: 90
-  offsetDistance: 4
-  offset: {x: 0.0000002384186, y: -4}
-  color: {r: 0, g: 0, b: 0, a: 0.09}
-  inset: 0
-  blendMode: 0
-  useCasterAlpha: 1
-  ignoreCasterColor: 0
-  skipTextHashing: 0
-  deallocateOnDisable: 0
-  disableFitCompensation: 0
-  shadowAsSibling: 0
-  cutout: 0
-  baked: 0
-  modifiedFromInspector: 0
-  bakedShadows: []
 --- !u!1 &1646576452418669392
 GameObject:
   m_ObjectHideFlags: 0

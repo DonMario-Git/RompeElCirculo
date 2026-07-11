@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
 using System.Text;
-using AwesomeAttributes;
 using System;
 
 public class EmailSender : MonoBehaviour

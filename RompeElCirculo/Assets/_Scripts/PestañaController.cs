@@ -1,4 +1,3 @@
-using AwesomeAttributes;
 using TMPro;
 using UnityEngine;
 

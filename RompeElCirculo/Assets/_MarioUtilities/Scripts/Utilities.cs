@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Runtime.CompilerServices;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 namespace UtilidadesLaEME
@@ -23,6 +26,22 @@ namespace UtilidadesLaEME
                 int r = Random.Range(i, n);
                 (list[i], list[r]) = (list[r], list[i]);
             }
+        }
+
+        public static string ToBase64(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return string.Empty;
+
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(text));
+        }
+
+        public static string FromBase64(string base64)
+        {
+            if (string.IsNullOrEmpty(base64))
+                return string.Empty;
+
+            return Encoding.UTF8.GetString(Convert.FromBase64String(base64));
         }
 
         public static string GetFirstWord(string texto)
@@ -52,6 +71,33 @@ namespace UtilidadesLaEME
             return result;
         }
 
+        /// <summary>
+        /// Trunca un texto al número de palabras indicado
+        /// y añade puntos suspensivos si fue recortado.
+        /// </summary>
+        public static string TruncateByWords(
+            this string text,
+            int maxWords,
+            string ellipsis = "...")
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return text;
+
+            if (maxWords <= 0)
+                throw new ArgumentOutOfRangeException(
+                    nameof(maxWords),
+                    "maxWords debe ser mayor que cero.");
+
+            var words = text.Split(
+                new[] { ' ', '\t', '\n', '\r' },
+                StringSplitOptions.RemoveEmptyEntries);
+
+            if (words.Length <= maxWords)
+                return text;
+
+            return string.Join(" ", words, 0, maxWords) + ellipsis;
+        }
+
         public static DateTime GetSafeDateTime(string input, bool toUTC = true)
         {
             string[] formatos =
@@ -75,7 +121,7 @@ namespace UtilidadesLaEME
                 throw new Exception("Formato de fecha inválido: " + input);
             }
 
-            // Detección básica de ambigüedad
+            // Detecci?n b?sica de ambig?edad
             if (input.Contains("-"))
             {
                 var partes = input.Split('-');
@@ -131,11 +177,11 @@ namespace UtilidadesLaEME
         }
 
         /// <summary>
-        /// Obtiene el ID único del dispositivo
+        /// Obtiene el ID ?nico del dispositivo
         /// </summary>
         public static string GetDeviceID()
         {
-            return SystemInfo.deviceUniqueIdentifier; 
+            return SystemInfo.deviceUniqueIdentifier;
         }
 
         /// <summary>
@@ -150,7 +196,7 @@ namespace UtilidadesLaEME
         }
 
         /// <summary>
-        /// Verifica si un string empieza con un carácter específico.
+        /// Verifica si un string empieza con un caracter especifico.
         /// </summary>
         public static bool StartsWithChar(this string text, char character)
         {
@@ -161,14 +207,14 @@ namespace UtilidadesLaEME
         }
 
         /// <summary>
-        /// Verifica si un string termina con un carácter específico.
+        /// Verifica si un string termina con un caracter especifico.
         /// </summary>
         public static bool EndsWithChar(this string text, char character)
         {
             if (string.IsNullOrEmpty(text))
                 return false;
 
-            return text[^1] == character; // ^1 = último carácter
+            return text[^1] == character; // ^1 = ultimo caracter
         }
 
         /// <summary>
@@ -202,19 +248,54 @@ namespace UtilidadesLaEME
 
         public static string CorregirAcentos(this string texto)
         {
-            if (string.IsNullOrEmpty(texto)) return texto;
+            if (string.IsNullOrEmpty(texto))
+                return texto;
 
             return texto
-                .Replace("à", "á")
-                .Replace("è", "é")
-                .Replace("ì", "í")
-                .Replace("ò", "ó")
-                .Replace("ù", "ú")
-                .Replace("À", "Á")
-                .Replace("È", "É")
-                .Replace("Ì", "Í")
-                .Replace("Ò", "Ó")
-                .Replace("Ù", "Ú");
+                .Replace('á', 'a')
+                .Replace('à', 'a')
+                .Replace('ä', 'a')
+                .Replace('â', 'a')
+                .Replace('Á', 'A')
+                .Replace('À', 'A')
+                .Replace('Ä', 'A')
+                .Replace('Â', 'A')
+
+                .Replace('é', 'e')
+                .Replace('è', 'e')
+                .Replace('ë', 'e')
+                .Replace('ê', 'e')
+                .Replace('É', 'E')
+                .Replace('È', 'E')
+                .Replace('Ë', 'E')
+                .Replace('Ê', 'E')
+
+                .Replace('í', 'i')
+                .Replace('ì', 'i')
+                .Replace('ï', 'i')
+                .Replace('î', 'i')
+                .Replace('Í', 'I')
+                .Replace('Ì', 'I')
+                .Replace('Ï', 'I')
+                .Replace('Î', 'I')
+
+                .Replace('ó', 'o')
+                .Replace('ò', 'o')
+                .Replace('ö', 'o')
+                .Replace('ô', 'o')
+                .Replace('Ó', 'O')
+                .Replace('Ò', 'O')
+                .Replace('Ö', 'O')
+                .Replace('Ô', 'O')
+
+                .Replace('ú', 'u')
+                .Replace('ù', 'u')
+                .Replace('ü', 'u')
+                .Replace('û', 'u')
+                .Replace('Ú', 'U')
+                .Replace('Ù', 'U')
+                .Replace('Ü', 'U')
+                .Replace('Û', 'U');
         }
 
         public static void DesactivarObjeto(this GameObject obj)
@@ -257,7 +338,7 @@ namespace UtilidadesLaEME
         }
 
         /// <summary>
-        /// Valida la seguridad de una contraseña y retorna un mensaje de recomendación
+        /// Valida la seguridad de una contraseña y retorna un mensaje de recomendaci?n
         /// </summary>
         public static bool ValidarCaracteresContraseña(this string password, out string result)
         {
@@ -286,6 +367,65 @@ namespace UtilidadesLaEME
             if (fechaActual < fechaNacimiento.AddYears(edad))
                 edad--;
             return edad;
+        }
+
+        public static void AddComponentDelayed<T>(GameObject target, System.Action<T> onCreated = null)
+        where T : Component
+        {
+            if (target == null)
+                return;
+
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+            {
+                EditorApplication.delayCall += () =>
+                {
+                    if (target == null)
+                        return;
+
+                    T component = target.GetComponent<T>();
+
+                    if (component == null)
+                        component = target.AddComponent<T>();
+
+                    onCreated?.Invoke(component);
+                };
+
+                return;
+            }
+#endif
+
+            T runtimeComponent = target.GetComponent<T>();
+
+            if (runtimeComponent == null)
+                runtimeComponent = target.AddComponent<T>();
+
+            onCreated?.Invoke(runtimeComponent);
+        }
+
+        public static void RemoveComponentDelayed<T>(ref T component)
+            where T : Component
+        {
+            if (component == null)
+                return;
+
+            T componentToRemove = component;
+            component = null;
+
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+            {
+                EditorApplication.delayCall += () =>
+                {
+                    if (componentToRemove != null)
+                        Object.DestroyImmediate(componentToRemove);
+                };
+
+                return;
+            }
+#endif
+
+            Object.Destroy(componentToRemove);
         }
     }
 

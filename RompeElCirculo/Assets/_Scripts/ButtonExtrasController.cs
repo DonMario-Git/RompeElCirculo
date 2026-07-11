@@ -10,16 +10,16 @@ using TMPro;
 using System.IO;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
-using AwesomeAttributes;
+using NaughtyAttributes;
 
 [RequireComponent(typeof(Button))]
 [ExecuteAlways]
 public class ButtonExtrasController : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
 {
-    [Readonly] public Button button;
+    [ReadOnly] public Button button;
 
     [Space(20)]
-    [Title("Animations On Pointer Down")]
+    [Header("Animations On Pointer Down")]
 
     public Vector3 targetscale_down = new Vector3(0.9f, 0.9f, 0.9f);
     public float time_down = 0.2f;
@@ -27,7 +27,7 @@ public class ButtonExtrasController : MonoBehaviour, IPointerDownHandler, IPoint
     
 
     [Space(20)]
-    [Title("Animations On Pointer Up")]
+    [Header("Animations On Pointer Up")]
 
     public Vector3 targetscale_Up = Vector3.one;
     public float time_Up = 0.2f;
@@ -36,19 +36,20 @@ public class ButtonExtrasController : MonoBehaviour, IPointerDownHandler, IPoint
     private TweenerCore<Vector3, Vector3, VectorOptions> core;
 
     [Space(20)]
-    [Title(null, "Text", false, false)]
+    [Header("Text Features")]
     public bool textFeatures;
-    [ShowIf(nameof(textFeatures))][Readonly] public TextMeshProUGUI textButton;
+    [ShowIf(nameof(textFeatures))][ReadOnly] public TextMeshProUGUI textButton;
     [ShowIf(nameof(textFeatures))] public Color defautColor, disableColor = new(1, 1, 1, 0.5f);
 
     [Space(20)]
     public bool desactivarDeUna;
     public bool shadowFeatures;
+    public bool firebaseDependenciesFreatures;
 
     private Shadow shadow;
 
     [Space(20)]
-    [Title("Eventos")]
+    [Header("Eventos")]
     public UnityEvent OnPointerDown;
     public UnityEvent<bool> OnSetInteractable;
 
@@ -62,8 +63,22 @@ public class ButtonExtrasController : MonoBehaviour, IPointerDownHandler, IPoint
         transform.DOKill();
     }
 
-    private void OnEnable()
+    private async void OnEnable()
     {
+        if (firebaseDependenciesFreatures)
+        {
+            SetInteractable(false);
+            if (button.image != null) button.image.raycastTarget = false;
+            if (textButton != null) textButton.raycastTarget = false;
+
+            bool enable = FirebaseStorageManager.singleton.IsInitialized && await FirebaseStorageManager.IsInternetAvailable();
+            if (button.image != null) button.image.raycastTarget = enable;
+            if (textButton != null) textButton.raycastTarget = enable;
+            SetInteractable(enable);
+
+            if (!enable) return;
+        }
+
         if (desactivarDeUna)
         {
             button.image.raycastTarget = true;
@@ -106,7 +121,7 @@ public class ButtonExtrasController : MonoBehaviour, IPointerDownHandler, IPoint
         {
             if (shadow == null)
             {
-                shadow = GetComponent<Shadow>();
+                TryGetComponent(out shadow);
             }
             else
             {

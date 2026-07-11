@@ -1,4 +1,3 @@
-using AwesomeAttributes;
 using DG.Tweening;
 using System;
 using System.Collections;
@@ -13,7 +12,7 @@ public class CentroNotificacionesController : MonoBehaviour
 {
     public static CentroNotificacionesController singleton;
 
-    [Title("Contenido")]
+    [Header("Contenido")]
 
     public GameObject objetoMenuNotificaciones;
     public TextMeshProUGUI textoNumeroNotificaciones;
@@ -64,7 +63,7 @@ public class CentroNotificacionesController : MonoBehaviour
             leido = false
         };
 
-        FirebaseStorageManager.singleton.AddNotification(userID, noti, (error) =>
+        FirebaseStorageManager.singleton.AddNotificacion(userID, noti, (error) =>
         {
             if (!string.IsNullOrEmpty(error))
                 Debug.LogError("Error al enviar notificación de prueba: " + error);
@@ -95,7 +94,7 @@ public class CentroNotificacionesController : MonoBehaviour
     [ContextMenu(nameof(VerificarCantidadNotificacionesNuevas))]
     private void VerificarCantidadNotificacionesNuevas()
     {
-        FirebaseStorageManager.singleton.GetNewNotificationCount(FirebaseStorageManager.singleton.currentAuthUser.UserId, (cantidad, error) =>
+        FirebaseStorageManager.singleton.GetContadorNotificaciones(FirebaseStorageManager.singleton.UserID, (cantidad, error) =>
         {
             if (cantidad != 0)
             {
@@ -117,14 +116,14 @@ public class CentroNotificacionesController : MonoBehaviour
             // Procesar y mostrar notificaciones aquí
             // Marcar como leídas
             var ids = notificaciones.Select(n => n.id).ToList();
-            FirebaseStorageManager.singleton.MarkNotificationsAsRead(FirebaseStorageManager.singleton.currentAuthUser.UserId, ids, (err) =>
+            FirebaseStorageManager.singleton.MarcarNotificacionesLeidas(FirebaseStorageManager.singleton.UserID, ids, (err) =>
             {
                 if (!string.IsNullOrEmpty(err))
                     Debug.LogError(err);
                 else
                     Debug.Log("Notificaciones marcadas como leídas.");
                 // Limpiar notificaciones leídas si hay más de 30
-                FirebaseStorageManager.singleton.CleanupReadNotifications(FirebaseStorageManager.singleton.currentAuthUser.UserId, (cleanupErr) =>
+                FirebaseStorageManager.singleton.LimpiarNotificacionesLeidas(FirebaseStorageManager.singleton.UserID, (cleanupErr) =>
                 {
                     if (!string.IsNullOrEmpty(cleanupErr))
                         Debug.LogError(cleanupErr);
@@ -142,11 +141,12 @@ public class CentroNotificacionesController : MonoBehaviour
         objetoMenuNotificaciones.ActivarObjeto();
         ruedaCarga.gameObject.ActivarObjeto();
         ruedaCarga.transform.DOKill();
+        ruedaCarga.transform.rotation = Quaternion.identity;
         ruedaCarga.transform.DORotate(new Vector3(0, 0, 360), 1, RotateMode.FastBeyond360)
         .SetEase(Ease.Linear)
         .SetLoops(-1, LoopType.Restart);
 
-        FirebaseStorageManager.singleton.GetNotifications(FirebaseStorageManager.singleton.currentAuthUser.UserId, (notificaciones, error) =>
+        FirebaseStorageManager.singleton.GetNotificaciones(FirebaseStorageManager.singleton.UserID, (notificaciones, error) =>
         {
             if (string.IsNullOrEmpty(error))
             {      

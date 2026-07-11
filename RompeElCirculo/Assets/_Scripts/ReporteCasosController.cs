@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System;
+using System.Linq;
 using System.Net;
 using TMPro; 
 using UnityEngine;
@@ -12,6 +13,7 @@ public class ReporteCasosController : MonoBehaviour
     public PreguntaSeleccionMultipleController incluirNombre, contactarParaApoyo;
     public InputFieldUtilities descripcionReporte;
     public PreguntaSeleccionMultipleController tipoViolencia;
+    public TMP_InputField textoOtroTipoViolencia;
     public ButtonExtrasController botonReportar;
 
     [Header("MensajeListo")]
@@ -33,10 +35,26 @@ public class ReporteCasosController : MonoBehaviour
     public void VerificarRespuestas()
     {
         botonReportar.button.interactable = incluirNombre.contestado && contactarParaApoyo.contestado && descripcionReporte.contestado && tipoViolencia.contestado;
+        textoOtroTipoViolencia.gameObject.SetActive(tipoViolencia.cuadrosMultiplesSeleccionados.Contains(tipoViolencia.items[4]));
     }
 
     public void Reportar()
     {
+        string tipoViolenciaFinal;
+
+        if (tipoViolencia.cuadrosMultiplesSeleccionados.Contains(tipoViolencia.items[4]))
+        {
+            string[] tiposSeleccionados = tipoViolencia.cuadrosMultiplesSeleccionados.Select(item => item.respuestaEMP.text).ToArray();
+
+            tipoViolenciaFinal = string.Join(", ", tiposSeleccionados) + ", " + textoOtroTipoViolencia.text;
+        }
+        else
+        {
+            string[] tiposSeleccionados = tipoViolencia.cuadrosMultiplesSeleccionados.Select(item => item.respuestaEMP.text).ToArray();
+
+            tipoViolenciaFinal = string.Join(", ", tiposSeleccionados);
+        }
+
         Caso nuevoCaso = new()
         {
             nombreCompleto = incluirNombre.cuadroSeleccionado.indiceRespuesta == 1 ? "[Anonimo]" : AppManager.UserData.nombreCompleto,
@@ -47,10 +65,12 @@ public class ReporteCasosController : MonoBehaviour
             direccion = incluirNombre.cuadroSeleccionado.indiceRespuesta == 1 ? "[Anonimo]" : AppManager.UserData.direccion,
             fechaCaso = Utilities.DateTimeToString(DateTime.Now),
             fechaNacimiento = incluirNombre.cuadroSeleccionado.indiceRespuesta == 1 ? "[Anonimo]" : AppManager.UserData.fechaNacimiento,
+            tipoViolencia = tipoViolenciaFinal,
 
             hechoAReportar = descripcionReporte.inputField.text,
             tipoAvance = 0,
-            estadoDelCaso = 0
+            estadoDelCaso = 0,
+            municipioUsuario = AppManager.UserData.municipio,
         };
 
         ruedaCarga.gameObject.ActivarObjeto();
@@ -82,8 +102,8 @@ public class ReporteCasosController : MonoBehaviour
                     : $"<p><strong>Solicitar contacto al emisor:</strong> {WebUtility.HtmlEncode(nuevoCaso.numeroCelular)}</p>";
 
                 string cuerpo = $@"<html><body>
-<p>Se reportó un caso en la fecha {WebUtility.HtmlEncode(nuevoCaso.fechaCaso)}.</p>
-
+<p>Fecha: {WebUtility.HtmlEncode(nuevoCaso.fechaCaso)}.</p>
+<p><strong>En el municipio de :</strong> {WebUtility.HtmlEncode(nuevoCaso.municipioUsuario)}</p>
 <p><strong>A nombre de:</strong> {WebUtility.HtmlEncode(nuevoCaso.nombreCompleto)}<br/>
 <strong>Documento:</strong> {WebUtility.HtmlEncode(nuevoCaso.tipoDocumento)} {WebUtility.HtmlEncode(nuevoCaso.numeroDocumento)}</p>
 
@@ -122,6 +142,6 @@ public class ReporteCasosController : MonoBehaviour
     // Subir un ReporteCaso a Firebase with unqiue ID
     public void SubirReporteCaso(Caso reporte, Action<string> onResult)
     {
-        FirebaseStorageManager.singleton.AddReporteCaso(reporte, onResult);
+        FirebaseStorageManager.singleton.AddCaso(reporte, onResult);
     }  
 }

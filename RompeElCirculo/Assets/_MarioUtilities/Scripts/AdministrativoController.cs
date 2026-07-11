@@ -64,7 +64,7 @@ public class AdministrativoController : MonoBehaviour
         casoActual.descripcionDeAvance = descripcionAvance.inputField.text.TrimEdges();
 
         btn_guardar.button.interactable = false;
-        FirebaseStorageManager.singleton.EditarReporteCaso(casoActual.ID, casoActual, (error) => {
+        FirebaseStorageManager.singleton.EditarCaso(casoActual.ID, casoActual, (error) => {
             if (!string.IsNullOrEmpty(error))
             {
                 Debug.LogWarning(error);

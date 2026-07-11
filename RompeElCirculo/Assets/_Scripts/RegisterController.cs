@@ -50,15 +50,16 @@ public class RegisterController : MonoBehaviour
                 sexo = sexo.cuadroSeleccionado.respuestaEMP.text,
                 fechaNacimiento = Utilities.DateTimeToString(Utilities.CrearFecha(int.Parse(diaNacimiento.inputField.text), int.Parse(mesNacimiento.inputField.text), int.Parse(añoNacimiento.inputField.text))),
                 nacionalidad = !otraNacionalidad.gameObject.activeInHierarchy ? nacionalidad.cuadroSeleccionado.respuestaEMP.text : otraNacionalidad.inputField.text,
-                departamento = departamento.options[departamento.value].text,
+                municipio = departamento.options[departamento.value].text,
+                municipioID = departamento.value,
                 direccion = direccion.inputField.text,
                 email = email.inputField.text,
                 contrasena = contraseña.inputField.text
             };
 
-            FirebaseStorageManager.singleton.CreateAuthUser(email.inputField.text.TrimEdges(), contraseña.inputField.text.TrimEdges(), (user, mensaje) => {
+            FirebaseStorageManager.singleton.CreateAccount(email.inputField.text.TrimEdges(), contraseña.inputField.text.TrimEdges(), (isError, mensaje) => {
 
-                if (user == null)
+                if (isError)
                 {
                     Debug.LogWarning(mensaje);
                     TirarMensaje("mensaje", Color.red);
@@ -66,7 +67,7 @@ public class RegisterController : MonoBehaviour
                 }
                 else
                 {
-                    _ = FirebaseStorageManager.singleton.SaveData(data, user.UserId, false, (resultError) =>
+                    _ = FirebaseStorageManager.singleton.SaveUsuario(data, FirebaseStorageManager.singleton.UserID, false, (resultError) =>
                     {
                         if (!string.IsNullOrEmpty(resultError))
                         {

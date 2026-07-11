@@ -16,13 +16,14 @@ public class CuadroOpcionItemController : MonoBehaviour
 
     public int indiceRespuesta;
 
-    private void Awake()
-    {
-        if (!refPregunta.items.Contains(this)) refPregunta.items.Add(this);  
-    }
-
     private void OnEnable()
     {
+        if (refPregunta == null)
+        {
+            //Debug.LogError($"El objeto {name} no tiene asignada una referencia al sistema de preguntas", gameObject);
+            return;
+        }
+
         if (refPregunta.selcMultiple)
         {
             if (refPregunta.cuadrosMultiplesSeleccionados.Contains(this)) refPregunta.cuadrosMultiplesSeleccionados.Remove(this);
@@ -73,6 +74,8 @@ public class CuadroOpcionItemController : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (refPregunta == null) return;
+        if (refPregunta.items == null) return;
         if (refPregunta.items.Contains(this)) refPregunta.items.Remove(this);
     }
 }

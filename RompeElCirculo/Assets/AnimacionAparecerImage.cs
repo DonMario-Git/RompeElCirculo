@@ -1,4 +1,4 @@
-using AwesomeAttributes;
+using NaughtyAttributes;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,14 +11,11 @@ public class AnimacionAparecerImage : MonoBehaviour
     private CanvasGroup cg;
     private Vector2? posicionOriginal;
 
-    private void OnValidate()
+    private void OnEnable()
     {
         im = im != null ? im : GetComponent<Image>();
         cg = cg != null ? cg : GetComponent<CanvasGroup>();
-    }
 
-    private void OnEnable()
-    {
         if (canvasGroup)
         {
             var cgRtr = (RectTransform)cg.transform;

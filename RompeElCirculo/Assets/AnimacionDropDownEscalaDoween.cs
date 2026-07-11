@@ -1,25 +1,43 @@
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-[RequireComponent(typeof(RectTransform))]
-[RequireComponent(typeof(CanvasGroup))]
+[RequireComponent(typeof(RectTransform), typeof(CanvasGroup))]
 public class AnimacionDropDownEscalaDoween : MonoBehaviour
 {
-    public RectTransform recTransform;
-    public CanvasGroup canvasGroup;
-    public float porDefecto = 400;
-    public float inicial = 300;
+    [Header("Referencias")]
+    [SerializeField] private RectTransform rectTransform;
+    [SerializeField] private CanvasGroup canvasGroup;
+
+    [Header("Animación")]
+    [SerializeField] private float alturaInicial = 300f;
+    [SerializeField] private float alturaFinal = 400f;
+    [SerializeField] private float duracionEscala = 0.3f;
+    [SerializeField] private float duracionFade = 0.1f;
 
     private void Awake()
     {
-        recTransform = recTransform != null ? recTransform : (RectTransform)transform;
-        canvasGroup = canvasGroup != null ? canvasGroup : GetComponent<CanvasGroup>();
+        if (rectTransform == null)
+            rectTransform = GetComponent<RectTransform>();
 
-        recTransform.sizeDelta = new Vector2(recTransform.sizeDelta.x, inicial);
-        recTransform.DOSizeDelta(new Vector2(recTransform.sizeDelta.x, porDefecto), 0.3f).SetEase(Ease.OutQuart);
+        if (canvasGroup == null)
+            canvasGroup = GetComponent<CanvasGroup>();
 
-        canvasGroup.alpha = 0;
-        canvasGroup.DOFade(1, 0.3f);
+        Vector2 size = rectTransform.sizeDelta;
+        size.y = alturaInicial;
+        rectTransform.sizeDelta = size;
+
+        size.y = alturaFinal;
+        rectTransform
+            .DOSizeDelta(size, duracionEscala)
+            .SetEase(Ease.OutQuart);
+
+        canvasGroup.alpha = 0f;
+        canvasGroup.DOFade(1f, duracionFade);
+    }
+
+    private void OnDestroy()
+    {
+        rectTransform.DOKill();
+        canvasGroup.DOKill();
     }
 }
