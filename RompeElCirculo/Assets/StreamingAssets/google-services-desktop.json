@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "891755908483",
+    "firebase_url": "https://rompeelcirculoapp-default-rtdb.firebaseio.com",
+    "project_id": "rompeelcirculoapp",
+    "storage_bucket": "rompeelcirculoapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891755908483:android:bf4eafaf60612be438fab6",
+        "android_client_info": {
+          "package_name": "com.RompeElCirculo.com"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8MArqgtwkOCWXGLLxivaSLPtOkIi8hzw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

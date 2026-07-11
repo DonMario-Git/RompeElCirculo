@@ -1,0 +1,13 @@
+﻿[*.{cs,vb}]
+
+# IDE0060: Quitar el parámetro no utilizado
+dotnet_diagnostic.IDE0060.severity = none
+
+# IDE0090: Usar "new(...)"
+dotnet_diagnostic.IDE0090.severity = none
+
+# IDE0025: Usar cuerpo de expresiones para la propiedad
+dotnet_diagnostic.IDE0025.severity = none
+
+# IDE1006: Estilos de nombres
+dotnet_diagnostic.IDE1006.severity = none
