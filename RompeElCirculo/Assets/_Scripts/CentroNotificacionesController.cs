@@ -17,6 +17,8 @@ public class CentroNotificacionesController : MonoBehaviour
     public GameObject objetoMenuNotificaciones;
     public TextMeshProUGUI textoNumeroNotificaciones;
     public Image ruedaCarga;
+    public GameObject iconoNoNotificaciones;
+    public GameObject iconoError;
     public GameObject plantillaNotificacion;
     public Transform objetoPadre;
 
@@ -69,6 +71,26 @@ public class CentroNotificacionesController : MonoBehaviour
                 Debug.LogError("Error al enviar notificación de prueba: " + error);
             else
                 Debug.Log("Notificación de prueba enviada correctamente.");
+        });
+    }
+
+    public void EnviarNotificacionATodosLosAdministradores(string titulo, string mensaje)
+    {
+        FirebaseStorageManager.singleton.GetUsuariosAdmin((adminIDs, error) =>
+        {
+            if (!string.IsNullOrEmpty(error))
+            {
+                Debug.LogError("Error al obtener administradores: " + error);
+                return;
+            }
+
+            if (adminIDs == null || adminIDs.Length == 0)
+            {
+                Debug.LogWarning("No se encontraron administradores para notificar.");
+                return;
+            }
+
+            EnviarNotificacion(adminIDs, titulo, mensaje);
         });
     }
 
@@ -138,6 +160,9 @@ public class CentroNotificacionesController : MonoBehaviour
 
     public void AbrirMenuNotificaciones()
     {
+        iconoNoNotificaciones.DesactivarObjeto();
+        iconoError.DesactivarObjeto();
+
         objetoMenuNotificaciones.ActivarObjeto();
         ruedaCarga.gameObject.ActivarObjeto();
         ruedaCarga.transform.DOKill();
@@ -162,10 +187,14 @@ public class CentroNotificacionesController : MonoBehaviour
                     nuevaNotificacion.nuevoIcono.SetActive(!item.leido);
                 }
 
+                if (notificaciones.Count == 0) iconoNoNotificaciones.ActivarObjeto();
                 OnNotificationsReceived(notificaciones);
             }
             else
             {
+                iconoError.ActivarObjeto();
+                ruedaCarga.transform.DOKill();
+                ruedaCarga.gameObject.DesactivarObjeto();
                 Debug.LogWarning(error);
             }      
         });

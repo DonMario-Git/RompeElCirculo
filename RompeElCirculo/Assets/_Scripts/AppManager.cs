@@ -193,7 +193,8 @@ public class AppManager : MonoBehaviour
 
             if (esError)
             {
-                Debug.LogError($"[AppManager] Error al verificar la versión de la tabla: {errorMessage}");
+                Debug.LogWarning("El archivo no existe o no se pudo descargar, se creará una tabla nueva.");
+                CrearTablaNueva();
                 return;
             }
 
@@ -290,14 +291,7 @@ public class AppManager : MonoBehaviour
 
         informacionMunicipios = nuevaData;
 
-        // NullValueHandling.Include asegura que cada propiedad aparezca en el JSON
-        // (aunque sea ""), en vez de que Newtonsoft omita campos vacíos/nulos.
-        string json = JsonConvert.SerializeObject(nuevaData, new JsonSerializerSettings
-        {
-            NullValueHandling = NullValueHandling.Include
-        });
-
-        GuardarTablaLocal();
+        GuardarTablaDisco();
     }
 
     /// <summary>
@@ -323,13 +317,32 @@ public class AppManager : MonoBehaviour
         return instancia;
     }
 
-    public string GuardarTablaLocal()
+    public string GuardarTablaDisco()
+    {
+        string json = JsonConvert.SerializeObject(informacionMunicipios, new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Include
+        });
+
+        File.WriteAllText(comisariaArchivoPath, json);
+
+        string versionString = versionActualInfoMunicipios.ToString();
+        File.WriteAllText(versionArchivoComisaria, versionString);
+
+        Debug.Log("Se guardó la tabla localmente", gameObject);
+
+        return json;
+    }
+
+    public string GuardarTablaLocalEscrita()
     {
         string json = EditorTablaController.singleton.ObtenerTablaActualJSON();
         File.WriteAllText(comisariaArchivoPath, json);
 
         string versionString = versionActualInfoMunicipios.ToString();
         File.WriteAllText(versionArchivoComisaria, versionString);
+
+        Debug.Log("Se guardó la tabla localmente de la tabla escrita", gameObject);
 
         return json;
     }

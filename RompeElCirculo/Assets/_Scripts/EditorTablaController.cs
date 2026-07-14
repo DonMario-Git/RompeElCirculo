@@ -66,7 +66,7 @@ public class EditorTablaController : Singleton<EditorTablaController>
 
         try
         {
-            FirebaseStorageManager.singleton.SaveData("datosMunicipios",  AppManager.singleton.GuardarTablaLocal(), (isError, errorMessage) =>
+            FirebaseStorageManager.singleton.SaveData("datosMunicipios",  AppManager.singleton.GuardarTablaLocalEscrita(), (isError, errorMessage) =>
             {
                 if (isError)
                 {

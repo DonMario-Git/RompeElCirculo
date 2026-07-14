@@ -114,7 +114,7 @@ public class DataBaseExcelGenerator : MonoBehaviour
             "Número celular",
             "Sexo",
             "Correo autenticado",
-            "Verificado",
+            "Es administrador",
             "Fecha nacimiento",
             "Nacionalidad",
             "Municipio",

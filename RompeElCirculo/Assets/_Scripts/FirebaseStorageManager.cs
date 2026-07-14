@@ -1598,6 +1598,33 @@ public class FirebaseStorageManager : Singleton<FirebaseStorageManager>
         _ = EmailVerificationPollingTask(_pollingCancellationToken.Token, tiempoRestante);
     }
 
+    public void GetUsuariosAdmin(Action<string[], string> callback)
+    {
+        FirebaseDatabase.DefaultInstance
+            .GetReference("usuarios")
+            .OrderByChild("isAdmin")
+            .EqualTo(true)
+            .GetValueAsync()
+            .ContinueWithOnMainThread(task =>
+            {
+                if (task.IsFaulted || task.IsCanceled)
+                {
+                    callback?.Invoke(null, task.Exception?.Message ?? "Error al consultar administradores.");
+                    return;
+                }
+
+                DataSnapshot snapshot = task.Result;
+                var ids = new List<string>();
+
+                foreach (var child in snapshot.Children)
+                {
+                    ids.Add(child.Key); // el key de cada nodo bajo "usuarios" es el userID
+                }
+
+                callback?.Invoke(ids.ToArray(), null);
+            });
+    }
+
     private async Task EmailVerificationPollingTask(CancellationToken token, float overrideTimeout = -1f)
     {
         float interval = _pendingPollingInterval;

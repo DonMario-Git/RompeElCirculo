@@ -8,8 +8,6 @@ using UtilidadesLaEME;
 
 public class ReporteCasosController : MonoBehaviour
 {
-    public string[] entidadesReceptoras;
-
     public PreguntaSeleccionMultipleController incluirNombre, contactarParaApoyo;
     public InputFieldUtilities descripcionReporte;
     public PreguntaSeleccionMultipleController tipoViolencia;
@@ -117,7 +115,8 @@ public class ReporteCasosController : MonoBehaviour
                 EmailSender.singleton.EnviarReporte("Reporte de botón violeta", cuerpo, "alta", EmailSender.singleton.mailsEmpresasRemitentes, (error2) => {
                     ruedaCarga.transform.DOKill();
                     ruedaCarga.gameObject.DesactivarObjeto();
-                    CentroNotificacionesController.singleton.EnviarNotificacion(entidadesReceptoras, $"Reporte de botón violeta", $"De: '{nuevoCaso.nombreCompleto}'");
+
+                    CentroNotificacionesController.singleton.EnviarNotificacionATodosLosAdministradores($"Reporte de botón violeta", $"De: '{nuevoCaso.nombreCompleto}'");
 
                     if (string.IsNullOrEmpty(error2))
                     {
