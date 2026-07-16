@@ -1042,7 +1042,7 @@ public class FirebaseStorageManager : Singleton<FirebaseStorageManager>
             bool reinitialized = await TryReinitializeAsync();
             if (!reinitialized)
             {
-                callback?.Invoke(true, "Firebase no está inicializado y no se pudo reinicializar.");
+                callback?.Invoke(true, "Error al conectar con sistema.");
                 return;
             }
         }
@@ -1078,7 +1078,7 @@ public class FirebaseStorageManager : Singleton<FirebaseStorageManager>
                 _ => $"Error inesperado (código {ex.ErrorCode}): {ex.Message}"
             };
 
-            string msg = $"No se pudo crear la cuenta. {detalle}";
+            string msg = $"Error al crear cuenta: {detalle}";
             LogError(msg);
             callback?.Invoke(true, msg);
         }
