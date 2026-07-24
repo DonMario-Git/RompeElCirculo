@@ -35,8 +35,8 @@ RectTransform:
   - {fileID: 2920003998669666836}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: -334.06, y: -1.6000208}
   m_SizeDelta: {x: 81.885, y: 81.89}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -159,6 +159,7 @@ MonoBehaviour:
   disableColor: {r: 1, g: 1, b: 1, a: 0.5}
   desactivarDeUna: 0
   shadowFeatures: 0
+  firebaseDependenciesFreatures: 0
   OnPointerDown:
     m_PersistentCalls:
       m_Calls: []

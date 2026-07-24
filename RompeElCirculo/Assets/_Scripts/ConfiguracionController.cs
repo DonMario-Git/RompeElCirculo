@@ -15,9 +15,4 @@ public class ConfiguracionController : MonoBehaviour
         AppManager.UserData.municipio = dropDownMunicipiosDefault.dropdown.options[dropDownMunicipiosDefault.dropdown.value].text;
         AppManager.singleton.GuardarDatosDisco();
     }
-
-    public void GuardarTablas()
-    {
-
-    }
 }

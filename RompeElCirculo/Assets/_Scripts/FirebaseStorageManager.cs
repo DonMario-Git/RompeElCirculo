@@ -233,7 +233,7 @@ public class FirebaseStorageManager : Singleton<FirebaseStorageManager>
     /// Comprueba la conectividad real a internet enviando una petición HEAD a Google.
     /// Si no hay respuesta en el tiempo límite, devuelve false.
     /// </summary>
-    public static async Task<bool> IsInternetAvailable()
+    public async Task<bool> IsInternetAvailable()
     {
         if (Application.internetReachability == NetworkReachability.NotReachable)
             return false;
@@ -1813,9 +1813,14 @@ public class  InfoTablaMunicipios
 {
     public string No;
     public string Municipio;
+
     public string NumeroTelefonico_ComisariaFamilia;
     public string Direccion_ComisariaFamilia;
     public string CorreoElectronico_ComisariaFamilia;
+
+    public string NumeroTelefono_Salud;
+    public string Direccion_Salud;
+    public string CorreoElectronico_Salud;
 }
 
 [Serializable]

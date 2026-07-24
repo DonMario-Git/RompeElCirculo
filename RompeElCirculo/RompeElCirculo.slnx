@@ -12,6 +12,7 @@
   <Project Path="Unity.VisualStudio.Editor.csproj" />
   <Project Path="Unity.Services.Authentication.csproj" />
   <Project Path="Unity.Services.Authentication.Editor.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="LeTai.TrueShadow.Editor.csproj" />
   <Project Path="Firebase.App.Internal.csproj" />
   <Project Path="NaughtyAttributes.Editor.csproj" />
@@ -27,7 +28,6 @@
   <Project Path="Google.Play.Common.csproj" />
   <Project Path="LeTai.TrueShadow.Demo.csproj" />
   <Project Path="Assembly-CSharp-firstpass.csproj" />
-  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Unity.Services.Authentication.PlayerAccounts.Editor.csproj" />
   <Project Path="Unity.InputSystem.DocCodeSamples.csproj" />
   <Project Path="Unity.Services.Core.Analytics.csproj" />

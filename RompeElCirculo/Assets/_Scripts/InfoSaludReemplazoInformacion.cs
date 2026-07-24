@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InfoComisariaController : MonoBehaviour
+public class InfoSaludReemplazoInformacion : MonoBehaviour
 {
     [Header("Referencias")]
     [SerializeField] private TMP_Dropdown dropdownMunicipios;
@@ -28,19 +28,19 @@ public class InfoComisariaController : MonoBehaviour
 
         ActualizarCampo(
             textoDireccion,
-            info.Direccion_ComisariaFamilia,
+            info.Direccion_Salud,
             "-Dirección no disponible-"
         );
 
         ActualizarCampo(
             telefono,
-            info.NumeroTelefonico_ComisariaFamilia,
+            info.NumeroTelefono_Salud,
             "-Teléfono no disponible-"
         );
 
         ActualizarCampo(
             email,
-            info.CorreoElectronico_ComisariaFamilia,
+            info.CorreoElectronico_Salud,
             "-Correo no disponible-"
         );
     }
@@ -64,7 +64,7 @@ public class InfoComisariaController : MonoBehaviour
 
     public void MarcarContacto()
     {
-        AppManager.singleton.LlamarPorWhatsApp(telefono.text);
+        AppManager.singleton.LlamarPorTelefono(telefono.text);
     }
 
     public void EnviarCorreo()

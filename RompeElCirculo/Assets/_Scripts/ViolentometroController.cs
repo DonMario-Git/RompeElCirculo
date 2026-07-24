@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
+using UtilidadesLaEME;
 
 public class ViolentometroController : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class ViolentometroController : MonoBehaviour
 
     private Coroutine _saveCoroutine;
 
+    public GameObject objetoError;
+
     public void AlSeleccionar()
     {
         botonEnviar.button.interactable = pregunta1.cuadrosMultiplesSeleccionados.Count > 0 || pregunta2.cuadrosMultiplesSeleccionados.Count > 0 || pregunta3.cuadrosMultiplesSeleccionados.Count > 0;
@@ -26,6 +29,7 @@ public class ViolentometroController : MonoBehaviour
     public void AlEnviar()
     {
         imagenNegraFondo.gameObject.SetActive(true);
+        ruedaCarga.gameObject.ActivarObjeto();
         ruedaCarga.DOKill();
         ruedaCarga.localEulerAngles = Vector3.zero;
         ruedaCarga.DORotate(new Vector3(0, 0, 360), 1f, RotateMode.FastBeyond360).SetLoops(-1).SetEase(Ease.Linear);
@@ -75,18 +79,25 @@ public class ViolentometroController : MonoBehaviour
         }
 
         ruedaCarga.DOKill();
+        ruedaCarga.gameObject.DesactivarObjeto();
 
         if (!completado)
         {
             Debug.LogWarning("SaveData superó el límite de 5 segundos sin responder.");
-            // Aquí puedes mostrar un mensaje de error al usuario si lo necesitas
+            objetoError.SetActive(true);
+            objetoError.transform.DOKill();
+            objetoError.transform.localScale = new Vector3(1.1f, 1.1f, 1);
+            objetoError.transform.DOScale(1, 0.2f);
             yield break;
         }
 
         if (!string.IsNullOrEmpty(errorGuardado))
         {
             Debug.LogWarning(errorGuardado);
-            // Aquí puedes manejar el error de Firebase si lo necesitas
+            objetoError.SetActive(true);
+            objetoError.transform.DOKill();
+            objetoError.transform.localScale = new Vector3(1.1f, 1.1f, 1);
+            objetoError.transform.DOScale(1, 0.2f);
             yield break;
         }
 
@@ -121,5 +132,6 @@ public class ViolentometroController : MonoBehaviour
         respuestas[2].SetActive(false);
         respuestas[1].SetActive(false);
         respuestas[0].SetActive(false);
+        objetoError.SetActive(false);
     }
 }

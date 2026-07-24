@@ -1,12 +1,13 @@
 using DG.Tweening;
 using Newtonsoft.Json;
 using System;
-using System.IO;
 using System.Collections;
+using System.IO;
+using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
-using UtilidadesLaEME;
 using UnityEngine.InputSystem;
+using UtilidadesLaEME;
 
 public class AppManager : MonoBehaviour
 {
@@ -147,16 +148,76 @@ public class AppManager : MonoBehaviour
         Application.OpenURL(link);
     }
 
+    private static string NormalizarTelefono(string numero, bool paraWhatsApp)
+    {
+        if (string.IsNullOrWhiteSpace(numero))
+            return null;
+
+        // Elimina espacios, paréntesis, guiones, etc.
+        numero = Regex.Replace(numero, @"\D", "");
+
+        // ========= NÚMEROS DE EMERGENCIA =========
+        // 123, 122, 119, 125, etc.
+        if (numero.Length <= 3)
+            return numero;
+
+        // ========= LÍNEAS 01 8000 =========
+        if (numero.StartsWith("018000"))
+            return numero;
+
+        // ========= CELULAR COLOMBIANO =========
+        if (numero.Length == 10 && numero.StartsWith("3"))
+            return paraWhatsApp ? "57" + numero : "+57" + numero;
+
+        // ========= YA VIENE CON +57 =========
+        if (numero.Length == 12 && numero.StartsWith("57"))
+            return paraWhatsApp ? numero : "+" + numero;
+
+        // ========= FIJOS COLOMBIANOS =========
+        // Ej: 601..., 604..., 605..., 606..., 607..., 608...
+        if (numero.Length == 10 &&
+            (numero.StartsWith("60") || numero.StartsWith("1")))
+            return numero;
+
+        // ========= INTERNACIONAL =========
+        if (numero.Length > 10)
+            return paraWhatsApp ? numero : "+" + numero;
+
+        return numero;
+    }
+
     public void LlamarPorWhatsApp(string numero)
     {
-        string url = $"https://wa.me/{numero}";
-        Application.OpenURL(url);
+        string telefono = NormalizarTelefono(numero, true);
+
+        if (string.IsNullOrEmpty(telefono))
+        {
+            Debug.LogError("Número inválido.");
+            return;
+        }
+
+        // WhatsApp únicamente funciona con números telefónicos normales,
+        // no con líneas de emergencia ni 018000.
+        if (telefono.Length <= 3 || telefono.StartsWith("018000"))
+        {
+            Debug.LogWarning("Este número no es compatible con WhatsApp.");
+            return;
+        }
+
+        Application.OpenURL($"https://wa.me/{telefono}");
     }
 
     public void LlamarPorTelefono(string numero)
     {
-        string url = $"tel:{numero}";
-        Application.OpenURL(url);
+        string telefono = NormalizarTelefono(numero, false);
+
+        if (string.IsNullOrEmpty(telefono))
+        {
+            Debug.LogError("Número inválido.");
+            return;
+        }
+
+        Application.OpenURL($"tel:{telefono}");
     }
 
     public void AbrirDireccion(string direccion)
@@ -192,9 +253,13 @@ public class AppManager : MonoBehaviour
         FirebaseStorageManager.singleton.LoadData("numeroVersion", (bool esError, string errorMessage, int versionEnBaseDatos) => {
 
             if (esError)
-            {
-                Debug.LogWarning("El archivo no existe o no se pudo descargar, se creará una tabla nueva.");
-                CrearTablaNueva();
+            { 
+                if (!File.Exists(comisariaArchivoPath) && informacionMunicipios == null)
+                {
+                    Debug.LogWarning("El archivo no existe o no se pudo descargar, se creará una tabla nueva.");
+                    CrearTablaNueva();
+                }
+
                 return;
             }
 

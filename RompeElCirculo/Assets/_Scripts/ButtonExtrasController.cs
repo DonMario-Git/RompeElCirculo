@@ -71,7 +71,7 @@ public class ButtonExtrasController : MonoBehaviour, IPointerDownHandler, IPoint
             if (button.image != null) button.image.raycastTarget = false;
             if (textButton != null) textButton.raycastTarget = false;
 
-            bool enable = FirebaseStorageManager.singleton.IsInitialized && await FirebaseStorageManager.IsInternetAvailable();
+            bool enable = FirebaseStorageManager.singleton.IsInitialized && await FirebaseStorageManager.singleton.IsInternetAvailable();
             if (button.image != null) button.image.raycastTarget = enable;
             if (textButton != null) textButton.raycastTarget = enable;
             SetInteractable(enable);
